@@ -10,6 +10,7 @@ import {
 	FormMessage,
 	Input
 } from '@/shared/componets/ui'
+import { useRegisterMutation } from '@/shared/hooks'
 import { registerSchema, TypeRegisterSchema } from '@/shared/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTheme } from 'next-themes'
@@ -34,13 +35,14 @@ const RegisterForm = (props: Props) => {
 		}
 	})
 
+	const { register, isLoadingRegister } = useRegisterMutation()
+
 	const onSubmit = (data: TypeRegisterSchema) => {
 		if (recaptchaValue) {
-			console.log(data)
-		}else{
+			register({ values: data, recaptcha: recaptchaValue })
+		} else {
 			toast.error('Please complete the captcha')
 		}
-	
 	}
 	return (
 		<AuthWrapper
@@ -64,6 +66,7 @@ const RegisterForm = (props: Props) => {
 								<FormControl>
 									<Input
 										placeholder='Enter your name'
+										disabled={isLoadingRegister}
 										{...field}
 									/>
 								</FormControl>
@@ -82,6 +85,7 @@ const RegisterForm = (props: Props) => {
 									<Input
 										placeholder='Enter your email'
 										type='email'
+										disabled={isLoadingRegister}
 										{...field}
 									/>
 								</FormControl>
@@ -100,6 +104,7 @@ const RegisterForm = (props: Props) => {
 									<Input
 										placeholder='Enter your password'
 										type='password'
+										disabled={isLoadingRegister}
 										{...field}
 									/>
 								</FormControl>
@@ -118,6 +123,7 @@ const RegisterForm = (props: Props) => {
 									<Input
 										placeholder='Repeat your password'
 										type='password'
+										disabled={isLoadingRegister}
 										{...field}
 									/>
 								</FormControl>
@@ -126,15 +132,19 @@ const RegisterForm = (props: Props) => {
 						)}
 					/>
 
-					<div className="flex justify-center">
+					<div className='flex justify-center'>
 						<ReCAPTCHA
-							sitekey={process.env.GOOGLE_RECAPTCHA_SITE_KEY as string}
+							sitekey={
+								process.env.GOOGLE_RECAPTCHA_SITE_KEY as string
+							}
 							onChange={setRecaptchaValue}
 							theme={theme === 'dark' ? 'dark' : 'light'}
 						/>
 					</div>
 
-					<Button type='submit'>Register</Button>
+					<Button disabled={isLoadingRegister} type='submit'>
+						Register
+					</Button>
 				</form>
 			</Form>
 		</AuthWrapper>
