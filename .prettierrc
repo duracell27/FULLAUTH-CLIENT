@@ -16,7 +16,5 @@
 		"^../(.*)$",
 		"^./(.*)$"
 	],
-	"plugins": [
-		"prettier-plugin-tailwindcss"
-	]
+	"plugins": []
 }
