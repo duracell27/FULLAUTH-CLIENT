@@ -5,7 +5,7 @@ import { toastMessageHandler } from '../utils'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 
-export function useLoginMutation() {
+export function useLoginMutation(setIsShowFactor: React.Dispatch<React.SetStateAction<boolean>>) {
 
 	const router = useRouter()
 	const {mutate: login, isPending: isLoadingLogin} = useMutation({
@@ -20,6 +20,7 @@ export function useLoginMutation() {
 		onSuccess: (data:any) => {
             if(data.message){
 				toastMessageHandler(data)
+				setIsShowFactor(true)
 			}else{
 				toast.success('User logged in successfully')
 				router.push('/dashboard/settings')
