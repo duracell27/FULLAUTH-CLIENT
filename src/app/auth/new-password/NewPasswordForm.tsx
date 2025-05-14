@@ -10,19 +10,8 @@ import {
 	FormMessage,
 	Input
 } from '@/shared/componets/ui'
-import {
-	useNewPasswordMutation,
-	useRegisterMutation,
-	useResetPasswordMutation
-} from '@/shared/hooks'
-import {
-	newPasswordSchema,
-	registerSchema,
-	resetPasswordSchema,
-	TypeNewPasswordSchema,
-	TypePasswordResetSchema,
-	TypeRegisterSchema
-} from '@/shared/schemas'
+import { useNewPasswordMutation } from '@/shared/hooks'
+import { newPasswordSchema, TypeNewPasswordSchema } from '@/shared/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTheme } from 'next-themes'
 import React, { useState } from 'react'
@@ -34,6 +23,7 @@ type Props = {}
 
 const NewPasswordForm = (props: Props) => {
 	const { theme } = useTheme()
+	
 	const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null)
 
 	const form = useForm<TypeNewPasswordSchema>({

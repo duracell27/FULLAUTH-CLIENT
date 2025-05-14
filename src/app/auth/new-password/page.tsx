@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import NewPasswordForm from './NewPasswordForm'
 import { Metadata } from 'next'
+import { Loading } from '@/shared/componets/ui/Loading'
 
 export const metadata: Metadata = {
 	title: 'New Password',
@@ -8,5 +9,9 @@ export const metadata: Metadata = {
 }
 
 export default function NewPasswordPage() {
-	return <NewPasswordForm />
+	return (
+		<Suspense fallback={<Loading/>}>
+			<NewPasswordForm />
+		</Suspense>
+	)
 }
