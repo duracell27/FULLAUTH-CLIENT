@@ -20,14 +20,14 @@ export default function RootLayout({
 	return (
 		<html lang='en' suppressHydrationWarning>
 			<body>
-				<MainProvider>
-					<div className='relative flex min-h-screen flex-col'>
-            <ToggleTheme/>
-						<div className='flex h-screen w-full items-center justify-center px-4'>
-							{children}
-						</div>
+				<div
+					className='flex min-h-screen w-full justify-center bg-cover'
+					style={{ backgroundImage: "url('/images/bg2.jpg')" }}
+				>
+					<div className='w-full mx-2 max-w-[400px]'>
+						<MainProvider>{children}</MainProvider>
 					</div>
-				</MainProvider>
+				</div>
 			</body>
 		</html>
 	)

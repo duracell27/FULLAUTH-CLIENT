@@ -1,4 +1,6 @@
 'use client'
+
+import { HeaderProvider } from './HeaderProvider'
 import { TanstackQueryProvider } from './TanstackQueryProvider'
 import { ThemeProvider } from './ThemeProvider'
 import { ToastProvider } from './ToastProvider'
@@ -11,9 +13,11 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
 				defaultTheme='light'
 				disableTransitionOnChange
 			>
+				<HeaderProvider />
 				<ToastProvider />
 				{children}
 			</ThemeProvider>
+			
 		</TanstackQueryProvider>
 	)
 }

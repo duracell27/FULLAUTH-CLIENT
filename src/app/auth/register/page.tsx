@@ -4,7 +4,11 @@ import RegisterForm from './RegisterForm'
 type Props = {}
 
 const RegisterPage = (props: Props) => {
-	return <RegisterForm />
+	return (
+		<div className='flex flex-col gap-3 justify-center items-center h-screen'>
+			<RegisterForm />
+		</div>
+	)
 }
 
 export default RegisterPage

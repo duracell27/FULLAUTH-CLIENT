@@ -1,10 +1,16 @@
 import { TypeSettingsSchema } from '../schemas'
-import { IUser } from '../types'
+import { IUser, IUserSafe } from '../types'
 import { api } from '../utils/api'
 
 class UserService {
 	public async findProfile() {
 		const response = await api.get<IUser>('user/profile')
+
+		return response
+	}
+
+	public async findProfileSafe(userId: string) {
+		const response = await api.get<IUserSafe>(`user/by-id-safe/${userId}`)
 
 		return response
 	}

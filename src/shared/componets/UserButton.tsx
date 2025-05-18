@@ -14,7 +14,7 @@ import {
 import { IUser } from '../types'
 
 interface UserButtonProps {
-	user: IUser
+	user: IUser | undefined
 }
 
 export function UserButton({ user }: UserButtonProps) {

@@ -5,7 +5,13 @@ export enum UserRole {
 
 export enum AuthMethod {
 	Credentials = 'CREDENTIALS',
-	Google = 'GOOGLE',
+	Google = 'GOOGLE'
+}
+
+enum FriendStatus {
+	Pending = 'PENDING',
+	Accepted = 'ACCEPTED',
+	Rejected = 'REJECTED'
 }
 
 export interface IAccount {
@@ -33,4 +39,28 @@ export interface IUser {
 	isTwoFactorEnabled: boolean
 	method: AuthMethod
 	accounts: IAccount[]
+}
+
+export interface IUserSafe {
+	id: string
+	email: string
+	displayName: string
+	picture: string
+}
+
+export interface IFriend {
+	id: string
+	senderId: string
+	sender: IUser
+	receiver: IUser
+	receiverId: string
+	createdAt: string
+	updatedAt: string
+	status: FriendStatus
+}
+
+export interface ResponseIfriend {
+	friends: IFriend[]
+	friendRequests: IFriend[]
+	friendRequestsSended: IFriend[]
 }

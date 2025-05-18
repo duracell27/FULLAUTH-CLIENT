@@ -30,7 +30,7 @@ export const AuthWrapper = ({
 	isShowSocial = false
 }: Props) => {
 	return (
-		<Card className='w-[400px]'>
+		<Card className='w-full max-w-[400px]'>
 			<CardHeader className='space-y-2'>
 				<CardTitle>{heading}</CardTitle>
 				{description && (
