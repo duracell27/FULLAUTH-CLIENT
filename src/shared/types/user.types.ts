@@ -1,3 +1,5 @@
+import { IGroupMember } from './groupe.types'
+
 export enum UserRole {
 	Regular = 'REGULAR',
 	Admin = 'ADMIN'
@@ -39,6 +41,7 @@ export interface IUser {
 	isTwoFactorEnabled: boolean
 	method: AuthMethod
 	accounts: IAccount[]
+	groupMemberships: IGroupMember[]
 }
 
 export interface IUserSafe {

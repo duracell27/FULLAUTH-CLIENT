@@ -22,9 +22,9 @@ export default function RootLayout({
 			<body>
 				<div
 					className='flex min-h-screen w-full justify-center bg-cover'
-					style={{ backgroundImage: "url('/images/bg2.jpg')" }}
+					style={{ backgroundImage: "url('/images/bg6.png')" }}
 				>
-					<div className='w-full mx-2 max-w-[400px]'>
+					<div className='w-full mx-2 max-w-[400px] relative'>
 						<MainProvider>{children}</MainProvider>
 					</div>
 				</div>

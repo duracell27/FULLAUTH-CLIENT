@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 const SettingsPage = () => {
 	return (
-		<div className='flex flex-col gap-3 justify-center items-center h-screen'>
+		<div className='flex flex-col gap-3 justify-start items-center h-screen  pt-18'>
 			<SettingsForm />
 
 			<Card className='w-full max-w-[400px]'>
