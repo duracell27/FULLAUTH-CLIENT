@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { TypeLoginSchema } from '../schemas'
 import { authService, groupsService } from '../services'
 import { toastMessageHandler } from '../utils'
@@ -8,6 +8,7 @@ import { TypeAddGroupSchema } from '../schemas/createGroup.schema'
 
 export function useAddGroupMutation() {
 	const router = useRouter()
+	const queryClient = useQueryClient()
 	const { mutate: addGroup, isPending: isLoadingAddGroup } = useMutation({
 		mutationKey: ['add group'],
 		mutationFn: ({ values }: { values: TypeAddGroupSchema }) =>
@@ -17,6 +18,7 @@ export function useAddGroupMutation() {
 				toastMessageHandler(data)
 			} else {
 				toast.success('Group created successfully')
+				queryClient.invalidateQueries({queryKey: ['groups']})
 				router.push('/groups')
 			}
 		},

@@ -46,7 +46,7 @@ const GroupsPage = (props: Props) => {
 											<div className=''>
 												<Avatar>
 													<AvatarImage
-														src={group.avatarUrl}
+														src={group.avatarUrl.length ? group.avatarUrl.replace('/upload/', '/upload/w_100,h_100,c_fill,f_webp,q_80/') : ''}
 													/>
 													<AvatarFallback>
 														{group.name
