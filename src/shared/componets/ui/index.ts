@@ -9,3 +9,5 @@ export * from "./Sonner";
 export * from "./Avatar";
 export * from "./Skeleton";
 export * from "./Switch";
+export * from "./Badge";
+export * from "./Dialog";

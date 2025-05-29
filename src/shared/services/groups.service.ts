@@ -1,3 +1,4 @@
+import { TypeEditGroupSchema } from '../schemas'
 import { TypeAddGroupSchema } from '../schemas/createGroup.schema'
 import { IGroup, IUserGroup, ResponseIfriend } from '../types'
 import { api } from '../utils/api'
@@ -8,8 +9,18 @@ class GroupsService {
 		return response
 	}
 
+    public async editGroup(body: TypeEditGroupSchema) {
+		const response = await api.patch<IGroup>('groups/update', body)
+		return response
+	}
+
     public async getGroups() {
         const response = await api.get<IUserGroup[]>('group-members')
+        return response
+    }
+
+     public async getGroup(userId: string) {
+        const response = await api.get<IGroup>(`groups/${userId}`)
         return response
     }
 }

@@ -1,4 +1,4 @@
-import { IUser } from "./user.types"
+import { IUser, IUserSafe } from "./user.types"
 
 export interface IGroup {
 	id: string
@@ -16,7 +16,7 @@ export interface IGroupMember {
 	groupId: string
 	role: GroupRole
 	joinedAt: Date
-	user: IUser
+	user: IUserSafe
 	group: IGroup
 }
 
@@ -26,6 +26,7 @@ export interface IUserGroup {
 	avatarUrl: string
 	eventDate: Date
 }
+
 
 export enum GroupRole {
 	ADMIN = 'ADMIN',

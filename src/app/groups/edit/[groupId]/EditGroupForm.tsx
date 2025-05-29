@@ -31,30 +31,41 @@ import {
 	addGroupSchema,
 	TypeAddGroupSchema
 } from '@/shared/schemas/createGroup.schema'
-import { useAddGroupMutation, useGroup } from '@/shared/hooks'
-import { IGroup } from '@/shared/types'
+import { useGroup } from '@/shared/hooks'
+import { Loading } from '@/shared/componets/ui/Loading'
+import { editGroupSchema, TypeEditGroupSchema } from '@/shared/schemas'
+import { useEditGroupMutation } from '@/shared/hooks/useEditGroupMutation'
 
 type Props = {
-	
+	groupId: string
 }
 
-export const AddGroupForm = (props: Props) => {
-	const [previewUrl, setPreviewUrl] = useState<string | null>(null) // Оптимізована версія для прев'ю
+export const EditGroupForm = ({ groupId }: Props) => {
+	const { group, isLoadingGroup } = useGroup(groupId)
+
+	const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 	const [originalUrl, setOriginalUrl] = useState<string | null>(null)
 	const [isLoadingAvatar, setIsLoadingAvatar] = useState(false)
 	const fileInputRef = useRef<HTMLInputElement>(null)
 
+	const form = useForm<TypeEditGroupSchema>({
+		resolver: zodResolver(editGroupSchema),
 
-	const { addGroup, isLoadingAddGroup } = useAddGroupMutation()
-
-	const form = useForm<TypeAddGroupSchema>({
-		resolver: zodResolver(addGroupSchema),
-		defaultValues: {
-			name:'',
-			avatarUrl: '',
-			eventDate: new Date()
+		values: {
+			groupId: group?.id || groupId,
+			name: group?.name || '',
+			avatarUrl: (group?.avatarUrl as string) || '',
+			eventDate: new Date(group?.eventDate!) || new Date()
 		}
 	})
+
+	// console.log('group', group)
+	console.log('name', form.getValues('name'))
+	console.log('avatarUrl', form.getValues('avatarUrl'))
+	console.log('eventDate', form.getValues('eventDate'))
+	console.log('groupId', form.getValues('groupId'))
+
+	const { editGroup, isLoadingEditGroup } = useEditGroupMutation(groupId)
 
 	const handleFileChange = async (
 		event: React.ChangeEvent<HTMLInputElement>
@@ -129,17 +140,24 @@ export const AddGroupForm = (props: Props) => {
 	const avatarUrl = form.watch('avatarUrl')
 	const name = form.watch('name')
 
-	const onSubmit = (data: TypeAddGroupSchema) => {
-		addGroup({ values: data })
+	const onSubmit = (data: TypeEditGroupSchema) => {
+		editGroup({ values: data })
 	}
 
+	useEffect(() => {
+		if (group !== undefined) {
+			setPreviewUrl((group.avatarUrl as string) || null)
+		}
+	}, [group])
+
+	if (isLoadingGroup) {
+		return <Loading />
+	}
 	return (
 		<div className='flex flex-col gap-3 justify-start items-center h-screen  pt-18'>
 			<Card className='w-full max-w-[400px]'>
 				<CardHeader>
-					<CardTitle>
-						Create group
-					</CardTitle>
+					<CardTitle>Edit group</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<Form {...form}>
@@ -156,7 +174,7 @@ export const AddGroupForm = (props: Props) => {
 										<FormControl>
 											<Input
 												placeholder='Enter group name'
-												disabled={isLoadingAddGroup}
+												disabled={isLoadingEditGroup}
 												{...field}
 											/>
 										</FormControl>
@@ -226,11 +244,13 @@ export const AddGroupForm = (props: Props) => {
 													accept='image/*'
 													ref={fileInputRef}
 													className='hidden'
-													disabled={isLoadingAddGroup}
 													onChange={handleFileChange}
 												/>
 												<input
 													type='hidden'
+													disabled={
+														isLoadingEditGroup
+													}
 													{...field}
 												/>
 												{/* Попередній перегляд */}
@@ -297,9 +317,7 @@ export const AddGroupForm = (props: Props) => {
 								)}
 							/>
 
-							<Button disabled={isLoadingAddGroup} type='submit'>
-								Create group
-							</Button>
+							<Button type='submit'>Edit group</Button>
 						</form>
 					</Form>
 				</CardContent>

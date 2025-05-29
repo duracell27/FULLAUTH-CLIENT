@@ -13,4 +13,5 @@ export * from './useRejectFriendRequestMutation'
 export * from './useAddFriendMutation'
 export * from './useGroups'
 export * from './useAddGroupMutation'
+export * from './useGroup'
 

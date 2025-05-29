@@ -21,6 +21,7 @@ export function TanstackQueryProvider({
 					refetchOnWindowFocus: false,
 					staleTime: 1000 * 60 * 1,
 					gcTime: 1000 * 60,
+					retry: 1
 				},
 			},
 		})
