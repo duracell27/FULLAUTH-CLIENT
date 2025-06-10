@@ -15,6 +15,12 @@ class UserService {
 		return response
 	}
 
+	public async findProfileByNameSafe(name: string) {
+		const response = await api.get<IUserSafe[]>(`user/by-name-safe/${name}`)
+
+		return response
+	}
+
 	public async updateProfile(body: TypeSettingsSchema) {
 		const response = await api.patch<IUser>('user/profile', body)
 

@@ -4,6 +4,7 @@ import {
 	AvatarFallback,
 	AvatarImage,
 	Badge,
+	buttonVariants,
 	Card,
 	CardContent,
 	CardHeader,
@@ -11,15 +12,12 @@ import {
 	Dialog,
 	DialogContent,
 	DialogTitle,
-	DialogTrigger,
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuTrigger
+	DialogTrigger
 } from '@/shared/componets/ui'
 import { Loading } from '@/shared/componets/ui/Loading'
 import { useGroup, useProfile } from '@/shared/hooks'
-import { GroupRole } from '@/shared/types'
-import { format, formatDate } from 'date-fns'
+import { GroupMemberStatus, GroupRole } from '@/shared/types'
+import { format } from 'date-fns'
 import { Edit2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -101,13 +99,16 @@ export const GroupData = ({ groupId }: Props) => {
 
 			<Card className=''>
 				<CardHeader>
-					<CardTitle>Members</CardTitle>
+					<CardTitle className='flex justify-between items-center'>
+						<span>Members</span>
+						<Link href={`/groups/members/${group.id}`} className={buttonVariants()} >Add</Link>
+					</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<ul>
 						{group.members.map(member => (
 							<li
-								className='flex items-center gap-2 py-2 font-medium border-b border-ring/20 py-2 hover:bg-accent block'
+								className='flex items-center gap-2 font-medium border-b border-ring/20 py-2 hover:bg-accent'
 								key={member.userId}
 							>
 								<div className='flex gap-2 items-center'>
@@ -122,9 +123,22 @@ export const GroupData = ({ groupId }: Props) => {
 										</AvatarFallback>
 									</Avatar>
 									<div className='flex gap-2 items-center'>
-										<span className='font-bold'>
-											{member.user.displayName}
-										</span>
+										{member.status ===
+										GroupMemberStatus.PENDING ? (
+											<>
+												<span className='font-bold text-muted-foreground'>
+													{member.user.displayName}
+												</span>
+												<Badge className='text-xs bg-muted-foreground'>
+													invited
+												</Badge>
+											</>
+										) : (
+											<span className='font-bold'>
+												{member.user.displayName}
+											</span>
+										)}
+
 										{member.role === GroupRole.ADMIN && (
 											<Badge className='text-xs'>
 												admin

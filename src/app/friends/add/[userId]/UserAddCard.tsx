@@ -30,7 +30,7 @@ export const UserAddCard = ({ userId }: Props) => {
 	return (
 		<div className=''>
 			<ul>
-				<li className='flex items-center gap-2 py-2 font-medium border-b border-ring/20 py-2 hover:bg-accent block'>
+				<li className='flex items-center gap-2 font-medium border-b border-ring/20 py-2 hover:bg-accent block'>
 					<Avatar>
 						<AvatarImage src={user?.picture} />
 						<AvatarFallback>

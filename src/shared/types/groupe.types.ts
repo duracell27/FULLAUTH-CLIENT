@@ -15,6 +15,7 @@ export interface IGroupMember {
 	userId: string
 	groupId: string
 	role: GroupRole
+	status: GroupMemberStatus
 	joinedAt: Date
 	user: IUserSafe
 	group: IGroup
@@ -31,4 +32,10 @@ export interface IUserGroup {
 export enum GroupRole {
 	ADMIN = 'ADMIN',
 	MEMBER = 'MEMBER'
+}
+
+export enum GroupMemberStatus {
+	PENDING = 'PENDING',
+	ACCEPTED = 'ACCEPTED',
+	REJECTED = 'REJECTED'
 }
