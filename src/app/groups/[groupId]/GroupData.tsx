@@ -101,7 +101,15 @@ export const GroupData = ({ groupId }: Props) => {
 				<CardHeader>
 					<CardTitle className='flex justify-between items-center'>
 						<span>Members</span>
-						<Link href={`/groups/members/${group.id}`} className={buttonVariants()} >Add</Link>
+						{group.members.find(member => member.userId === user.id)
+							?.role === GroupRole.ADMIN && (
+							<Link
+								href={`/groups/members/${group.id}`}
+								className={buttonVariants()}
+							>
+								Add
+							</Link>
+						)}
 					</CardTitle>
 				</CardHeader>
 				<CardContent>

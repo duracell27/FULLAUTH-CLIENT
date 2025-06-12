@@ -19,8 +19,10 @@ class GroupsService {
         return response
     }
 
-     public async getGroup(userId: string) {
-        const response = await api.get<IGroup>(`groups/${userId}`)
+    
+
+     public async getGroup(groupId: string) {
+        const response = await api.get<IGroup>(`groups/${groupId}`)
         return response
     }
 }
