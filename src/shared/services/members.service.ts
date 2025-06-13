@@ -8,6 +8,11 @@ class MemberService {
 		return response
 	}
 
+	public async deleteMemberFromGroup(body: TypeAddMemberToGroupSchema) {
+		const response = await api.delete<boolean>('group-members', body)
+		return response
+	}
+
 	public async getGroupsRequests() {
 		const response = await api.get<IUserGroup[]>('group-members/requests')
 		return response

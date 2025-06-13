@@ -122,12 +122,27 @@ export class FetchClient {
 		})
 	}
 
+	// public delete<T>(
+	// 	endpoint: string,
+	// 	options: Omit<RequestOptions, 'body'> = {}
+	// ) {
+	// 	return this.request<T>(endpoint, 'DELETE', options)
+	// }
+
 	public delete<T>(
-		endpoint: string,
-		options: Omit<RequestOptions, 'body'> = {}
-	) {
-		return this.request<T>(endpoint, 'DELETE', options)
-	}
+	endpoint: string,
+	body?: Record<string, any>,
+	options: RequestOptions = {}
+) {
+	return this.request<T>(endpoint, 'DELETE', {
+		...options,
+		headers: {
+			'Content-Type': 'application/json',
+			...(options?.headers || {})
+		},
+		...(!!body && { body: JSON.stringify(body) })
+	})
+}
 
 	public patch<T>(
 		endpoint: string,

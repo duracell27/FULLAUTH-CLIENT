@@ -1,13 +1,12 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { toastMessageHandler } from '../utils'
 import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
+
 import { TypeAddMemberToGroupSchema } from '../schemas/addMemberToGroup.schema'
 import { memberService } from '../services/members.service'
 
 export function useAddMemberToGroupMutation() {
-	const router = useRouter()
-	const queryClient = useQueryClient()
+	
 
 	const { mutate: addMember, isPending: isLoadingAddMember } = useMutation({
 		mutationKey: ['add member'],

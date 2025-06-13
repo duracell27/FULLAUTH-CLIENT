@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { MainProvider } from '@/shared/providers'
+import { Outfit } from "next/font/google";
 import '@/shared/styles/globals.css'
-import { ToggleTheme } from '@/shared/componets/ui'
 
 export const metadata: Metadata = {
 	title: {
@@ -12,14 +12,19 @@ export const metadata: Metadata = {
 		'Lendower — a handy app for calculating debts from shared trips, cafe visits, or group expenses. Easily track who owes whom!'
 }
 
+const outfit = Outfit({
+  subsets: ['latin'],
+  variable: '--font-sans',
+});
+
 export default function RootLayout({
 	children
 }: Readonly<{
 	children: React.ReactNode
 }>) {
 	return (
-		<html lang='en' suppressHydrationWarning>
-			<body>
+		<html lang='en' suppressHydrationWarning className={outfit.variable}>
+			<body >
 				<div
 					className='flex min-h-screen w-full justify-center bg-cover'
 					style={{ backgroundImage: "url('/images/bg6.png')" }}

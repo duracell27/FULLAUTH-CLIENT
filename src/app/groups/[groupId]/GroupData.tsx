@@ -4,6 +4,7 @@ import {
 	AvatarFallback,
 	AvatarImage,
 	Badge,
+	Button,
 	buttonVariants,
 	Card,
 	CardContent,
@@ -16,9 +17,10 @@ import {
 } from '@/shared/componets/ui'
 import { Loading } from '@/shared/componets/ui/Loading'
 import { useGroup, useProfile } from '@/shared/hooks'
+import { useDeleteMemberFromGroupMutation } from '@/shared/hooks/useDeleteMemberFromGroupMutation'
 import { GroupMemberStatus, GroupRole } from '@/shared/types'
 import { format } from 'date-fns'
-import { Edit2 } from 'lucide-react'
+import { Edit2, X } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -29,7 +31,12 @@ type Props = {
 
 export const GroupData = ({ groupId }: Props) => {
 	const { group, isLoadingGroup } = useGroup(groupId)
+	const {deleteMember, isLoadingDeleteMember} = useDeleteMemberFromGroupMutation(groupId)
 	const { user } = useProfile()
+
+	const handleDeleteMember = (recieverId: string) => {
+		deleteMember({values:{groupId, userId: recieverId}})
+	}
 
 	if (isLoadingGroup) {
 		return <Loading />
@@ -116,10 +123,10 @@ export const GroupData = ({ groupId }: Props) => {
 					<ul>
 						{group.members.map(member => (
 							<li
-								className='flex items-center gap-2 font-medium border-b border-ring/20 py-2 hover:bg-accent'
+								className='flex w-full items-center gap-2 font-medium border-b border-ring/20 py-2 hover:bg-accent'
 								key={member.userId}
 							>
-								<div className='flex gap-2 items-center'>
+								<div className='flex w-full gap-2 items-center'>
 									<Avatar>
 										<AvatarImage
 											src={member.user.picture}
@@ -130,7 +137,7 @@ export const GroupData = ({ groupId }: Props) => {
 												.toUpperCase()}
 										</AvatarFallback>
 									</Avatar>
-									<div className='flex gap-2 items-center'>
+									<div className='flex gap-2 items-center flex-1'>
 										{member.status ===
 										GroupMemberStatus.PENDING ? (
 											<>
@@ -153,6 +160,15 @@ export const GroupData = ({ groupId }: Props) => {
 											</Badge>
 										)}
 									</div>
+									
+									{group.members.find(
+										member => member.userId === user.id
+									)?.role === GroupRole.ADMIN &&
+										member.userId !== user.id && (
+											<Button onClick={() => handleDeleteMember(member.userId)} variant={'default'} size={'xs'}>
+												<X />
+											</Button>
+										)}
 								</div>
 							</li>
 						))}
