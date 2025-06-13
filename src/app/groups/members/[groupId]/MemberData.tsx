@@ -17,6 +17,7 @@ import {
 	Input
 } from '@/shared/componets/ui'
 import { BackButton } from '@/shared/componets/ui/BackButton'
+import { useFriends, useProfile } from '@/shared/hooks'
 import { useAddMemberToGroupMutation } from '@/shared/hooks/useAddMemberToGroupMutation'
 import { useProfileByNameSafe } from '@/shared/hooks/useProfileByNameSafe'
 import {
@@ -37,7 +38,13 @@ type Props = {
 export const MemberData = (props: Props) => {
 	const [searchName, setSearchName] = useState<string>('')
 	const { users, isLoadingProfile } = useProfileByNameSafe(searchName)
-	const { addMember, isLoadingAddMember } = useAddMemberToGroupMutation()
+	const { addMember, isLoadingAddMember } = useAddMemberToGroupMutation(
+		props.groupId
+	)
+	const { friendsData, isLoadingFriend } = useFriends()
+	const { user } = useProfile()
+	console.log(friendsData)
+	
 
 	const form = useForm<TypeSearchUserSchema>({
 		resolver: zodResolver(searchUserSchema),
@@ -131,6 +138,59 @@ export const MemberData = (props: Props) => {
 					</ul>
 				</CardContent>
 			</Card>
+
+
+			{friendsData && friendsData?.friends.length > 0 && (
+				<Card className='w-full max-w-[400px]'>
+				<CardHeader>
+					<CardTitle>Or from friends</CardTitle>
+				</CardHeader>
+				<CardContent>
+					<ul>
+						
+						{
+							friendsData.friends.map(friend => (
+								<li
+									className='flex w-full items-center gap-2 font-medium border-b border-ring/20 py-2 hover:bg-accent'
+									key={friend.id}
+								>
+									<div className='flex w-full gap-2 items-center'>
+										<Avatar>
+											<AvatarImage src={friend.senderId === user?.id
+												? friend?.receiver?.picture
+												: friend?.sender?.picture} />
+											<AvatarFallback>
+												{friend.senderId === user?.id
+											? friend.receiver.displayName
+													.slice(0, 2)
+													.toUpperCase()
+											: friend.sender.displayName
+													.slice(0, 2)
+													.toUpperCase()}
+											</AvatarFallback>
+										</Avatar>
+										<div className='flex w-full gap-2 items-center'>
+											<span className='font-bold flex-1'>
+												{friend.senderId === user?.id
+										? friend.receiver.displayName
+										: friend.sender.displayName}
+											</span>
+											<Button
+												onClick={() =>
+													handleAddMember(friend.senderId === user?.id ? friend.receiverId : friend.senderId)
+												}
+											>
+												Invite
+											</Button>
+										</div>
+									</div>
+								</li>
+							))}
+					</ul>
+				</CardContent>
+			</Card>
+			)}
+			
 		</>
 	)
 }

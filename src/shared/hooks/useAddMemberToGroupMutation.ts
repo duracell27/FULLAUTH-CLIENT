@@ -1,12 +1,13 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toastMessageHandler } from '../utils'
 import { toast } from 'sonner'
 
 import { TypeAddMemberToGroupSchema } from '../schemas/addMemberToGroup.schema'
 import { memberService } from '../services/members.service'
 
-export function useAddMemberToGroupMutation() {
-	
+export function useAddMemberToGroupMutation(groupId: string) {
+
+	const queryClient = useQueryClient()
 
 	const { mutate: addMember, isPending: isLoadingAddMember } = useMutation({
 		mutationKey: ['add member'],
@@ -17,7 +18,7 @@ export function useAddMemberToGroupMutation() {
 				toastMessageHandler(data)
 			} else {
 				toast.success('Member request sent')
-				// queryClient.invalidateQueries({queryKey: ['groups']})
+				queryClient.invalidateQueries({queryKey: ['group ' + groupId]})
 				// router.push('/groups')
 			}
 		},

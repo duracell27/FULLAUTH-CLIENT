@@ -25,6 +25,7 @@ type Props = {}
 export const FriendRequest = (props: Props) => {
 	const { user, isLoadingProfile } = useProfile()
 	const { friendsData, isLoadingFriend } = useFriends()
+	
 	const { cancelFriendRequest, isLoadingCancelFriendRequest } =
 		useCancelFriendRequestMutation()
 	const { acceptFriendRequest, isLoadingAcceptFriendRequest } =
