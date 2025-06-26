@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 // import { uk } from 'date-fns/locale'
-import React, { use, useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
 	Button,
@@ -31,8 +31,8 @@ import {
 	addGroupSchema,
 	TypeAddGroupSchema
 } from '@/shared/schemas/createGroup.schema'
-import { useAddGroupMutation, useGroup } from '@/shared/hooks'
-import { IGroup } from '@/shared/types'
+import { useAddGroupMutation } from '@/shared/hooks'
+
 
 type Props = {
 	

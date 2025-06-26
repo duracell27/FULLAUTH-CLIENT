@@ -1,3 +1,4 @@
+import { IExpense } from "./expense.types"
 import { IUser, IUserSafe } from "./user.types"
 
 export interface IGroup {
@@ -9,6 +10,7 @@ export interface IGroup {
 	createdAt: Date
 	updatedAt: Date
 	members: IGroupMember[]
+	expenses: IExpense[]
 }
 
 export interface IGroupMember {

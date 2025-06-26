@@ -31,11 +31,12 @@ type Props = {
 
 export const GroupData = ({ groupId }: Props) => {
 	const { group, isLoadingGroup } = useGroup(groupId)
-	const {deleteMember, isLoadingDeleteMember} = useDeleteMemberFromGroupMutation(groupId)
+	const { deleteMember, isLoadingDeleteMember } =
+		useDeleteMemberFromGroupMutation(groupId)
 	const { user } = useProfile()
 
 	const handleDeleteMember = (recieverId: string) => {
-		deleteMember({values:{groupId, userId: recieverId}})
+		deleteMember({ values: { groupId, userId: recieverId } })
 	}
 
 	if (isLoadingGroup) {
@@ -46,7 +47,7 @@ export const GroupData = ({ groupId }: Props) => {
 		return <div>Group not found</div>
 	}
 	return (
-		<div className='w-full max-w-[400px] flex flex-col gap-3 '>
+		<div className='w-full max-w-[400px] flex flex-col gap-3 mb-18'>
 			<Card className=''>
 				<CardHeader>
 					<CardTitle className='flex gap-2 items-center justify-between'>
@@ -107,6 +108,51 @@ export const GroupData = ({ groupId }: Props) => {
 			<Card className=''>
 				<CardHeader>
 					<CardTitle className='flex justify-between items-center'>
+						<span>Expenses</span>
+
+						<Link
+							href={`/expenses/add/${group.id}`}
+							className={buttonVariants()}
+						>
+							Add Expense
+						</Link>
+					</CardTitle>
+				</CardHeader>
+				<CardContent>
+					<ul>
+						{group.expenses.map(expense => (
+							<li
+								className='flex w-full items-center gap-2 font-medium border-b border-ring/20 py-2 hover:bg-accent'
+								key={expense.id}
+							>
+								<Link href={`/expense/${expense.id}`} className='flex w-full gap-2 items-center'>
+									<Avatar>
+										<AvatarImage
+											src={expense.photoUrl || ''}
+										/>
+										<AvatarFallback>
+											{expense.description
+												.slice(0, 2)
+												.toUpperCase()}
+										</AvatarFallback>
+									</Avatar>
+									<div className="flex-1 min-w-0">
+										<h1 className='font-semibold whitespace-nowrap overflow-hidden text-ellipsis'>{expense.description}</h1>
+										<p className='text-secondary-foreground text-xs'>{format(expense.createdAt, 'PPP')}</p>
+									</div>
+									<div className="">
+										<span className='font-bold'>{expense.amount}</span>
+									</div>
+								</Link>
+							</li>
+						))}
+					</ul>
+				</CardContent>
+			</Card>
+
+			<Card className=''>
+				<CardHeader>
+					<CardTitle className='flex justify-between items-center'>
 						<span>Members</span>
 						{group.members.find(member => member.userId === user.id)
 							?.role === GroupRole.ADMIN && (
@@ -160,12 +206,20 @@ export const GroupData = ({ groupId }: Props) => {
 											</Badge>
 										)}
 									</div>
-									
+
 									{group.members.find(
 										member => member.userId === user.id
 									)?.role === GroupRole.ADMIN &&
 										member.userId !== user.id && (
-											<Button onClick={() => handleDeleteMember(member.userId)} variant={'default'} size={'xs'}>
+											<Button
+												onClick={() =>
+													handleDeleteMember(
+														member.userId
+													)
+												}
+												variant={'default'}
+												size={'xs'}
+											>
 												<X />
 											</Button>
 										)}
