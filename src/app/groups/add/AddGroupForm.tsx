@@ -32,6 +32,7 @@ import {
 	TypeAddGroupSchema
 } from '@/shared/schemas/createGroup.schema'
 import { useAddGroupMutation } from '@/shared/hooks'
+import { BackButton } from '@/shared/componets/ui/BackButton'
 
 
 type Props = {
@@ -135,6 +136,7 @@ export const AddGroupForm = (props: Props) => {
 
 	return (
 		<div className='flex flex-col gap-3 justify-start items-center h-screen  pt-18'>
+			<BackButton />
 			<Card className='w-full max-w-[400px]'>
 				<CardHeader>
 					<CardTitle>

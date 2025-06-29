@@ -25,6 +25,7 @@ export const addExpenseSchema = z.object({
 	}),
 	splitType: z.enum(['EQUAL', 'CUSTOM', 'PERCENTAGE', 'SHARES', 'EXTRA']),
 	photoUrl: z.string().optional(),
+	date: z.optional(z.date()),
 	payers: z.array(payersSchema),
 	debtors: z.array(debtorsSchema)
 })
@@ -52,6 +53,7 @@ export interface TypeAddExpenseFormNumber {
 	groupId: string
 	splitType: 'EQUAL' | 'CUSTOM' | 'PERCENTAGE' | 'SHARES' | 'EXTRA'
 	photoUrl?: string
+	date?: Date
 	payers: IPayersSchema[]
 	debtors: IDebtorsSchema[]
 }

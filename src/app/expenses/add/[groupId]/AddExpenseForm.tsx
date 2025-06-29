@@ -22,15 +22,28 @@ import {
 	Checkbox,
 	Avatar,
 	AvatarImage,
-	AvatarFallback
+	AvatarFallback,
+	Popover,
+	PopoverTrigger,
+	PopoverContent,
+	Calendar
 } from '@/shared/componets/ui'
+import { BackButton } from '@/shared/componets/ui/BackButton'
 import { useGroup } from '@/shared/hooks'
 import { useAddExpenseMutation } from '@/shared/hooks/useAddExpenseMutation'
-import { addExpenseSchema, TypeAddExpenseForm, TypeAddExpenseFormNumber } from '@/shared/schemas'
+import {
+	addExpenseSchema,
+	TypeAddExpenseForm,
+	TypeAddExpenseFormNumber
+} from '@/shared/schemas'
+import { SplitType } from '@/shared/types'
+import { cn } from '@/shared/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { format } from 'date-fns'
+import { CalendarIcon } from 'lucide-react'
 
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useForm, useFieldArray } from 'react-hook-form'
 
 type Props = {
@@ -47,6 +60,11 @@ type transformedDebtors = {
 }
 
 const AddExpenseForm = ({ groupId }: Props) => {
+	const [previewUrl, setPreviewUrl] = useState<string | null>(null) // Оптимізована версія для прев'ю
+	const [originalUrl, setOriginalUrl] = useState<string | null>(null)
+	const [isLoadingAvatar, setIsLoadingAvatar] = useState(false)
+	const fileInputRef = useRef<HTMLInputElement>(null)
+
 	const { group, isLoadingGroup } = useGroup(groupId)
 	const [paymentMode, setPaymentMode] = useState<'single' | 'multiple'>(
 		'single'
@@ -55,20 +73,91 @@ const AddExpenseForm = ({ groupId }: Props) => {
 		'EQUAL' | 'CUSTOM' | 'PERCENTAGE' | 'SHARES' | 'EXTRA'
 	>('EQUAL')
 
-	const { addExpense, isLoadingAddExpense } = useAddExpenseMutation()
+	const { addExpense, isLoadingAddExpense } = useAddExpenseMutation(groupId)
 
 	const form = useForm<TypeAddExpenseForm>({
 		resolver: zodResolver(addExpenseSchema),
 		defaultValues: {
-			description: 'test',
-			amount: '200',
+			description: 'шашлик',
+			amount: '',
 			groupId,
 			splitType: debtorMode,
 			photoUrl: '',
+			date: new Date(),
 			payers: [],
 			debtors: []
 		}
 	})
+
+	const handleFileChange = async (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setIsLoadingAvatar(true)
+		const file = event.target.files?.[0]
+		if (!file) return
+
+		// Перевірка розміру файлу (5 МБ)
+		const maxSize = 5 * 1024 * 1024 // 5MB у байтах
+		if (file.size > maxSize) {
+			form.setError('photoUrl', {
+				type: 'manual',
+				message: 'Файл занадто великий! Максимальний розмір 5 МБ.'
+			})
+			setIsLoadingAvatar(false)
+			return
+		}
+
+		// Очищаємо помилку, якщо розмір файлу валідний
+		form.clearErrors('photoUrl')
+
+		const formData = new FormData()
+		formData.append('file', file)
+		formData.append(
+			'upload_preset',
+			process.env.CLOUDINARY_UPLOAD_PRESET as string
+		)
+
+		try {
+			const response = await fetch(
+				`https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload`,
+				{
+					method: 'POST',
+					body: formData
+				}
+			)
+
+			const data = await response.json()
+			if (data.secure_url) {
+				form.setValue('photoUrl', data.secure_url, {
+					shouldValidate: true
+				})
+				setOriginalUrl(data.secure_url)
+				const optimizedUrl = data.secure_url.replace(
+					'/upload/',
+					'/upload/w_200,h_200,c_fill,f_webp,q_80/'
+				)
+				setPreviewUrl(optimizedUrl)
+				setIsLoadingAvatar(false)
+			} else {
+				form.setError('photoUrl', {
+					type: 'manual',
+					message: 'Помилка завантаження зображення на Cloudinary.'
+				})
+				setIsLoadingAvatar(false)
+			}
+		} catch (error) {
+			form.setError('photoUrl', {
+				type: 'manual',
+				message: 'Помилка при завантаженні на Cloudinary.'
+			})
+			setIsLoadingAvatar(false)
+		}
+	}
+
+	const handleButtonClick = () => {
+		// Активуємо прихований input при кліку на прямокутник
+		fileInputRef.current?.click()
+	}
 
 	const {
 		fields: payerFields,
@@ -77,8 +166,305 @@ const AddExpenseForm = ({ groupId }: Props) => {
 		replace: replacePayers
 	} = useFieldArray({
 		name: 'payers',
-		control: form.control
+		control: form.control,
+		rules: {
+			validate: payers => {
+				const amount = form.getValues('amount')
+				const sumOfPayers = payers.reduce(
+					(acc, curr) => acc + (parseFloat(curr.amount) || 0),
+					0
+				)
+				return (
+					sumOfPayers <= parseFloat(amount) ||
+					'Sum of payers must be less than amount'
+				)
+			}
+		}
 	})
+
+	// валідація платників початок
+
+	const isValidatingRef = useRef(false)
+
+	useEffect(() => {
+		const subscription = form.watch((values, { name }) => {
+			// Перевіряємо чи не валідуємо зараз
+			if (isValidatingRef.current) return
+
+			if (name?.startsWith('payers') || name === 'amount') {
+				isValidatingRef.current = true
+
+				// Використовуємо setTimeout щоб вийти з поточного call stack
+				setTimeout(() => {
+					const { payers = [], amount } = values
+					if (!amount) return
+					const sumOfPayers = payers.reduce(
+						(acc, curr) => acc + (parseFloat(curr?.amount!) || 0),
+						0
+					)
+
+
+					if (payers.length === 0) {
+						form.setError('payers', {
+							type: 'manual',
+							message: 'Add at least one payer'
+						})
+					} else if (sumOfPayers < (parseFloat(amount) || 0)) {
+						console.log('tut', sumOfPayers)
+						form.setError('payers', {
+							type: 'manual',
+							message: `${
+								parseFloat(amount) - sumOfPayers
+							} remain of ${amount}`
+						})
+					} else if (sumOfPayers > (parseFloat(amount) || 0)) {
+						form.setError('payers', {
+							type: 'manual',
+							message:
+								'Sum of payers must be less than expense sum'
+						})
+					} else {
+						form.clearErrors('payers')
+					}
+
+					// Звільняємо через невеликий час
+					setTimeout(() => {
+						isValidatingRef.current = false
+					}, 50)
+				}, 0)
+			}
+		})
+
+		return () => subscription.unsubscribe()
+	}, [form])
+
+	// валідація платників кінець
+
+	// валідація боржників початок
+
+	const isValidatingDebtorsRef = useRef(false)
+
+	useEffect(() => {
+		const subscription = form.watch((values, { name }) => {
+			// Перевіряємо чи не валідуємо зараз
+			if (isValidatingDebtorsRef.current) return
+
+			if (
+				name?.startsWith('debtors') ||
+				name === 'amount' ||
+				name === 'splitType'
+			) {
+				isValidatingDebtorsRef.current = true
+
+				// Використовуємо setTimeout щоб вийти з поточного call stack
+				setTimeout(() => {
+					if (values === null || values === undefined) return
+					const { debtors = [], amount, splitType } = values
+					if (!amount || !splitType || !Array.isArray(debtors)) return
+
+					form.clearErrors('debtors')
+
+					// Фільтруємо undefined/null і об'єкти без userId
+					const validDebtors = debtors.filter(
+						(
+							debtor
+						): debtor is {
+							userId: string
+							amount?: string
+							percentage?: string
+							shares?: string
+							extraAmount?: string
+						} => debtor != null && typeof debtor.userId === 'string'
+					)
+
+					// Додаткова перевірка для TypeScript
+					if (validDebtors.length > 0 || debtors.length === 0) {
+						const totalAmount = parseFloat(amount) || 0
+						validateDebtorsBySplitType(
+							validDebtors,
+							totalAmount,
+							splitType
+						)
+					}
+
+					// Звільняємо через невеликий час
+					setTimeout(() => {
+						isValidatingDebtorsRef.current = false
+					}, 50)
+				}, 0)
+			}
+		})
+
+		return () => subscription.unsubscribe()
+	}, [form])
+
+	const validateDebtorsBySplitType = (
+		debtors: TypeAddExpenseForm['debtors'],
+		totalAmount: number,
+		splitType: 'EQUAL' | 'CUSTOM' | 'PERCENTAGE' | 'SHARES' | 'EXTRA'
+	) => {
+		switch (splitType) {
+			case 'EQUAL':
+				validateEqualSplit(debtors)
+				break
+			case 'CUSTOM':
+				validateCustomSplit(debtors, totalAmount)
+				break
+			case 'PERCENTAGE':
+				validatePercentageSplit(debtors)
+				break
+			case 'SHARES':
+				validateSharesSplit(debtors)
+				break
+			case 'EXTRA':
+				validateExtraAmountSplit(debtors, totalAmount)
+				break
+			default:
+				form.clearErrors('debtors')
+		}
+	}
+
+	const validateEqualSplit = (debtors: TypeAddExpenseForm['debtors']) => {
+		// При рівному розподілі просто перевіряємо чи є учасники
+		if (debtors.length === 0) {
+			form.setError('debtors', {
+				type: 'manual',
+				message: 'Add at least one debtor'
+			})
+		} else {
+			form.clearErrors('debtors')
+		}
+	}
+
+	const validateCustomSplit = (
+		debtors: TypeAddExpenseForm['debtors'],
+		totalAmount: number
+	) => {
+		const sumOfDebtors = debtors.reduce(
+			(acc, curr) => acc + parseFloat(curr.amount || '0'),
+			0
+		)
+
+		console.log(sumOfDebtors, totalAmount)
+
+		if (debtors.length === 0) {
+			form.setError('debtors', {
+				type: 'manual',
+				message: 'Add at least one debtor'
+			})
+		} else if (sumOfDebtors > totalAmount) {
+			form.setError('debtors', {
+				type: 'manual',
+				message: 'Sum of debtors must be less than expense sum'
+			})
+		} else if (sumOfDebtors < totalAmount && sumOfDebtors >= 0) {
+			form.setError('debtors', {
+				type: 'manual',
+				message: `${
+					totalAmount - sumOfDebtors
+				} remain of ${totalAmount}`
+			})
+		} else if (sumOfDebtors === totalAmount) {
+			form.clearErrors('debtors')
+		}
+	}
+
+	const validatePercentageSplit = (
+		debtors: TypeAddExpenseForm['debtors']
+	) => {
+		const sumOfPercentages = debtors.reduce(
+			(acc, curr) => acc + parseFloat(curr.percentage || '0'),
+			0
+		)
+
+		if (debtors.length === 0) {
+			form.setError('debtors', {
+				type: 'manual',
+				message: 'Add at least one debtor'
+			})
+		} else if (sumOfPercentages > 100) {
+			form.setError('debtors', {
+				type: 'manual',
+				message: 'Sum of percentages cannot exceed 100%'
+			})
+		} else if (sumOfPercentages < 100 && sumOfPercentages >= 0) {
+			form.setError('debtors', {
+				type: 'manual',
+				message: `${100 - sumOfPercentages}% remain`
+			})
+		} else if (sumOfPercentages === 100) {
+			form.clearErrors('debtors')
+		}
+	}
+
+	const validateSharesSplit = (debtors: TypeAddExpenseForm['debtors']) => {
+		const hasShares = debtors.some(
+			debtor => parseFloat(debtor.shares || '0') > 0
+		)
+
+		console.log('sheres', hasShares)
+
+		if (debtors.length === 0) {
+			form.setError('debtors', {
+				type: 'manual',
+				message: 'Add at least one debtor'
+			})
+		} else if (!hasShares && debtors.length > 0) {
+			form.setError('debtors', {
+				type: 'manual',
+				message: 'Add shares for at least one debtor'
+			})
+		} else {
+			// При розподілі по частках немає фіксованої суми для перевірки
+			form.clearErrors('debtors')
+		}
+	}
+
+	const validateExtraAmountSplit = (
+		debtors: TypeAddExpenseForm['debtors'],
+		totalAmount: number
+	) => {
+		if (debtors.length === 0) {
+			form.setError('debtors', {
+				type: 'manual',
+				message: 'Add at least one debtor'
+			})
+			return
+		}
+
+		// При extraAmount зазвичай є базова сума (рівний розподіл) + додаткові суми
+		const sumOfExtraAmounts = debtors.reduce(
+			(acc, curr) => acc + parseFloat(curr.extraAmount || '0'),
+			0
+		)
+
+		// Базова сума розподіляється рівно між усіма
+		const baseAmountPerPerson =
+			(totalAmount - sumOfExtraAmounts) / debtors.length
+
+		if (debtors.length === 0) {
+			form.setError('debtors', {
+				type: 'manual',
+				message: 'Add at least one debtor'
+			})
+		} else if (baseAmountPerPerson < 0) {
+			form.setError('debtors', {
+				type: 'manual',
+				message: `Extra amounts (${sumOfExtraAmounts.toFixed(
+					2
+				)}) exceed total expense (${totalAmount})`
+			})
+		} else if (sumOfExtraAmounts > totalAmount) {
+			form.setError('debtors', {
+				type: 'manual',
+				message: `Sum of extra amounts must be less than expense sum`
+			})
+		} else {
+			form.clearErrors('debtors')
+		}
+	}
+
+	// валідація боржників кінець
 
 	const {
 		fields: debtorFields,
@@ -147,16 +533,6 @@ const AddExpenseForm = ({ groupId }: Props) => {
 		}
 	}
 
-	// Перевіряємо чи обраний користувач як платник
-	const isUserSelected = (userId: string) => {
-		return payerFields.some(field => field.userId === userId)
-	}
-
-	// Перевіряємо чи обраний користувач як боржник
-	const isDebtorSelected = (userId: string) => {
-		return debtorFields.some(field => field.userId === userId)
-	}
-
 	// Обробляємо зміну типу поділу
 	const handleSplitTypeChange = (newSplitType: string) => {
 		setDebtorMode(
@@ -213,6 +589,15 @@ const AddExpenseForm = ({ groupId }: Props) => {
 	}
 
 	const onSubmit = (data: TypeAddExpenseForm) => {
+		// Перевіряємо чи є помилки перед відправкою
+		if (
+			Object.keys(form.formState.errors).length > 0 ||
+			form.getValues('payers').length === 0 ||
+			form.getValues('debtors').length === 0
+		) {
+			console.log('Form has errors, not submitting')
+			return
+		}
 		const transformedPayers: transformedPayers[] = []
 		const transformedDebtors: transformedDebtors[] = []
 
@@ -278,7 +663,7 @@ const AddExpenseForm = ({ groupId }: Props) => {
 				break
 		}
 
-		const transformedData:TypeAddExpenseFormNumber = {
+		const transformedData: TypeAddExpenseFormNumber = {
 			...data,
 			amount: parseFloat(data.amount || '0'), // Конвертуємо amount у число
 			payers: transformedPayers,
@@ -301,16 +686,17 @@ const AddExpenseForm = ({ groupId }: Props) => {
 	const inputConfig = getDebtorInputConfig()
 
 	return (
-		<Card className='w-full max-w-[400px] mt-18 mb-18'>
-			<CardHeader>
-				<CardTitle>Create expense</CardTitle>
-			</CardHeader>
-			<CardContent>
-				<Form {...form}>
-					<form
-						onSubmit={form.handleSubmit(onSubmit)}
-						className='grid gap-4'
-					>
+		<Form {...form}>
+			<form
+				onSubmit={form.handleSubmit(onSubmit)}
+				className='grid gap-4 w-full max-w-[400px] mt-24 mb-18'
+			>
+				<BackButton url={`/groups/${groupId}`} />
+				<Card className=''>
+					<CardHeader>
+						<CardTitle>Create expense</CardTitle>
+					</CardHeader>
+					<CardContent>
 						<FormField
 							control={form.control}
 							name='description'
@@ -349,7 +735,62 @@ const AddExpenseForm = ({ groupId }: Props) => {
 								<FormItem>
 									<FormLabel>Expense pic</FormLabel>
 									<FormControl>
-										<Input type='file' {...field} />
+										<div>
+											{/* Кастомний прямокутник */}
+											<div className='flex gap-4 items-center'>
+												<div
+													className='flex items-center justify-center w-full h-12 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 hover:bg-gray-100 cursor-pointer transition-colors'
+													onClick={handleButtonClick}
+												>
+													<span className='text-gray-600 font-medium'>
+														{isLoadingAvatar
+															? 'Завантажую ...'
+															: 'Завантажити фото'}
+													</span>
+												</div>
+
+												{previewUrl ? (
+													<div className='mt-2'>
+														<a
+															href={
+																originalUrl ||
+																'#'
+															}
+															target='_blank'
+															rel='noopener noreferrer'
+															title='Відкрити оригінальне зображення'
+														>
+															<img
+																src={previewUrl}
+																alt='Попередній перегляд аватара'
+																className='h-24 w-24 min-w-24 object-cover block rounded-full hover:opacity-80 transition-opacity'
+															/>
+														</a>
+													</div>
+												) : (
+													<div className='h-24 w-24 flex-shrink-0  leading-24 text-center rounded-full hover:opacity-80 transition-opacity bg-muted-foreground/10'>
+														{form
+															.getValues(
+																'description'
+															)
+															.slice(0, 2)
+															.toUpperCase()}
+													</div>
+												)}
+											</div>
+
+											{/* Прихований input */}
+											<input
+												type='file'
+												accept='image/*'
+												ref={fileInputRef}
+												className='hidden'
+												disabled={isLoadingAddExpense}
+												onChange={handleFileChange}
+											/>
+											<input type='hidden' {...field} />
+											{/* Попередній перегляд */}
+										</div>
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -396,7 +837,70 @@ const AddExpenseForm = ({ groupId }: Props) => {
 							)}
 						/>
 
-						{/* Вибір режиму оплати */}
+						<FormField
+								control={form.control}
+								name='date'
+								render={({ field }) => (
+									<FormItem className='flex flex-col'>
+										<FormLabel>Date of expense</FormLabel>
+										<Popover>
+											<PopoverTrigger asChild>
+												<FormControl>
+													<Button
+														variant={'outline'}
+														className={cn(
+															'pl-3 text-left font-normal',
+															!field.value &&
+																'text-muted-foreground'
+														)}
+													>
+														{field.value ? (
+															format(
+																field.value,
+																'PPP'
+															)
+														) : (
+															<span>
+																Pick a date
+															</span>
+														)}
+														<CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
+													</Button>
+												</FormControl>
+											</PopoverTrigger>
+											<PopoverContent
+												className='w-auto p-0'
+												align='start'
+											>
+												<Calendar
+													mode='single'
+													selected={field.value}
+													onSelect={field.onChange}
+													disabled={date =>
+														date > new Date() ||
+														date <
+															new Date(
+																'2000-01-01'
+															)
+													}
+													initialFocus
+												/>
+											</PopoverContent>
+										</Popover>
+
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+					</CardContent>
+				</Card>
+
+				<Card className=''>
+					<CardHeader>
+						<CardTitle>Choose payer</CardTitle>
+					</CardHeader>
+					<CardContent>
+						{/* Вибір режиму оплати
 						<FormItem>
 							<FormLabel>Payment mode</FormLabel>
 							<FormControl>
@@ -406,7 +910,6 @@ const AddExpenseForm = ({ groupId }: Props) => {
 										value: 'single' | 'multiple'
 									) => {
 										setPaymentMode(value)
-										// Очищаємо payers при зміні режиму
 										replacePayers([])
 									}}
 									className='flex flex-row space-x-4'
@@ -431,11 +934,46 @@ const AddExpenseForm = ({ groupId }: Props) => {
 									</div>
 								</RadioGroup>
 							</FormControl>
-						</FormItem>
+						</FormItem> */}
+
+						<FormItem>
+	<FormLabel>Payment mode</FormLabel>
+	<FormControl>
+		<div className="flex p-1 bg-muted rounded-lg mb-4">
+			<button
+				type="button"
+				onClick={() => {
+					setPaymentMode('single')
+					replacePayers([])
+				}}
+				className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all ${
+					paymentMode === 'single'
+						? 'bg-primary shadow-sm text-background'
+						: 'text-muted-foreground hover:text-foreground'
+				}`}
+			>
+				Single payer
+			</button>
+			<button
+				type="button"
+				onClick={() => {
+					setPaymentMode('multiple')
+					replacePayers([])
+				}}
+				className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all ${
+					paymentMode === 'multiple'
+						? 'bg-primary shadow-sm text-background'
+						: 'text-muted-foreground hover:text-foreground'
+				}`}
+			>
+				Multiple payers
+			</button>
+		</div>
+	</FormControl>
+</FormItem>
 
 						{/* Вибір платників */}
 						<FormItem>
-							<FormLabel>Who paid?</FormLabel>
 							<FormControl>
 								{paymentMode === 'single' ? (
 									<RadioGroup
@@ -537,6 +1075,9 @@ const AddExpenseForm = ({ groupId }: Props) => {
 																	<FormControl>
 																		<Input
 																			type='number'
+																			min={
+																				0
+																			}
 																			placeholder='0.00'
 																			className='w-24'
 																			{...amountField}
@@ -553,12 +1094,23 @@ const AddExpenseForm = ({ groupId }: Props) => {
 									</div>
 								)}
 							</FormControl>
+							{form.formState.errors.payers && (
+								<div className='text-red-500 text-sm mt-2 text-center'>
+									{form.formState.errors.payers.message}
+								</div>
+							)}
 							<FormMessage />
 						</FormItem>
+					</CardContent>
+				</Card>
 
+				<Card className=''>
+					<CardHeader>
+						<CardTitle>Choose debtor</CardTitle>
+					</CardHeader>
+					<CardContent>
 						{/* Вибір боржників */}
 						<FormItem>
-							<FormLabel>Who owes?</FormLabel>
 							<FormControl>
 								<div className='grid gap-3'>
 									{group.members.map(member => {
@@ -617,6 +1169,7 @@ const AddExpenseForm = ({ groupId }: Props) => {
 																<FormControl>
 																	<Input
 																		type='number'
+																		min={0}
 																		placeholder={
 																			inputConfig.placeholder
 																		}
@@ -634,14 +1187,29 @@ const AddExpenseForm = ({ groupId }: Props) => {
 									})}
 								</div>
 							</FormControl>
+							{form.formState.errors.debtors && (
+								<div className='text-red-500 text-sm mt-2 text-center'>
+									{form.formState.errors.debtors.message}
+								</div>
+							)}
 							<FormMessage />
 						</FormItem>
+					</CardContent>
+				</Card>
 
-						<Button type='submit'>Create expense</Button>
-					</form>
-				</Form>
-			</CardContent>
-		</Card>
+				<Button
+					type='submit'
+					disabled={
+						Object.keys(form.formState.errors).length > 0 ||
+						isLoadingAddExpense ||
+						form.getValues('payers').length === 0 ||
+						form.getValues('debtors').length === 0
+					}
+				>
+					Create expense
+				</Button>
+			</form>
+		</Form>
 	)
 }
 

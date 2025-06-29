@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { TypeAddExpenseForm, TypeAddExpenseFormNumber } from '../schemas'
 import { expenseService } from '../services/expense.service'
 
-export function useAddExpenseMutation() {
+export function useAddExpenseMutation(groupId: string) {
 	const router = useRouter()
 	const queryClient = useQueryClient()
 	const { mutate: addExpense, isPending: isLoadingAddExpense } = useMutation({
@@ -14,8 +14,9 @@ export function useAddExpenseMutation() {
 			expenseService.addExpense(data),
 		onSuccess: () => {
 			toast.success('Expense added successfully')
-			//queryClient.invalidateQueries({queryKey: ['friends']})
-			//router.push('/friends')
+			queryClient.invalidateQueries({queryKey: ['group ' + groupId]})
+			router.push('/groups/' + groupId)
+			
 		},
 		onError: error => {
 			toastMessageHandler(error)

@@ -1,5 +1,5 @@
-import { IExpense } from "./expense.types"
-import { IUser, IUserSafe } from "./user.types"
+import { IExpense } from './expense.types'
+import { IUser, IUserSafe } from './user.types'
 
 export interface IGroup {
 	id: string
@@ -9,6 +9,8 @@ export interface IGroup {
 	eventDate: Date
 	createdAt: Date
 	updatedAt: Date
+	totalExpenses: number
+	userTotalBalance: number
 	members: IGroupMember[]
 	expenses: IExpense[]
 }
@@ -29,7 +31,6 @@ export interface IUserGroup {
 	avatarUrl: string
 	eventDate: Date
 }
-
 
 export enum GroupRole {
 	ADMIN = 'ADMIN',

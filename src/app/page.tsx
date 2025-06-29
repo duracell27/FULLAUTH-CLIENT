@@ -5,6 +5,7 @@ import {
 	CardFooter,
 	CardHeader
 } from '@/shared/componets/ui'
+import Image from 'next/image'
 import Link from 'next/link'
 
 export default function Home() {
@@ -17,6 +18,14 @@ export default function Home() {
 					</h1>
 				</CardHeader>
 				<CardContent>
+					<Image
+					className='rounded-lg my-2'
+						src='/images/home.jpg'
+						alt='bannerImg'
+						layout='responsive'
+						width={1000}
+						height={500}
+					/>
 					<p className='text-sm text-center'>
 						Easily track shared expenses and balances! Split costs
 						with any group—friends, family, housemates, or travel
