@@ -78,7 +78,7 @@ const AddExpenseForm = ({ groupId }: Props) => {
 	const form = useForm<TypeAddExpenseForm>({
 		resolver: zodResolver(addExpenseSchema),
 		defaultValues: {
-			description: 'шашлик',
+			description: '',
 			amount: '',
 			groupId,
 			splitType: debtorMode,
@@ -101,7 +101,7 @@ const AddExpenseForm = ({ groupId }: Props) => {
 		if (file.size > maxSize) {
 			form.setError('photoUrl', {
 				type: 'manual',
-				message: 'Файл занадто великий! Максимальний розмір 5 МБ.'
+				message: 'Max file size is 5 MB'
 			})
 			setIsLoadingAvatar(false)
 			return
@@ -141,14 +141,14 @@ const AddExpenseForm = ({ groupId }: Props) => {
 			} else {
 				form.setError('photoUrl', {
 					type: 'manual',
-					message: 'Помилка завантаження зображення на Cloudinary.'
+					message: 'Error uploading photo to server.'
 				})
 				setIsLoadingAvatar(false)
 			}
 		} catch (error) {
 			form.setError('photoUrl', {
 				type: 'manual',
-				message: 'Помилка при завантаженні на Cloudinary.'
+				message: 'Error uploading photo to server.'
 			})
 			setIsLoadingAvatar(false)
 		}
@@ -202,7 +202,6 @@ const AddExpenseForm = ({ groupId }: Props) => {
 						(acc, curr) => acc + (parseFloat(curr?.amount!) || 0),
 						0
 					)
-
 
 					if (payers.length === 0) {
 						form.setError('payers', {
@@ -744,8 +743,8 @@ const AddExpenseForm = ({ groupId }: Props) => {
 												>
 													<span className='text-gray-600 font-medium'>
 														{isLoadingAvatar
-															? 'Завантажую ...'
-															: 'Завантажити фото'}
+															? 'Uploading ...'
+															: 'Upload photo'}
 													</span>
 												</div>
 
@@ -792,6 +791,14 @@ const AddExpenseForm = ({ groupId }: Props) => {
 											{/* Попередній перегляд */}
 										</div>
 									</FormControl>
+									{form.formState.errors.photoUrl && (
+										<div className='text-red-500 text-sm mt-2 text-center'>
+											{
+												form.formState.errors.photoUrl
+													.message
+											}
+										</div>
+									)}
 									<FormMessage />
 								</FormItem>
 							)}
@@ -838,60 +845,56 @@ const AddExpenseForm = ({ groupId }: Props) => {
 						/>
 
 						<FormField
-								control={form.control}
-								name='date'
-								render={({ field }) => (
-									<FormItem className='flex flex-col'>
-										<FormLabel>Date of expense</FormLabel>
-										<Popover>
-											<PopoverTrigger asChild>
-												<FormControl>
-													<Button
-														variant={'outline'}
-														className={cn(
-															'pl-3 text-left font-normal',
-															!field.value &&
-																'text-muted-foreground'
-														)}
-													>
-														{field.value ? (
-															format(
-																field.value,
-																'PPP'
-															)
-														) : (
-															<span>
-																Pick a date
-															</span>
-														)}
-														<CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
-													</Button>
-												</FormControl>
-											</PopoverTrigger>
-											<PopoverContent
-												className='w-auto p-0'
-												align='start'
-											>
-												<Calendar
-													mode='single'
-													selected={field.value}
-													onSelect={field.onChange}
-													disabled={date =>
-														date > new Date() ||
-														date <
-															new Date(
-																'2000-01-01'
-															)
-													}
-													initialFocus
-												/>
-											</PopoverContent>
-										</Popover>
+							control={form.control}
+							name='date'
+							render={({ field }) => (
+								<FormItem className='flex flex-col'>
+									<FormLabel>Date of expense</FormLabel>
+									<Popover>
+										<PopoverTrigger asChild>
+											<FormControl>
+												<Button
+													variant={'outline'}
+													className={cn(
+														'pl-3 text-left font-normal',
+														!field.value &&
+															'text-muted-foreground'
+													)}
+												>
+													{field.value ? (
+														format(
+															field.value,
+															'PPP'
+														)
+													) : (
+														<span>Pick a date</span>
+													)}
+													<CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
+												</Button>
+											</FormControl>
+										</PopoverTrigger>
+										<PopoverContent
+											className='w-auto p-0'
+											align='start'
+										>
+											<Calendar
+												mode='single'
+												selected={field.value}
+												onSelect={field.onChange}
+												disabled={date =>
+													date > new Date() ||
+													date <
+														new Date('2000-01-01')
+												}
+												initialFocus
+											/>
+										</PopoverContent>
+									</Popover>
 
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 					</CardContent>
 				</Card>
 
@@ -900,77 +903,41 @@ const AddExpenseForm = ({ groupId }: Props) => {
 						<CardTitle>Choose payer</CardTitle>
 					</CardHeader>
 					<CardContent>
-						{/* Вибір режиму оплати
 						<FormItem>
 							<FormLabel>Payment mode</FormLabel>
 							<FormControl>
-								<RadioGroup
-									value={paymentMode}
-									onValueChange={(
-										value: 'single' | 'multiple'
-									) => {
-										setPaymentMode(value)
-										replacePayers([])
-									}}
-									className='flex flex-row space-x-4'
-								>
-									<div className='flex items-center space-x-2'>
-										<RadioGroupItem
-											value='single'
-											id='single'
-										/>
-										<label htmlFor='single'>
-											Single payer
-										</label>
-									</div>
-									<div className='flex items-center space-x-2'>
-										<RadioGroupItem
-											value='multiple'
-											id='multiple'
-										/>
-										<label htmlFor='multiple'>
-											Multiple payers
-										</label>
-									</div>
-								</RadioGroup>
+								<div className='flex p-1 bg-muted rounded-lg mb-4'>
+									<button
+										type='button'
+										onClick={() => {
+											setPaymentMode('single')
+											replacePayers([])
+										}}
+										className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all ${
+											paymentMode === 'single'
+												? 'bg-primary shadow-sm text-background'
+												: 'text-muted-foreground hover:text-foreground'
+										}`}
+									>
+										Single payer
+									</button>
+									<button
+										type='button'
+										onClick={() => {
+											setPaymentMode('multiple')
+											replacePayers([])
+										}}
+										className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all ${
+											paymentMode === 'multiple'
+												? 'bg-primary shadow-sm text-background'
+												: 'text-muted-foreground hover:text-foreground'
+										}`}
+									>
+										Multiple payers
+									</button>
+								</div>
 							</FormControl>
-						</FormItem> */}
-
-						<FormItem>
-	<FormLabel>Payment mode</FormLabel>
-	<FormControl>
-		<div className="flex p-1 bg-muted rounded-lg mb-4">
-			<button
-				type="button"
-				onClick={() => {
-					setPaymentMode('single')
-					replacePayers([])
-				}}
-				className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all ${
-					paymentMode === 'single'
-						? 'bg-primary shadow-sm text-background'
-						: 'text-muted-foreground hover:text-foreground'
-				}`}
-			>
-				Single payer
-			</button>
-			<button
-				type="button"
-				onClick={() => {
-					setPaymentMode('multiple')
-					replacePayers([])
-				}}
-				className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all ${
-					paymentMode === 'multiple'
-						? 'bg-primary shadow-sm text-background'
-						: 'text-muted-foreground hover:text-foreground'
-				}`}
-			>
-				Multiple payers
-			</button>
-		</div>
-	</FormControl>
-</FormItem>
+						</FormItem>
 
 						{/* Вибір платників */}
 						<FormItem>

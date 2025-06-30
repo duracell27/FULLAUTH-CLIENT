@@ -34,10 +34,7 @@ import {
 import { useAddGroupMutation } from '@/shared/hooks'
 import { BackButton } from '@/shared/componets/ui/BackButton'
 
-
-type Props = {
-	
-}
+type Props = {}
 
 export const AddGroupForm = (props: Props) => {
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null) // Оптимізована версія для прев'ю
@@ -45,13 +42,12 @@ export const AddGroupForm = (props: Props) => {
 	const [isLoadingAvatar, setIsLoadingAvatar] = useState(false)
 	const fileInputRef = useRef<HTMLInputElement>(null)
 
-
 	const { addGroup, isLoadingAddGroup } = useAddGroupMutation()
 
 	const form = useForm<TypeAddGroupSchema>({
 		resolver: zodResolver(addGroupSchema),
 		defaultValues: {
-			name:'',
+			name: '',
 			avatarUrl: '',
 			eventDate: new Date()
 		}
@@ -69,7 +65,7 @@ export const AddGroupForm = (props: Props) => {
 		if (file.size > maxSize) {
 			form.setError('avatarUrl', {
 				type: 'manual',
-				message: 'Файл занадто великий! Максимальний розмір 5 МБ.'
+				message: 'Max file size is 5 MB'
 			})
 			setIsLoadingAvatar(false)
 			return
@@ -109,14 +105,14 @@ export const AddGroupForm = (props: Props) => {
 			} else {
 				form.setError('avatarUrl', {
 					type: 'manual',
-					message: 'Помилка завантаження зображення на Cloudinary.'
+					message: 'Error uploading photo to server.'
 				})
 				setIsLoadingAvatar(false)
 			}
 		} catch (error) {
 			form.setError('avatarUrl', {
 				type: 'manual',
-				message: 'Помилка при завантаженні на Cloudinary.'
+				message: 'Error uploading photo to server.'
 			})
 			setIsLoadingAvatar(false)
 		}
@@ -139,9 +135,7 @@ export const AddGroupForm = (props: Props) => {
 			<BackButton />
 			<Card className='w-full max-w-[400px]'>
 				<CardHeader>
-					<CardTitle>
-						Create group
-					</CardTitle>
+					<CardTitle>Create group</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<Form {...form}>
@@ -238,6 +232,14 @@ export const AddGroupForm = (props: Props) => {
 												{/* Попередній перегляд */}
 											</div>
 										</FormControl>
+										{form.formState.errors.avatarUrl && (
+											<div className='text-red-500 text-sm mt-2 text-center'>
+												{
+													form.formState.errors
+														.avatarUrl.message
+												}
+											</div>
+										)}
 										<FormMessage />
 									</FormItem>
 								)}

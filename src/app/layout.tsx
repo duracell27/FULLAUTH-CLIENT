@@ -24,6 +24,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='en' suppressHydrationWarning className={outfit.variable}>
+			<head></head>
 			<body
 				className='bg-cover bg-fixed'
 				style={{ backgroundImage: "url('/images/bg6.png')" }}
