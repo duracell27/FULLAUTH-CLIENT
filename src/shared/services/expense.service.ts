@@ -1,6 +1,5 @@
-import { TypeAddExpenseForm, TypeAddExpenseFormNumber, TypeEditGroupSchema } from '../schemas'
-import { TypeAddGroupSchema } from '../schemas/createGroup.schema'
-import { IExpense, IGroup, IUserGroup, ResponseIfriend } from '../types'
+import { TypeAddExpenseFormNumber } from '../schemas'
+import { IExpense } from '../types'
 import { api } from '../utils/api'
 
 class ExpenseService {
@@ -8,6 +7,11 @@ class ExpenseService {
 		const response = await api.post<IExpense>('expenses/add', body)
 		return response
 	}
+
+    public async getExpense(expenseId: string) {
+        const response = await api.get<IExpense>(`expenses/${expenseId}`)
+        return response
+    }
 
     // public async editGroup(body: TypeEditGroupSchema) {
 	// 	const response = await api.patch<IGroup>('groups/update', body)

@@ -82,7 +82,7 @@ export const Friends = (props: Props) => {
 						))}
 					</ul>
 				) : (
-					<p>You have no friends jet</p>
+					<p>You have no friends yet</p>
 				)}
 			</CardContent>
 		</Card>

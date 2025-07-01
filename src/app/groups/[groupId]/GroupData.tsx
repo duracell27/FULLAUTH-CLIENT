@@ -195,7 +195,7 @@ export const GroupData = ({ groupId }: Props) => {
 										</DialogContent>
 									</Dialog>
 									<Link
-										href={`/expense/${expense.id}`}
+										href={`/expenses/${expense.id}`}
 										className='flex items-center w-full min-w-0'
 									>
 										<div className='flex-1 min-w-0'>

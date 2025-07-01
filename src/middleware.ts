@@ -9,7 +9,7 @@ export default function middleware(request: NextRequest) {
 
 	if (isAuthPath) {
 		if (session) {
-			return NextResponse.redirect(new URL('/dashboard/settings', url))
+			return NextResponse.redirect(new URL('/groups', url))
 		}
 
 		return NextResponse.next()
@@ -21,5 +21,5 @@ export default function middleware(request: NextRequest) {
 }
 
 export const config = {
-	matcher: ['/auth/:path*', '/dashboard/:path*', '/friends/:path*', '/theme/:path*', '/summary/:path*', '/groups/:path*']
+	matcher: ['/auth/:path*', '/dashboard/:path*', '/friends/:path*', '/theme/:path*', '/summary/:path*', '/groups/:path*', '/expenses/:path*']
 }
