@@ -44,7 +44,6 @@ export const MemberData = (props: Props) => {
 	const { friendsData, isLoadingFriend } = useFriends()
 	const { user } = useProfile()
 	console.log(friendsData)
-	
 
 	const form = useForm<TypeSearchUserSchema>({
 		resolver: zodResolver(searchUserSchema),
@@ -92,7 +91,7 @@ export const MemberData = (props: Props) => {
 								)}
 							/>
 
-							<Button type='submit'>Search</Button>
+							<Button disabled={isLoadingProfile} type='submit'>Search</Button>
 						</form>
 					</Form>
 				</CardContent>
@@ -125,6 +124,7 @@ export const MemberData = (props: Props) => {
 												{user.displayName}
 											</span>
 											<Button
+												disabled={isLoadingAddMember}
 												onClick={() =>
 													handleAddMember(user.id)
 												}
@@ -139,45 +139,55 @@ export const MemberData = (props: Props) => {
 				</CardContent>
 			</Card>
 
-
 			{friendsData && friendsData?.friends.length > 0 && (
 				<Card className='w-full max-w-[400px]'>
-				<CardHeader>
-					<CardTitle>Or from friends</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<ul>
-						
-						{
-							friendsData.friends.map(friend => (
+					<CardHeader>
+						<CardTitle>Or from friends</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<ul>
+							{friendsData.friends.map(friend => (
 								<li
 									className='flex w-full items-center gap-2 font-medium border-b border-ring/20 py-2 hover:bg-accent'
 									key={friend.id}
 								>
 									<div className='flex w-full gap-2 items-center'>
 										<Avatar>
-											<AvatarImage src={friend.senderId === user?.id
-												? friend?.receiver?.picture
-												: friend?.sender?.picture} />
+											<AvatarImage
+												src={
+													friend.senderId === user?.id
+														? friend?.receiver
+																?.picture
+														: friend?.sender
+																?.picture
+												}
+											/>
 											<AvatarFallback>
 												{friend.senderId === user?.id
-											? friend.receiver.displayName
-													.slice(0, 2)
-													.toUpperCase()
-											: friend.sender.displayName
-													.slice(0, 2)
-													.toUpperCase()}
+													? friend.receiver.displayName
+															.slice(0, 2)
+															.toUpperCase()
+													: friend.sender.displayName
+															.slice(0, 2)
+															.toUpperCase()}
 											</AvatarFallback>
 										</Avatar>
 										<div className='flex w-full gap-2 items-center'>
 											<span className='font-bold flex-1'>
 												{friend.senderId === user?.id
-										? friend.receiver.displayName
-										: friend.sender.displayName}
+													? friend.receiver
+															.displayName
+													: friend.sender.displayName}
 											</span>
 											<Button
+												disabled={isLoadingAddMember}
 												onClick={() =>
-													handleAddMember(friend.senderId === user?.id ? friend.receiverId : friend.senderId)
+													handleAddMember(
+														friend.senderId ===
+															user?.id
+															? friend.receiverId
+															: friend.senderId
+													)
 												}
 											>
 												Invite
@@ -186,11 +196,10 @@ export const MemberData = (props: Props) => {
 									</div>
 								</li>
 							))}
-					</ul>
-				</CardContent>
-			</Card>
+						</ul>
+					</CardContent>
+				</Card>
 			)}
-			
 		</>
 	)
 }

@@ -237,16 +237,17 @@ const AddExpenseForm = ({ groupId }: Props) => {
 		return () => subscription.unsubscribe()
 	}, [form])
 
-	// валідація платників кінець
-
-	// валідація боржників початок
 
 	const isValidatingDebtorsRef = useRef(false)
 
 	useEffect(() => {
 		const subscription = form.watch((values, { name }) => {
-			// Перевіряємо чи не валідуємо зараз
+			console.log('запуск перевірки')
+			console.log('дані ', isValidatingDebtorsRef.current)
+
 			if (isValidatingDebtorsRef.current) return
+
+			console.log('запуск після')
 
 			if (
 				name?.startsWith('debtors') ||
@@ -255,41 +256,41 @@ const AddExpenseForm = ({ groupId }: Props) => {
 			) {
 				isValidatingDebtorsRef.current = true
 
-				// Використовуємо setTimeout щоб вийти з поточного call stack
 				setTimeout(() => {
-					if (values === null || values === undefined) return
-					const { debtors = [], amount, splitType } = values
-					if (!amount || !splitType || !Array.isArray(debtors)) return
+					try {
+						if (values === null || values === undefined) return
+						const { debtors = [], amount, splitType } = values
+						if (!amount || !splitType || !Array.isArray(debtors))
+							return
 
-					form.clearErrors('debtors')
+						form.clearErrors('debtors')
 
-					// Фільтруємо undefined/null і об'єкти без userId
-					const validDebtors = debtors.filter(
-						(
-							debtor
-						): debtor is {
-							userId: string
-							amount?: string
-							percentage?: string
-							shares?: string
-							extraAmount?: string
-						} => debtor != null && typeof debtor.userId === 'string'
-					)
-
-					// Додаткова перевірка для TypeScript
-					if (validDebtors.length > 0 || debtors.length === 0) {
-						const totalAmount = parseFloat(amount) || 0
-						validateDebtorsBySplitType(
-							validDebtors,
-							totalAmount,
-							splitType
+						const validDebtors = debtors.filter(
+							(
+								debtor
+							): debtor is {
+								userId: string
+								amount?: string
+								percentage?: string
+								shares?: string
+								extraAmount?: string
+							} =>
+								debtor != null &&
+								typeof debtor.userId === 'string'
 						)
-					}
 
-					// Звільняємо через невеликий час
-					setTimeout(() => {
+						if (validDebtors.length > 0 || debtors.length === 0) {
+							const totalAmount = parseFloat(amount) || 0
+							validateDebtorsBySplitType(
+								validDebtors,
+								totalAmount,
+								splitType
+							)
+						}
+					} finally {
+						// Завжди скидаємо флаг, навіть якщо сталася помилка
 						isValidatingDebtorsRef.current = false
-					}, 50)
+					}
 				}, 0)
 			}
 		})
@@ -699,6 +700,7 @@ const AddExpenseForm = ({ groupId }: Props) => {
 						<FormField
 							control={form.control}
 							name='description'
+							disabled={isLoadingAddExpense}
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Expense name</FormLabel>
@@ -716,6 +718,7 @@ const AddExpenseForm = ({ groupId }: Props) => {
 						<FormField
 							control={form.control}
 							name='amount'
+							disabled={isLoadingAddExpense}
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Expense sum</FormLabel>
@@ -730,6 +733,7 @@ const AddExpenseForm = ({ groupId }: Props) => {
 						<FormField
 							control={form.control}
 							name='photoUrl'
+							disabled={isLoadingAddExpense || isLoadingAvatar}
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Expense pic</FormLabel>
@@ -807,6 +811,7 @@ const AddExpenseForm = ({ groupId }: Props) => {
 						<FormField
 							control={form.control}
 							name='splitType'
+							disabled={isLoadingAddExpense}
 							render={({ field }) => (
 								<FormItem className='w-full'>
 									<FormLabel>Split type</FormLabel>
@@ -847,6 +852,7 @@ const AddExpenseForm = ({ groupId }: Props) => {
 						<FormField
 							control={form.control}
 							name='date'
+							disabled={isLoadingAddExpense}
 							render={({ field }) => (
 								<FormItem className='flex flex-col'>
 									<FormLabel>Date of expense</FormLabel>
@@ -1034,6 +1040,7 @@ const AddExpenseForm = ({ groupId }: Props) => {
 															control={
 																form.control
 															}
+															disabled={isLoadingAddExpense}
 															name={`payers.${fieldIndex}.amount`}
 															render={({
 																field: amountField
@@ -1126,6 +1133,7 @@ const AddExpenseForm = ({ groupId }: Props) => {
 												{isSelected && inputConfig && (
 													<FormField
 														control={form.control}
+														disabled={isLoadingAddExpense}
 														name={
 															`debtors.${fieldIndex}.${inputConfig.fieldName}` as any
 														}

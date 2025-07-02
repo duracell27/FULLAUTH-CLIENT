@@ -15,6 +15,7 @@ export function useAddExpenseMutation(groupId: string) {
 		onSuccess: () => {
 			toast.success('Expense added successfully')
 			queryClient.invalidateQueries({queryKey: ['group ' + groupId]})
+			queryClient.invalidateQueries({queryKey: ['summary']})
 			router.push('/groups/' + groupId)
 			
 		},

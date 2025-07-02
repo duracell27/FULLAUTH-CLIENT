@@ -110,19 +110,19 @@ export const GroupData = ({ groupId }: Props) => {
 					</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<div>
+					<div className='flex items-center gap-2'>
 						Group expenses:{' '}
 						<span className='font-bold'>
 							{formatNumberWithSpaces(group.totalExpenses)}
 						</span>
 					</div>
-					<div>
+					<div className='flex items-center gap-2'>
 						Your balance:{' '}
 						<span className='font-bold'>
 							{colorBalance({ balance: group.userTotalBalance })}
 						</span>
 					</div>
-					<p className='text-xs'>{format(group.eventDate, 'PPP')}</p>
+					<p className='text-xs mt-1'>{format(group.eventDate, 'PPP')}</p>
 				</CardContent>
 			</Card>
 

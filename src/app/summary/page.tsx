@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/componets/ui'
 import React from 'react'
+import { SummaryData } from './SummaryData'
 
 type Props = {}
 
@@ -12,8 +13,8 @@ const SummaryPage = (props: Props) => {
 						<CardTitle>Summary</CardTitle>
 					</CardHeader>
 					<CardContent>
-            <p>Summary will be here</p>
-          </CardContent>
+						<SummaryData />
+					</CardContent>
 				</Card>
 			</div>
 		</div>
