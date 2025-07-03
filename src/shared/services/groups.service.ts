@@ -19,7 +19,10 @@ class GroupsService {
         return response
     }
 
-    
+    public async deleteGroup(groupId: string) {
+        const response = await api.delete<boolean>(`groups/${groupId}`)
+        return response
+    }
 
      public async getGroup(groupId: string) {
         const response = await api.get<IGroup>(`groups/${groupId}`)

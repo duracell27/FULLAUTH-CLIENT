@@ -1,5 +1,14 @@
 'use client'
 import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
 	Avatar,
 	AvatarFallback,
 	AvatarImage,
@@ -17,6 +26,7 @@ import {
 } from '@/shared/componets/ui'
 import { Loading } from '@/shared/componets/ui/Loading'
 import { useGroup, useProfile } from '@/shared/hooks'
+import { useDeleteGroupMutation } from '@/shared/hooks/useDeleteGroupMutation'
 import { useDeleteMemberFromGroupMutation } from '@/shared/hooks/useDeleteMemberFromGroupMutation'
 import { GroupMemberStatus, GroupRole } from '@/shared/types'
 import colorBalance from '@/shared/utils/colorBalance'
@@ -25,7 +35,7 @@ import {
 	formatNumberWithSpaces
 } from '@/shared/utils/formatBalance'
 import { format } from 'date-fns'
-import { Edit2, X } from 'lucide-react'
+import { Edit2, Eye, Trash, X } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -44,6 +54,11 @@ export const GroupData = ({ groupId }: Props) => {
 		deleteMember({ values: { groupId, userId: recieverId } })
 	}
 
+	const { deleteGroup, isLoadingDeleteGroup } = useDeleteGroupMutation()
+	const handleDeleteGroup = () => {
+		deleteGroup(groupId)
+	}
+
 	console.log(group)
 
 	if (isLoadingGroup) {
@@ -56,60 +71,116 @@ export const GroupData = ({ groupId }: Props) => {
 	return (
 		<div className='w-full max-w-[400px] flex flex-col gap-3 pb-18'>
 			<Card className=''>
-				<CardHeader>
-					<CardTitle className='flex gap-2 items-center justify-between'>
-						<h2 className='flex items-center gap-2'>
-							{group.name}{' '}
-							{group.members.some(
-								member =>
-									member.userId === user?.id &&
-									member.role === GroupRole.ADMIN
-							) ? (
-								<Link href={`/groups/edit/${group.id}`}>
-									<Edit2 className='text-xs' />
-								</Link>
-							) : (
-								''
-							)}
-						</h2>
-						<Dialog>
-							<DialogTrigger>
-								<DialogTitle></DialogTitle>
-								<Avatar>
-									<AvatarImage
-										src={
-											group.avatarUrl
-												? group.avatarUrl.replace(
-														'/upload/',
-														'/upload/w_100,h_100,c_fill,f_webp,q_80/'
-												  )
-												: ''
-										}
-									/>
-									<AvatarFallback className='text-base'>
-										{group.name.slice(0, 2).toUpperCase()}
-									</AvatarFallback>
-								</Avatar>
-							</DialogTrigger>
-							<DialogContent className='w-[90vw] max-w-none'>
-								<Image
-									src={group.avatarUrl || ''}
-									alt=''
-									width={0}
-									height={0}
-									sizes='100vw'
-									style={{
-										width: '100%',
+				<CardHeader className='p-0'>
+					<CardTitle
+						className={`flex relative gap-2 items-center justify-between h-50 rounded-lg px-5 ${
+							group.avatarUrl === ''
+								? 'bg-primary/40'
+								: 'bg-cover bg-center'
+						}`}
+						style={
+							group.avatarUrl !== ''
+								? {
+										backgroundImage: `url(${group.avatarUrl})`
+								  }
+								: {}
+						}
+					>
+						{group.avatarUrl === '' && (
+							<div className='w-full flex items-center justify-center  text-background '>
+								<span className='bg-primary rounded-full px-5 py-2'>
+									{group.name.slice(0, 2).toUpperCase()}
+								</span>
+							</div>
+						)}
+						<div className='absolute -bottom-2 inset-x-5 gap-5 flex justify-between items-center  text-background bg-primary rounded-full px-5 py-2'>
+							<h1 className=''>{group.name}</h1>
+							<span>
+								{group.members.some(
+									member =>
+										member.userId === user?.id &&
+										member.role === GroupRole.ADMIN
+								) ? (
+									<div className='flex gap-2 items-center'>
+										<Link href={`/groups/edit/${group.id}`}>
+											<Button size={'xs'}>
+												<Edit2 className='size-4' />
+											</Button>
+										</Link>
+										<AlertDialog>
+											<AlertDialogTrigger asChild>
+												<Button
+													size={'xs'}
+													className='bg-bad-red hover:bg-bad-red/80'
+												>
+													<Trash className='size-4' />
+												</Button>
+											</AlertDialogTrigger>
+											<AlertDialogContent>
+												<AlertDialogHeader>
+													<AlertDialogTitle>
+														Are you absolutely sure?
+													</AlertDialogTitle>
+													<AlertDialogDescription>
+														This action cannot be
+														undone. This will
+														permanently delete this
+														group.
+													</AlertDialogDescription>
+												</AlertDialogHeader>
+												<AlertDialogFooter>
+													<AlertDialogCancel>
+														Cancel
+													</AlertDialogCancel>
+													<AlertDialogAction
+														onClick={() =>
+															handleDeleteGroup()
+														}
+														className='bg-bad-red hover:bg-bad-red/80'
+													>
+														Continue
+													</AlertDialogAction>
+												</AlertDialogFooter>
+											</AlertDialogContent>
+										</AlertDialog>
+									</div>
+								) : (
+									''
+								)}
+							</span>
+						</div>
 
-										height: 'auto',
-										borderRadius: '8px'
-									}}
-								/>
-							</DialogContent>
-						</Dialog>
+						{group.avatarUrl !== '' && (
+							<div className='absolute top-3 right-3'>
+								<Dialog>
+									<DialogTrigger>
+										<DialogTitle></DialogTitle>
+										<div className='rounded-full bg-white/30 text-background/50 p-1'>
+											<Eye />
+										</div>
+									</DialogTrigger>
+									<DialogContent className='w-[90vw] max-w-none'>
+										<Image
+											src={group.avatarUrl || ''}
+											alt=''
+											width={0}
+											height={0}
+											sizes='100vw'
+											style={{
+												width: '100%',
+
+												height: 'auto',
+												borderRadius: '8px'
+											}}
+										/>
+									</DialogContent>
+								</Dialog>
+							</div>
+						)}
 					</CardTitle>
 				</CardHeader>
-				<CardContent>
+
+				<CardContent className='mt-4'>
 					<div className='flex items-center gap-2'>
 						Group expenses:{' '}
 						<span className='font-bold'>
@@ -122,7 +193,9 @@ export const GroupData = ({ groupId }: Props) => {
 							{colorBalance({ balance: group.userTotalBalance })}
 						</span>
 					</div>
-					<p className='text-xs mt-1'>{format(group.eventDate, 'PPP')}</p>
+					<p className='text-xs mt-1'>
+						{format(group.eventDate, 'PPP')}
+					</p>
 				</CardContent>
 			</Card>
 

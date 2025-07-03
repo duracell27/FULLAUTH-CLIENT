@@ -14,7 +14,7 @@ class ExpenseService {
     }
 
     public async deleteExpense(expenseId: string) {
-        const response = await api.delete<IExpense>(`expenses/${expenseId}`)
+        const response = await api.delete<boolean>(`expenses/${expenseId}`)
         return response
     }
 
