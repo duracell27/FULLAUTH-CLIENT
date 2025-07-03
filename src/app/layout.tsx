@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { MainProvider } from '@/shared/providers'
 import { Outfit } from 'next/font/google'
+import { GoogleAnalytics } from '@next/third-parties/google'
 import '@/shared/styles/globals.css'
 
 export const metadata: Metadata = {
@@ -34,6 +35,10 @@ export default function RootLayout({
 						<MainProvider>{children}</MainProvider>
 					</div>
 				</div>
+				{/* Google Analytics */}
+				{process.env.GOOGLE_ANALYTICS && (
+					<GoogleAnalytics gaId={process.env.GOOGLE_ANALYTICS} />
+				)}
 			</body>
 		</html>
 	)

@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
     FRONTEND_URL: process.env.NEXT_PUBLIC_FRONTEND_URL,
     CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
     CLOUDINARY_UPLOAD_PRESET: process.env.CLOUDINARY_UPLOAD_PRESET,
+    GOOGLE_ANALYTICS: process.env.GOOGLE_ANALYTICS,
   },
   images: {
     remotePatterns: [

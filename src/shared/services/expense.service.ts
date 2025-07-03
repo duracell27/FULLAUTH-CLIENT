@@ -13,6 +13,11 @@ class ExpenseService {
         return response
     }
 
+    public async deleteExpense(expenseId: string) {
+        const response = await api.delete<IExpense>(`expenses/${expenseId}`)
+        return response
+    }
+
     // public async editGroup(body: TypeEditGroupSchema) {
 	// 	const response = await api.patch<IGroup>('groups/update', body)
 	// 	return response

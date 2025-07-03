@@ -1,5 +1,14 @@
 'use client'
 import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
 	Avatar,
 	AvatarFallback,
 	AvatarImage,
@@ -14,6 +23,7 @@ import {
 	DialogTrigger
 } from '@/shared/componets/ui'
 import { BackButton } from '@/shared/componets/ui/BackButton'
+import { useDeleteExpenseMutation } from '@/shared/hooks/useDeleteExpenseMutation'
 import { useExpense } from '@/shared/hooks/useExpense'
 import { formatBalance } from '@/shared/utils/formatBalance'
 import { format } from 'date-fns'
@@ -28,6 +38,9 @@ type Props = {
 const ExpenseData = ({ expenseId }: Props) => {
 	const { expense, isLoadingExpense } = useExpense(expenseId)
 
+	const { deleteExpense, isLoadingDeleteExpense } = useDeleteExpenseMutation(
+		expense?.groupId || ''
+	)
 	if (isLoadingExpense) {
 		return <div>Loading...</div>
 	}
@@ -36,6 +49,10 @@ const ExpenseData = ({ expenseId }: Props) => {
 
 	if (!expense) {
 		return <div>Expense not found</div>
+	}
+
+	const deleteExpenseHandler = async (expenseId: string) => {
+		await deleteExpense(expenseId)
 	}
 	return (
 		<div className='w-full max-w-[400px] flex flex-col gap-3 pb-18'>
@@ -244,9 +261,36 @@ const ExpenseData = ({ expenseId }: Props) => {
 			<Card>
 				<CardContent className='flex justify-center items-center gap-3 pt-3'>
 					<Button className='px-5'>Edit</Button>
-					<Button className='px-5 ' variant={'danger'}>
-						Delete
-					</Button>
+
+					<AlertDialog>
+						<AlertDialogTrigger asChild>
+							<Button className='px-5 ' variant={'danger'}>
+								Delete
+							</Button>
+						</AlertDialogTrigger>
+						<AlertDialogContent>
+							<AlertDialogHeader>
+								<AlertDialogTitle>
+									Are you absolutely sure?
+								</AlertDialogTitle>
+								<AlertDialogDescription>
+									This action cannot be undone. This will
+									permanently delete this expense.
+								</AlertDialogDescription>
+							</AlertDialogHeader>
+							<AlertDialogFooter>
+								<AlertDialogCancel>Cancel</AlertDialogCancel>
+								<AlertDialogAction
+									onClick={() =>
+										deleteExpenseHandler(expense.id)
+									}
+									className='bg-bad-red hover:bg-bad-red/80'
+								>
+									Continue
+								</AlertDialogAction>
+							</AlertDialogFooter>
+						</AlertDialogContent>
+					</AlertDialog>
 				</CardContent>
 			</Card>
 		</div>
