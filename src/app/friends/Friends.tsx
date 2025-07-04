@@ -26,9 +26,12 @@ export const Friends = (props: Props) => {
 	const { cancelFriendRequest, isLoadingCancelFriendRequest } =
 		useCancelFriendRequestMutation()
 
+		console.log(friendsData)
+
 	if (!user || !friendsData) return null
 
 	const cancelFriendRequestHandler = (friendRequestId: string) => {
+		console.log('id',friendRequestId)
 		cancelFriendRequest(friendRequestId)
 	}
 	return (
@@ -42,7 +45,7 @@ export const Friends = (props: Props) => {
 						{friendsData?.friends.map(friend => (
 							<li
 								key={friend.id}
-								className='flex items-center gap-2 py-2 font-medium border-b border-ring/20 py-2 hover:bg-accent block'
+								className='flex items-center gap-2 font-medium border-b border-ring/20 py-2 hover:bg-accent block'
 							>
 								<Avatar>
 									<AvatarImage

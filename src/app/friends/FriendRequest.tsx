@@ -61,7 +61,7 @@ export const FriendRequest = (props: Props) => {
 					{friendsData?.friendRequests.map(friend => (
 						<li
 							key={friend.id}
-							className='flex items-center gap-2 py-2 font-medium border-b border-ring/20 py-2 hover:bg-accent block'
+							className='flex items-center gap-2 font-medium border-b border-ring/20 py-2 hover:bg-accent block'
 						>
 							<Avatar>
 								<AvatarImage

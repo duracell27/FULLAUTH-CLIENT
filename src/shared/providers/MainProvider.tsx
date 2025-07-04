@@ -19,7 +19,6 @@ export function MainProvider({ children }: { children: React.ReactNode }) {
 				{children}
 				<FooterProvider />
 			</ThemeProvider>
-			
 		</TanstackQueryProvider>
 	)
 }

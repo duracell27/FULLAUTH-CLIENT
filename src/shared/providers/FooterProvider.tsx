@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { Separator } from '../componets/ui/Separator'
 
 export function FooterProvider() {
+	
 	const pathname = usePathname()
 	const excludedPaths = ['/', '/auth/login', '/auth/register']
 
