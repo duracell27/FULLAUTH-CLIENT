@@ -47,7 +47,9 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useForm, useFieldArray } from 'react-hook-form'
 
 type Props = {
-	groupId: string
+	groupId: string,
+	expenseId?: string,
+	edit?: boolean
 }
 
 type transformedPayers = { userId: string; amount: number }

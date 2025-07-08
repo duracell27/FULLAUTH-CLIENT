@@ -11,6 +11,24 @@ export interface IGroup {
 	updatedAt: Date
 	totalExpenses: number
 	userTotalBalance: number
+	memberBalanceDetails: {
+		user: {
+			id: string
+			displayName: string
+			picture: string | null
+		}
+		role: GroupRole
+		totalBalance: number
+		debtDetails: {
+			user: {
+				id: string
+				displayName: string
+				picture: string | null
+			}
+			amount: number
+			type: 'owes_to_member' | 'member_owes_to'
+		}[]
+	}[]
 	members: IGroupMember[]
 	expenses: IExpense[]
 }
@@ -30,6 +48,9 @@ export interface IUserGroup {
 	name: string
 	avatarUrl: string
 	eventDate: Date
+	membersCount: number
+	members: IUserSafe[]
+	userBalance: number
 }
 
 export enum GroupRole {

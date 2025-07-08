@@ -15,6 +15,7 @@ import { useGroups } from '@/shared/hooks'
 import { useAcceptGroupRequestMutation } from '@/shared/hooks/useAcceptGroupRequestMutation'
 import { useGroupsRequests } from '@/shared/hooks/useGroupsRequests'
 import { useRejectGroupRequestMutation } from '@/shared/hooks/useRejectGroupRequestMutation'
+import colorBalance from '@/shared/utils/colorBalance'
 import { format } from 'date-fns'
 import { Check, X } from 'lucide-react'
 import Link from 'next/link'
@@ -46,6 +47,7 @@ const GroupsPage = (props: Props) => {
 
 	return (
 		<div className='flex flex-col gap-3 justify-start items-center h-screen  pt-18'>
+			{/* GROUP REQUESTS */}
 			{userGroupsRequests && userGroupsRequests.length > 0 && (
 				<Card className='w-full max-w-[400px]'>
 					<CardHeader>
@@ -121,6 +123,7 @@ const GroupsPage = (props: Props) => {
 				</Card>
 			)}
 
+			{/* GROUPS LIST */}
 			<Card className='w-full max-w-[400px]'>
 				<CardHeader>
 					<CardTitle className='flex justify-between items-center'>
@@ -137,7 +140,7 @@ const GroupsPage = (props: Props) => {
 							userGroups.map(group => (
 								<li className='' key={group.id}>
 									<Link
-										className='border-t border-b border-ring/20 py-2 hover:bg-accent block'
+										className='border-t border-b border-ring/20 py-2 hover:bg-accent flex justify-between items-center gap-2'
 										href={`/groups/${group.id}`}
 									>
 										<div className='flex gap-2 items-center'>
@@ -172,6 +175,52 @@ const GroupsPage = (props: Props) => {
 														'PPP'
 													)}
 												</span>
+											</div>
+										</div>
+										<div className='flex flex-col gap-1 items-end'>
+											<h2>
+												{colorBalance({
+													balance: group.userBalance,
+													fontSize: 'text-md'
+												})}
+											</h2>
+											<div className=''>
+												<ul className='flex gap-1 items-center justify-end bg-primary/40 p-1 rounded-full'>
+													{group.members.map(
+														member => (
+															<li key={member.id}>
+																<Avatar className='size-4'>
+																	<AvatarImage
+																		src={
+																			member
+																				.picture
+																				.length
+																				? member.picture.replace(
+																						'/upload/',
+																						'/upload/w_100,h_100,c_fill,f_webp,q_80/'
+																				  )
+																				: ''
+																		}
+																	/>
+																	<AvatarFallback className='text-[9px]'>
+																		{member.displayName
+																			.slice(
+																				0,
+																				2
+																			)
+																			.toUpperCase()}
+																	</AvatarFallback>
+																</Avatar>
+															</li>
+														)
+													)}
+
+													<li key={'memberCount'}>
+														<div className='size-4 bg-primary text-center rounded-full text-background text-xs'>
+															{group.membersCount}
+														</div>
+													</li>
+												</ul>
 											</div>
 										</div>
 									</Link>

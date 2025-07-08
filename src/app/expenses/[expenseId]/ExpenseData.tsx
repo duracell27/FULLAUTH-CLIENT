@@ -29,6 +29,7 @@ import { formatBalance } from '@/shared/utils/formatBalance'
 import { format } from 'date-fns'
 import { Calendar, ContactRound, Eye, HandCoins, MoveRight } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
 type Props = {
@@ -260,7 +261,9 @@ const ExpenseData = ({ expenseId }: Props) => {
 			</Card>
 			<Card>
 				<CardContent className='flex justify-center items-center gap-3 pt-3'>
-					<Button className='px-5'>Edit</Button>
+					<Link href={`/expenses/edit/${expense.id}`}>
+						<Button className='px-5'>Edit</Button>
+					</Link>
 
 					<AlertDialog>
 						<AlertDialogTrigger asChild>
