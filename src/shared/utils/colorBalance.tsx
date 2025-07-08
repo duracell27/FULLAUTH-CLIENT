@@ -26,7 +26,7 @@ export default function colorBalance({ balance, fontSize, type }: Props) {
 			? 'bg-neutral-grey text-background px-2 rounded-full'
 			: 'text-neutral-grey'
 	return (
-		<p className={cn('text-xs text-neutral-grey', fontSize)}>
+		<span className={cn('text-xs text-neutral-grey', fontSize)}>
 			{balanceNumber > 0 && (
 				<span className={getClassByTypePositive()}>
 					+{formatNumberWithSpaces(balanceNumber)}
@@ -42,6 +42,6 @@ export default function colorBalance({ balance, fontSize, type }: Props) {
 					{formatNumberWithSpaces(balanceNumber)}
 				</span>
 			)}
-		</p>
+		</span>
 	)
 }

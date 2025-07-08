@@ -23,6 +23,9 @@ import {
 	CardContent,
 	CardHeader,
 	CardTitle,
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
 	Dialog,
 	DialogContent,
 	DialogTitle,
@@ -38,11 +41,12 @@ import {
 	formatBalance,
 	formatNumberWithSpaces
 } from '@/shared/utils/formatBalance'
+
 import { format } from 'date-fns'
 import { Edit2, Eye, HandCoins, MoveRight, Trash, X } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 
 type Props = {
 	groupId: string
@@ -54,6 +58,8 @@ export const GroupData = ({ groupId }: Props) => {
 		useDeleteMemberFromGroupMutation(groupId)
 	const { user } = useProfile()
 
+	const [isOpen, setIsOpen] = useState(false)
+
 	const handleDeleteMember = (recieverId: string) => {
 		deleteMember({ values: { groupId, userId: recieverId } })
 	}
@@ -63,7 +69,6 @@ export const GroupData = ({ groupId }: Props) => {
 		deleteGroup(groupId)
 	}
 
-	console.log(group)
 
 	if (isLoadingGroup) {
 		return <Loading />
@@ -205,77 +210,33 @@ export const GroupData = ({ groupId }: Props) => {
 
 			{group.memberBalanceDetails.length > 0 && (
 				<Card className=''>
-					<CardHeader>
-						<CardTitle className='flex justify-between items-center'>
-							<span>Balances</span>
-						</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<Accordion type='multiple' className='w-full '>
-							{group.memberBalanceDetails.map(memberBalance => (
-								<AccordionItem
-									key={memberBalance.user.id}
-									value={memberBalance.user.id}
-								>
-									<AccordionTrigger className='hover:no-underline cursor-pointer'>
-										<div className='flex items-center gap-2'>
-											<Avatar className='cursor-pointer'>
-												<AvatarImage
-													src={
-														memberBalance.user
-															.picture
-															? memberBalance.user.picture.replace(
-																	'/upload/',
-																	'/upload/w_100,h_100,c_fill,f_webp,q_80/'
-															  )
-															: ''
-													}
-												/>
-												<AvatarFallback className='text-base'>
-													{memberBalance.user.displayName
-														.slice(0, 2)
-														.toUpperCase()}
-												</AvatarFallback>
-											</Avatar>
-											<p>
-												{memberBalance.user.displayName}
-											</p>
-											{memberBalance.totalBalance > 0 ? (
-												<span className='flex items-center gap-1'>
-													gets back{' '}
-													{colorBalance({
-														balance:
-															memberBalance.totalBalance
-													})}{' '}
-													in total
-												</span>
-											) : (
-												<span className='flex items-center gap-1'>
-													owes{' '}
-													{colorBalance({
-														balance:
-															memberBalance.totalBalance
-													})}{' '}
-													in total
-												</span>
-											)}
-										</div>
-									</AccordionTrigger>
-									<AccordionContent className='flex flex-col gap-4 text-balance'>
-										<ul className='mt-2 space-y-1'>
-											{memberBalance.debtDetails.map(
-												debtDetail => (
-													<li
-														key={debtDetail.user.id}
-														className='flex items-center gap-2 pl-10 mb-2'
-													>
-														<Avatar className='cursor-pointer mb-0'>
+					<Collapsible open={isOpen} onOpenChange={setIsOpen}>
+						<CollapsibleTrigger className='w-full'>
+							<CardHeader>
+								<CardTitle className='flex justify-between items-center'>
+									<span>Balances</span>
+									<Button>{isOpen ? 'Close' : 'Open'}</Button>
+								</CardTitle>
+							</CardHeader>
+						</CollapsibleTrigger>
+						<CollapsibleContent>
+							<CardContent>
+								<Accordion type='multiple' className='w-full '>
+									{group.memberBalanceDetails.map(
+										memberBalance => (
+											<AccordionItem
+												key={memberBalance.user.id}
+												value={memberBalance.user.id}
+											>
+												<AccordionTrigger className='hover:no-underline cursor-pointer'>
+													<div className='flex items-center gap-2 w-full'>
+														<Avatar className='cursor-pointer'>
 															<AvatarImage
 																src={
-																	debtDetail
+																	memberBalance
 																		.user
 																		.picture
-																		? debtDetail.user.picture.replace(
+																		? memberBalance.user.picture.replace(
 																				'/upload/',
 																				'/upload/w_100,h_100,c_fill,f_webp,q_80/'
 																		  )
@@ -283,62 +244,137 @@ export const GroupData = ({ groupId }: Props) => {
 																}
 															/>
 															<AvatarFallback className='text-base'>
-																{debtDetail.user.displayName
+																{memberBalance.user.displayName
 																	.slice(0, 2)
 																	.toUpperCase()}
 															</AvatarFallback>
 														</Avatar>
-														<p className='w-full'>
-															{
-																debtDetail.user
-																	.displayName
-															}{' '}
-															{debtDetail.type ===
-															'owes_to_member' ? (
-																<span className=''>
-																	<span className='text-good-green whitespace-nowrap'>
-																		owes +
-																		<span className=''>
+														<div className='flex-1'>
+															<span>
+																{
+																	memberBalance
+																		.user
+																		.displayName
+																}
+															</span>
+
+															{memberBalance.totalBalance >
+															0 ? (
+																<span className='inline-block'>
+																	gets back{' '}
+																	<span>
+																		{colorBalance(
 																			{
-																				debtDetail.amount
+																				balance:
+																					memberBalance.totalBalance
 																			}
-																		</span>
+																		)}
 																	</span>{' '}
-																	to{' '}
-																	<span className='text-neutral-grey text-xs'>
-																		<MoveRight className='size-4 inline-block' />
-																		<HandCoins className='size-4 inline-block' />
-																		{
-																			memberBalance
-																				.user
-																				.displayName
-																		}
-																	</span>
+																	in total
 																</span>
 															) : (
 																<span className=''>
-																	<span className='text-bad-red whitespace-nowrap'>
-																		lended -
-																		<span className=''>
-																			{
-																				debtDetail.amount
-																			}
-																		</span>
-																	</span>{' '}
-																	to{' '}
-																	<span className='text-neutral-grey text-xs'>
-																		<MoveRight className='size-4 inline-block' />
-																		<HandCoins className='size-4 inline-block' />
+																	owes{' '}
+																	{colorBalance(
 																		{
-																			memberBalance
-																				.user
-																				.displayName
+																			balance:
+																				memberBalance.totalBalance
 																		}
-																	</span>
+																	)}{' '}
+																	in total
 																</span>
 															)}
-														</p>
-														{/* {debtDetail.amount >
+														</div>
+													</div>
+												</AccordionTrigger>
+												<AccordionContent className='flex flex-col gap-4 text-balance'>
+													<ul className='mt-2 space-y-1'>
+														{memberBalance.debtDetails.map(
+															debtDetail => (
+																<li
+																	key={
+																		debtDetail
+																			.user
+																			.id
+																	}
+																	className='flex items-center gap-2 pl-10 mb-2'
+																>
+																	<Avatar className='cursor-pointer mb-0'>
+																		<AvatarImage
+																			src={
+																				debtDetail
+																					.user
+																					.picture
+																					? debtDetail.user.picture.replace(
+																							'/upload/',
+																							'/upload/w_100,h_100,c_fill,f_webp,q_80/'
+																					  )
+																					: ''
+																			}
+																		/>
+																		<AvatarFallback className='text-base'>
+																			{debtDetail.user.displayName
+																				.slice(
+																					0,
+																					2
+																				)
+																				.toUpperCase()}
+																		</AvatarFallback>
+																	</Avatar>
+																	<p className='w-full'>
+																		{
+																			debtDetail
+																				.user
+																				.displayName
+																		}{' '}
+																		{debtDetail.type ===
+																		'owes_to_member' ? (
+																			<>
+																				<span className='text-good-green whitespace-nowrap font-semibold'>
+																					owes
+																					+
+																					<span className=''>
+																						{formatBalance(
+																							debtDetail.amount
+																						)}
+																					</span>
+																				</span>{' '}
+																				to{' '}
+																				<span className='text-neutral-grey text-xs'>
+																					<MoveRight className='size-4 inline-block' />
+																					<HandCoins className='size-4 inline-block' />
+																					{
+																						memberBalance
+																							.user
+																							.displayName
+																					}
+																				</span>
+																			</>
+																		) : (
+																			<>
+																				<span className='text-bad-red whitespace-nowrap font-semibold'>
+																					lended
+																					-
+																					<span className=''>
+																						{formatBalance(
+																							debtDetail.amount
+																						)}
+																					</span>
+																				</span>{' '}
+																				to{' '}
+																				<span className='text-neutral-grey text-xs'>
+																					<MoveRight className='size-4 inline-block' />
+																					<HandCoins className='size-4 inline-block' />
+																					{
+																						memberBalance
+																							.user
+																							.displayName
+																					}
+																				</span>
+																			</>
+																		)}
+																	</p>
+																	{/* {debtDetail.amount >
 													0 ? (
 														<span className='flex items-center gap-1'>
 															lended{' '}
@@ -358,15 +394,18 @@ export const GroupData = ({ groupId }: Props) => {
 															in total
 														</span>
 													)} */}
-													</li>
-												)
-											)}
-										</ul>
-									</AccordionContent>
-								</AccordionItem>
-							))}
-						</Accordion>
-					</CardContent>
+																</li>
+															)
+														)}
+													</ul>
+												</AccordionContent>
+											</AccordionItem>
+										)
+									)}
+								</Accordion>
+							</CardContent>
+						</CollapsibleContent>
+					</Collapsible>
 				</Card>
 			)}
 

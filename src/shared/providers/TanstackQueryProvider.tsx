@@ -7,12 +7,16 @@ import { authService } from '../services'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
+import { usePathname } from 'next/navigation'
+
 export function TanstackQueryProvider({
 	children
 }: {
 	children: React.ReactNode
 }) {
 	const router = useRouter()
+	const pathname = usePathname()
+	console.log('pathname', pathname)
 	const [client] = useState(
 		() => {
 		const queryClient = new QueryClient({
@@ -36,13 +40,13 @@ export function TanstackQueryProvider({
 					const error = state.error as any
 
 					// 401 помилка
-					if (error?.statusCode === 401) {
+					if (error?.statusCode === 401 && pathname !== '/') {
 						authService.logout()
 						router.push('/auth/login')
 						
 					} else {
 						console.log('Глобальна помилка запиту:', error)
-						toast('Глобальна помилка запиту')
+						// toast('Глобальна помилка запиту')
 					}
 				}
 			}
