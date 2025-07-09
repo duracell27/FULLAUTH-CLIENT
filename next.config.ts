@@ -13,9 +13,6 @@ const nextConfig: NextConfig = {
 	},
 	async rewrites() {
 
-    console.log('rewrites')
-    console.log(process.env.SERVER_PATH)
-    console.log(process.env.SERVER_URL)
 		return [
 			{
 				source: `${process.env.SERVER_PATH}/:path*`,

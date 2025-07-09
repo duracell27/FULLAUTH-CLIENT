@@ -29,26 +29,30 @@ import {
 	Calendar
 } from '@/shared/componets/ui'
 import { BackButton } from '@/shared/componets/ui/BackButton'
-import { useGroup } from '@/shared/hooks'
+import {
+	useEditExpenseMutation,
+	useExpenseFormData,
+	useGroup
+} from '@/shared/hooks'
 import { useAddExpenseMutation } from '@/shared/hooks/useAddExpenseMutation'
+
 import {
 	addExpenseSchema,
 	TypeAddExpenseForm,
 	TypeAddExpenseFormNumber
 } from '@/shared/schemas'
-import { SplitType } from '@/shared/types'
 import { cn } from '@/shared/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
 
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useForm, useFieldArray } from 'react-hook-form'
 
 type Props = {
-	groupId: string,
-	expenseId?: string,
+	groupId: string
+	expenseId?: string
 	edit?: boolean
 }
 
@@ -61,13 +65,59 @@ type transformedDebtors = {
 	extraAmount?: number
 }
 
-const AddExpenseForm = ({ groupId }: Props) => {
+const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null) // Оптимізована версія для прев'ю
 	const [originalUrl, setOriginalUrl] = useState<string | null>(null)
 	const [isLoadingAvatar, setIsLoadingAvatar] = useState(false)
 	const fileInputRef = useRef<HTMLInputElement>(null)
 
 	const { group, isLoadingGroup } = useGroup(groupId)
+	const { expenseFormData, isLoadingExpenseFormData } = useExpenseFormData(
+		edit ? expenseId : 'formdatatest'
+	)
+
+	const { editExpense, isLoadingEditExpense } = useEditExpenseMutation(
+		groupId
+	)
+
+	useEffect(() => {
+		if (edit && expenseFormData) {
+			console.log('expenseFormData', expenseFormData)
+
+			const transformedPayers = expenseFormData.payers.map(p => ({
+				userId: p.userId,
+				amount: p.amount.toString()
+			}))
+
+			if (transformedPayers.length > 1) {
+				setPaymentMode('multiple')
+			} else {
+				setPaymentMode('single')
+			}
+
+			const transformedDebtors = expenseFormData.debtors.map(d => ({
+				userId: d.userId,
+				amount: d.amount?.toString(),
+				percentage: d.percentage?.toString(),
+				shares: d.shares?.toString(),
+				extraAmount: d.extraAmount?.toString()
+			}))
+
+			setDebtorMode(expenseFormData.splitType)
+
+			form.reset({
+				description: expenseFormData.description,
+				amount: expenseFormData.amount.toString(),
+				groupId: expenseFormData.groupId,
+				splitType: expenseFormData.splitType,
+				photoUrl: expenseFormData.photoUrl,
+				date: new Date(expenseFormData.date as Date),
+				payers: transformedPayers,
+				debtors: transformedDebtors
+			})
+		}
+	}, [edit, expenseFormData])
+
 	const [paymentMode, setPaymentMode] = useState<'single' | 'multiple'>(
 		'single'
 	)
@@ -76,6 +126,8 @@ const AddExpenseForm = ({ groupId }: Props) => {
 	>('EQUAL')
 
 	const { addExpense, isLoadingAddExpense } = useAddExpenseMutation(groupId)
+
+	
 
 	const form = useForm<TypeAddExpenseForm>({
 		resolver: zodResolver(addExpenseSchema),
@@ -211,7 +263,6 @@ const AddExpenseForm = ({ groupId }: Props) => {
 							message: 'Add at least one payer'
 						})
 					} else if (sumOfPayers < (parseFloat(amount) || 0)) {
-						console.log('tut', sumOfPayers)
 						form.setError('payers', {
 							type: 'manual',
 							message: `${
@@ -237,19 +288,13 @@ const AddExpenseForm = ({ groupId }: Props) => {
 		})
 
 		return () => subscription.unsubscribe()
-	}, [form])
-
+	}, [form, expenseFormData])
 
 	const isValidatingDebtorsRef = useRef(false)
 
 	useEffect(() => {
 		const subscription = form.watch((values, { name }) => {
-			console.log('запуск перевірки')
-			console.log('дані ', isValidatingDebtorsRef.current)
-
 			if (isValidatingDebtorsRef.current) return
-
-			console.log('запуск після')
 
 			if (
 				name?.startsWith('debtors') ||
@@ -298,7 +343,7 @@ const AddExpenseForm = ({ groupId }: Props) => {
 		})
 
 		return () => subscription.unsubscribe()
-	}, [form])
+	}, [form, expenseFormData])
 
 	const validateDebtorsBySplitType = (
 		debtors: TypeAddExpenseForm['debtors'],
@@ -346,8 +391,6 @@ const AddExpenseForm = ({ groupId }: Props) => {
 			(acc, curr) => acc + parseFloat(curr.amount || '0'),
 			0
 		)
-
-		console.log(sumOfDebtors, totalAmount)
 
 		if (debtors.length === 0) {
 			form.setError('debtors', {
@@ -403,8 +446,6 @@ const AddExpenseForm = ({ groupId }: Props) => {
 		const hasShares = debtors.some(
 			debtor => parseFloat(debtor.shares || '0') > 0
 		)
-
-		console.log('sheres', hasShares)
 
 		if (debtors.length === 0) {
 			form.setError('debtors', {
@@ -597,7 +638,6 @@ const AddExpenseForm = ({ groupId }: Props) => {
 			form.getValues('payers').length === 0 ||
 			form.getValues('debtors').length === 0
 		) {
-			console.log('Form has errors, not submitting')
 			return
 		}
 		const transformedPayers: transformedPayers[] = []
@@ -672,14 +712,20 @@ const AddExpenseForm = ({ groupId }: Props) => {
 			debtors: transformedDebtors
 		}
 
-		console.log(transformedData)
-
-		addExpense(transformedData)
+		if (edit) {
+			editExpense({ data: transformedData, expenseId })
+		} else {
+			addExpense(transformedData)
+		}
 	}
 
 	if (isLoadingGroup) {
 		return <div>Loading group members...</div>
 	}
+
+	// if (edit && !expense) {
+	// 	return <div>Expense not found</div>
+	// }
 
 	if (!group?.members?.length) {
 		return <div>No group members found</div>
@@ -696,13 +742,17 @@ const AddExpenseForm = ({ groupId }: Props) => {
 				<BackButton url={`/groups/${groupId}`} />
 				<Card className=''>
 					<CardHeader>
-						<CardTitle>Create expense</CardTitle>
+						<CardTitle>
+							{edit ? 'Edit expense' : 'Create expense'}
+						</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<FormField
 							control={form.control}
 							name='description'
-							disabled={isLoadingAddExpense}
+							disabled={
+								isLoadingAddExpense || isLoadingEditExpense
+							}
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Expense name</FormLabel>
@@ -720,7 +770,9 @@ const AddExpenseForm = ({ groupId }: Props) => {
 						<FormField
 							control={form.control}
 							name='amount'
-							disabled={isLoadingAddExpense}
+							disabled={
+								isLoadingAddExpense || isLoadingEditExpense
+							}
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Expense sum</FormLabel>
@@ -735,7 +787,11 @@ const AddExpenseForm = ({ groupId }: Props) => {
 						<FormField
 							control={form.control}
 							name='photoUrl'
-							disabled={isLoadingAddExpense || isLoadingAvatar}
+							disabled={
+								isLoadingAddExpense ||
+								isLoadingEditExpense ||
+								isLoadingAvatar
+							}
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Expense pic</FormLabel>
@@ -813,7 +869,9 @@ const AddExpenseForm = ({ groupId }: Props) => {
 						<FormField
 							control={form.control}
 							name='splitType'
-							disabled={isLoadingAddExpense}
+							disabled={
+								isLoadingAddExpense || isLoadingEditExpense
+							}
 							render={({ field }) => (
 								<FormItem className='w-full'>
 									<FormLabel>Split type</FormLabel>
@@ -854,7 +912,9 @@ const AddExpenseForm = ({ groupId }: Props) => {
 						<FormField
 							control={form.control}
 							name='date'
-							disabled={isLoadingAddExpense}
+							disabled={
+								isLoadingAddExpense || isLoadingEditExpense
+							}
 							render={({ field }) => (
 								<FormItem className='flex flex-col'>
 									<FormLabel>Date of expense</FormLabel>
@@ -1042,7 +1102,9 @@ const AddExpenseForm = ({ groupId }: Props) => {
 															control={
 																form.control
 															}
-															disabled={isLoadingAddExpense}
+															disabled={
+																isLoadingAddExpense
+															}
 															name={`payers.${fieldIndex}.amount`}
 															render={({
 																field: amountField
@@ -1135,7 +1197,9 @@ const AddExpenseForm = ({ groupId }: Props) => {
 												{isSelected && inputConfig && (
 													<FormField
 														control={form.control}
-														disabled={isLoadingAddExpense}
+														disabled={
+															isLoadingAddExpense
+														}
 														name={
 															`debtors.${fieldIndex}.${inputConfig.fieldName}` as any
 														}
@@ -1183,7 +1247,7 @@ const AddExpenseForm = ({ groupId }: Props) => {
 						form.getValues('debtors').length === 0
 					}
 				>
-					Create expense
+					{edit ? 'Edit expense' : 'Create expense'}
 				</Button>
 			</form>
 		</Form>

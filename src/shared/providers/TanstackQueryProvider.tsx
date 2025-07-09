@@ -16,7 +16,7 @@ export function TanstackQueryProvider({
 }) {
 	const router = useRouter()
 	const pathname = usePathname()
-	console.log('pathname', pathname)
+
 	const [client] = useState(
 		() => {
 		const queryClient = new QueryClient({
@@ -43,10 +43,7 @@ export function TanstackQueryProvider({
 					if (error?.statusCode === 401 && pathname !== '/') {
 						authService.logout()
 						router.push('/auth/login')
-						
-					} else {
-						console.log('Глобальна помилка запиту:', error)
-						// toast('Глобальна помилка запиту')
+						toast.error('Please login again')
 					}
 				}
 			}

@@ -43,7 +43,7 @@ export const MemberData = (props: Props) => {
 	)
 	const { friendsData, isLoadingFriend } = useFriends()
 	const { user } = useProfile()
-	console.log(friendsData)
+	
 
 	const form = useForm<TypeSearchUserSchema>({
 		resolver: zodResolver(searchUserSchema),

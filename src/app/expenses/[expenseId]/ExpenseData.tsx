@@ -46,8 +46,6 @@ const ExpenseData = ({ expenseId }: Props) => {
 		return <div>Loading...</div>
 	}
 
-	console.log(expense)
-
 	if (!expense) {
 		return <div>Expense not found</div>
 	}
@@ -261,7 +259,7 @@ const ExpenseData = ({ expenseId }: Props) => {
 			</Card>
 			<Card>
 				<CardContent className='flex justify-center items-center gap-3 pt-3'>
-					<Link href={`/expenses/edit/${expense.id}`}>
+					<Link href={`/expenses/edit/${expense.groupId}/${expense.id}`}>
 						<Button className='px-5'>Edit</Button>
 					</Link>
 

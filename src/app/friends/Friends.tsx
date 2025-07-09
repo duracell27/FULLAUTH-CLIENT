@@ -26,12 +26,12 @@ export const Friends = (props: Props) => {
 	const { cancelFriendRequest, isLoadingCancelFriendRequest } =
 		useCancelFriendRequestMutation()
 
-		console.log(friendsData)
+		
 
 	if (!user || !friendsData) return null
 
 	const cancelFriendRequestHandler = (friendRequestId: string) => {
-		console.log('id',friendRequestId)
+		
 		cancelFriendRequest(friendRequestId)
 	}
 	return (

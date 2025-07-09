@@ -18,22 +18,17 @@ class ExpenseService {
         return response
     }
 
-    // public async editGroup(body: TypeEditGroupSchema) {
-	// 	const response = await api.patch<IGroup>('groups/update', body)
-	// 	return response
-	// }
-
-    // public async getGroups() {
-    //     const response = await api.get<IUserGroup[]>('group-members')
-    //     return response
-    // }
-
     
 
-    //  public async getGroup(groupId: string) {
-    //     const response = await api.get<IGroup>(`groups/${groupId}`)
-    //     return response
-    // }
+    public async getExpenseFormData(expenseId: string) {
+        const response = await api.get<TypeAddExpenseFormNumber>(`expenses/${expenseId}/form-data`)
+        return response
+    }
+
+   public async editExpense(body: TypeAddExpenseFormNumber, expenseId: string) {
+    const response = await api.put<IExpense>(`expenses/${expenseId}`, body)
+    return response
+   }
 }
 
 export const expenseService = new ExpenseService()

@@ -215,7 +215,7 @@ export const GroupData = ({ groupId }: Props) => {
 							<CardHeader>
 								<CardTitle className='flex justify-between items-center'>
 									<span>Balances</span>
-									<Button>{isOpen ? 'Close' : 'Open'}</Button>
+									<div className={buttonVariants()}>{isOpen ? 'Close' : 'Open'}</div>
 								</CardTitle>
 							</CardHeader>
 						</CollapsibleTrigger>
@@ -256,6 +256,7 @@ export const GroupData = ({ groupId }: Props) => {
 																		.user
 																		.displayName
 																}
+																{" "}
 															</span>
 
 															{memberBalance.totalBalance >

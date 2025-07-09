@@ -59,11 +59,6 @@ export const EditGroupForm = ({ groupId }: Props) => {
 		}
 	})
 
-	// console.log('group', group)
-	console.log('name', form.getValues('name'))
-	console.log('avatarUrl', form.getValues('avatarUrl'))
-	console.log('eventDate', form.getValues('eventDate'))
-	console.log('groupId', form.getValues('groupId'))
 
 	const { editGroup, isLoadingEditGroup } = useEditGroupMutation(groupId)
 

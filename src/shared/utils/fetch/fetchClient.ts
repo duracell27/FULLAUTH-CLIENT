@@ -19,8 +19,6 @@ export class FetchClient {
 		this.headers = init.headers
 		this.params = init.params
 		this.options = init.options
-
-		console.log('baseUrl', this.baseUrl)
 	}
 
 	private createSearchParams(params: TypeSearchParams) {
@@ -124,12 +122,6 @@ export class FetchClient {
 		})
 	}
 
-	// public delete<T>(
-	// 	endpoint: string,
-	// 	options: Omit<RequestOptions, 'body'> = {}
-	// ) {
-	// 	return this.request<T>(endpoint, 'DELETE', options)
-	// }
 
 	public delete<T>(
 	endpoint: string,
