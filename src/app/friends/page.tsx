@@ -4,6 +4,11 @@ import { Friends } from './Friends'
 import { FriendRequest } from './FriendRequest'
 import { BackButton } from '@/shared/componets/ui/BackButton'
 import Link from 'next/link'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+	title: 'Friends'
+}
 
 
 type Props = {}

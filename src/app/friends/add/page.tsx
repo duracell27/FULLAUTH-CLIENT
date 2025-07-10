@@ -4,6 +4,11 @@ import { BackButton } from '@/shared/componets/ui/BackButton'
 import React from 'react'
 import { QRCodeCard } from './QRCode'
 import { FriendLink } from './FriendLink'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+	title: 'Add friend'
+}
 
 type Props = {}
 

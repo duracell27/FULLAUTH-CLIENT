@@ -1,5 +1,11 @@
 import React from 'react'
 
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+	title: 'Group members'
+}
+
 type Props = {}
 
 const MembersPage = (props: Props) => {

@@ -1,5 +1,10 @@
 import React from 'react'
 import { MemberData } from './MemberData'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+	title: 'Group members'
+}
 
 const AddMemberPage = async ({
 	params

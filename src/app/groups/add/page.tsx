@@ -1,5 +1,10 @@
 import React from 'react'
 import { AddGroupForm } from './AddGroupForm'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+	title: 'Add group'
+}
 
 type Props = {}
 

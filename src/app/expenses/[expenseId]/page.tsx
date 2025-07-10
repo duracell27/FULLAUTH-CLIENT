@@ -1,5 +1,10 @@
 import React from 'react'
 import ExpenseData from './ExpenseData'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+	title: 'Expense details'
+}
 
 const ExpensePage = async ({
     params

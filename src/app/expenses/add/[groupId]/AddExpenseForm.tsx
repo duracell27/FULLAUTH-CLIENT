@@ -42,6 +42,7 @@ import {
 	TypeAddExpenseFormNumber
 } from '@/shared/schemas'
 import { cn } from '@/shared/utils'
+import { formatBalance } from '@/shared/utils/formatBalance'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
@@ -71,14 +72,20 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 	const [isLoadingAvatar, setIsLoadingAvatar] = useState(false)
 	const fileInputRef = useRef<HTMLInputElement>(null)
 
+	const [paymentMode, setPaymentMode] = useState<'single' | 'multiple'>(
+		'single'
+	)
+	const [debtorMode, setDebtorMode] = useState<
+		'EQUAL' | 'CUSTOM' | 'PERCENTAGE' | 'SHARES' | 'EXTRA'
+	>('EQUAL')
+
 	const { group, isLoadingGroup } = useGroup(groupId)
 	const { expenseFormData, isLoadingExpenseFormData } = useExpenseFormData(
 		edit ? expenseId : 'formdatatest'
 	)
 
-	const { editExpense, isLoadingEditExpense } = useEditExpenseMutation(
-		groupId
-	)
+	const { editExpense, isLoadingEditExpense } =
+		useEditExpenseMutation(groupId)
 
 	useEffect(() => {
 		if (edit && expenseFormData) {
@@ -103,13 +110,25 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 				extraAmount: d.extraAmount?.toString()
 			}))
 
-			setDebtorMode(expenseFormData.splitType)
+			setDebtorMode(
+				expenseFormData.splitType as
+					| 'EQUAL'
+					| 'CUSTOM'
+					| 'PERCENTAGE'
+					| 'SHARES'
+					| 'EXTRA'
+			)
 
 			form.reset({
 				description: expenseFormData.description,
 				amount: expenseFormData.amount.toString(),
 				groupId: expenseFormData.groupId,
-				splitType: expenseFormData.splitType,
+				splitType: expenseFormData.splitType as
+					| 'EQUAL'
+					| 'CUSTOM'
+					| 'PERCENTAGE'
+					| 'SHARES'
+					| 'EXTRA',
 				photoUrl: expenseFormData.photoUrl,
 				date: new Date(expenseFormData.date as Date),
 				payers: transformedPayers,
@@ -118,16 +137,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 		}
 	}, [edit, expenseFormData])
 
-	const [paymentMode, setPaymentMode] = useState<'single' | 'multiple'>(
-		'single'
-	)
-	const [debtorMode, setDebtorMode] = useState<
-		'EQUAL' | 'CUSTOM' | 'PERCENTAGE' | 'SHARES' | 'EXTRA'
-	>('EQUAL')
-
 	const { addExpense, isLoadingAddExpense } = useAddExpenseMutation(groupId)
-
-	
 
 	const form = useForm<TypeAddExpenseForm>({
 		resolver: zodResolver(addExpenseSchema),
@@ -265,9 +275,9 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 					} else if (sumOfPayers < (parseFloat(amount) || 0)) {
 						form.setError('payers', {
 							type: 'manual',
-							message: `${
+							message: `${formatBalance(
 								parseFloat(amount) - sumOfPayers
-							} remain of ${amount}`
+							)} remain of ${amount}`
 						})
 					} else if (sumOfPayers > (parseFloat(amount) || 0)) {
 						form.setError('payers', {
@@ -405,9 +415,9 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 		} else if (sumOfDebtors < totalAmount && sumOfDebtors >= 0) {
 			form.setError('debtors', {
 				type: 'manual',
-				message: `${
+				message: `${formatBalance(
 					totalAmount - sumOfDebtors
-				} remain of ${totalAmount}`
+				)} remain of ${totalAmount}`
 			})
 		} else if (sumOfDebtors === totalAmount) {
 			form.clearErrors('debtors')
@@ -435,7 +445,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 		} else if (sumOfPercentages < 100 && sumOfPercentages >= 0) {
 			form.setError('debtors', {
 				type: 'manual',
-				message: `${100 - sumOfPercentages}% remain`
+				message: `${formatBalance(100 - sumOfPercentages)}% remain`
 			})
 		} else if (sumOfPercentages === 100) {
 			form.clearErrors('debtors')
@@ -880,7 +890,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 											onValueChange={
 												handleSplitTypeChange
 											}
-											defaultValue={field.value}
+											value={field.value}
 										>
 											<SelectTrigger className='w-full'>
 												<SelectValue placeholder='Select split type' />

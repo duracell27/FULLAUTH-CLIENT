@@ -1,4 +1,9 @@
+import { Metadata } from 'next'
 import AddExpenseForm from './AddExpenseForm'
+
+export const metadata: Metadata = {
+	title: 'Add expense'
+}
 
 const AddExpensePage = async ({
 	params

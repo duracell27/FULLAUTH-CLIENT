@@ -1,5 +1,10 @@
 import React from 'react'
 import { EditGroupForm } from './EditGroupForm'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+	title: 'Edit group'
+}
 
 const EditGroupPage = async ({
 	params

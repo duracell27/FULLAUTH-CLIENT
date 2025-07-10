@@ -1,6 +1,10 @@
 import React from 'react'
 import AddExpenseForm from '../../../add/[groupId]/AddExpenseForm'
+import { Metadata } from 'next'
 
+export const metadata: Metadata = {
+	title: 'Edit expense'
+}
 
 const editExpensePage = async ({
 	params

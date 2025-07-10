@@ -1,5 +1,10 @@
 import React from 'react'
 import RegisterForm from './RegisterForm'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+	title: 'Register'
+}
 
 type Props = {}
 
