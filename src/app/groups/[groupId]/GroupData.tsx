@@ -69,7 +69,6 @@ export const GroupData = ({ groupId }: Props) => {
 		deleteGroup(groupId)
 	}
 
-
 	if (isLoadingGroup) {
 		return <Loading />
 	}
@@ -215,7 +214,9 @@ export const GroupData = ({ groupId }: Props) => {
 							<CardHeader>
 								<CardTitle className='flex justify-between items-center'>
 									<span>Balances</span>
-									<div className={buttonVariants()}>{isOpen ? 'Close' : 'Open'}</div>
+									<div className={buttonVariants()}>
+										{isOpen ? 'Close' : 'Open'}
+									</div>
 								</CardTitle>
 							</CardHeader>
 						</CollapsibleTrigger>
@@ -255,8 +256,7 @@ export const GroupData = ({ groupId }: Props) => {
 																	memberBalance
 																		.user
 																		.displayName
-																}
-																{" "}
+																}{' '}
 															</span>
 
 															{memberBalance.totalBalance >
@@ -486,9 +486,40 @@ export const GroupData = ({ groupId }: Props) => {
 											<h1 className='font-semibold whitespace-nowrap overflow-hidden text-ellipsis'>
 												{expense.description}
 											</h1>
-											<p className='text-secondary-foreground text-xs'>
-												{format(expense.date, 'PPP')}
-											</p>
+
+											<ul className='inline-flex gap-1 items-start justify-start bg-primary/40 p-0.5 rounded-full'>
+												<li key={'memberCount'}>
+													<div className='h-4 px-1 bg-primary text-center rounded-full text-background text-xs'>
+														<span>paid by</span>
+													</div>
+												</li>
+												{expense.payers.map(payer => (
+													<li key={payer.payer.id}>
+														<Avatar className='size-4'>
+															<AvatarImage
+																src={
+																	payer.payer
+																		.picture
+																		.length
+																		? payer.payer.picture.replace(
+																				'/upload/',
+																				'/upload/w_100,h_100,c_fill,f_webp,q_80/'
+																		  )
+																		: ''
+																}
+															/>
+															<AvatarFallback className='text-[9px]'>
+																{payer.payer.displayName
+																	.slice(0, 2)
+																	.toUpperCase()}
+															</AvatarFallback>
+														</Avatar>
+													</li>
+												))}
+											</ul>
+											<span className='text-secondary-foreground text-xs pl-1'>
+												on {format(expense.date, 'PPP')}
+											</span>
 										</div>
 										<div className='text-right'>
 											<div className='font-bold'>
@@ -563,22 +594,50 @@ export const GroupData = ({ groupId }: Props) => {
 										)}
 									</div>
 
-									{group.members.find(
-										member => member.userId === user.id
-									)?.role === GroupRole.ADMIN &&
-										member.userId !== user.id && (
-											<Button
-												onClick={() =>
-													handleDeleteMember(
-														member.userId
-													)
-												}
-												variant={'default'}
-												size={'xs'}
-											>
-												<X />
-											</Button>
-										)}
+									<AlertDialog>
+										<AlertDialogTrigger asChild>
+											{group.members.find(
+												member =>
+													member.userId === user.id
+											)?.role === GroupRole.ADMIN &&
+												member.userId !== user.id && (
+													<Button
+														type='button'
+														variant={'default'}
+														size={'xs'}
+													>
+														<X />
+													</Button>
+												)}
+										</AlertDialogTrigger>
+										<AlertDialogContent>
+											<AlertDialogHeader>
+												<AlertDialogTitle>
+													Are you absolutely sure?
+												</AlertDialogTitle>
+												<AlertDialogDescription>
+													This action cannot be
+													undone. This will remove
+													this member from the group.
+												</AlertDialogDescription>
+											</AlertDialogHeader>
+											<AlertDialogFooter>
+												<AlertDialogCancel>
+													Cancel
+												</AlertDialogCancel>
+												<AlertDialogAction
+													onClick={() =>
+														handleDeleteMember(
+															member.userId
+														)
+													}
+													className='bg-bad-red hover:bg-bad-red/80'
+												>
+													Continue
+												</AlertDialogAction>
+											</AlertDialogFooter>
+										</AlertDialogContent>
+									</AlertDialog>
 								</div>
 							</li>
 						))}
