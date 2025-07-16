@@ -89,7 +89,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 
 	useEffect(() => {
 		if (edit && expenseFormData) {
-			console.log('expenseFormData', expenseFormData)
+			
 
 			const transformedPayers = expenseFormData.payers.map(p => ({
 				userId: p.userId,
@@ -252,6 +252,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 
 	useEffect(() => {
 		const subscription = form.watch((values, { name }) => {
+			
 			// Перевіряємо чи не валідуємо зараз
 			if (isValidatingRef.current) return
 
@@ -273,12 +274,21 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 							message: 'Add at least one payer'
 						})
 					} else if (sumOfPayers < (parseFloat(amount) || 0)) {
-						form.setError('payers', {
-							type: 'manual',
-							message: `${formatBalance(
-								parseFloat(amount) - sumOfPayers
-							)} remain of ${amount}`
-						})
+						if (paymentMode === 'single') {
+							
+							form.setError('payers', {
+								type: 'manual',
+								message: 'Please reselect payer'
+							})
+						} else if (paymentMode === 'multiple') {
+						
+							form.setError('payers', {
+								type: 'manual',
+								message: `${formatBalance(
+									parseFloat(amount) - sumOfPayers
+								)} remain of ${amount}`
+							})
+						}
 					} else if (sumOfPayers > (parseFloat(amount) || 0)) {
 						form.setError('payers', {
 							type: 'manual',
@@ -298,7 +308,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 		})
 
 		return () => subscription.unsubscribe()
-	}, [form, expenseFormData])
+	}, [form, expenseFormData, paymentMode])
 
 	const isValidatingDebtorsRef = useRef(false)
 
@@ -533,8 +543,11 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 	const handleSinglePayerSelect = (userId: string) => {
 		const totalAmount = form.getValues('amount')
 		replacePayers([{ userId, amount: totalAmount }])
-	}
 
+		setTimeout(() => {
+			form.trigger('payers') // або form.trigger() для всієї форми
+		}, 50)
+	}
 	// Функція для обробки множинного вибору (multiple mode)
 	const handleMultiplePayerToggle = (userId: string, isChecked: boolean) => {
 		const currentPayers = form.getValues('payers')
@@ -549,6 +562,10 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 			)
 			replacePayers(updatedPayers)
 		}
+
+		// setTimeout(() => {
+		// 	form.trigger('payers') // або form.trigger() для всієї форми
+		// }, 50)
 	}
 
 	// Функція для обробки вибору боржників
@@ -733,10 +750,6 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 		return <div>Loading group members...</div>
 	}
 
-	// if (edit && !expense) {
-	// 	return <div>Expense not found</div>
-	// }
-
 	if (!group?.members?.length) {
 		return <div>No group members found</div>
 	}
@@ -756,7 +769,9 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 							{edit ? 'Edit expense' : 'Create expense'}
 						</CardTitle>
 					</CardHeader>
+					{/* form fields */}
 					<CardContent>
+						{/* description */}
 						<FormField
 							control={form.control}
 							name='description'
@@ -776,7 +791,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 								</FormItem>
 							)}
 						/>
-
+						{/* amount */}
 						<FormField
 							control={form.control}
 							name='amount'
@@ -793,7 +808,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 								</FormItem>
 							)}
 						/>
-
+						{/* photo Url*/}
 						<FormField
 							control={form.control}
 							name='photoUrl'
@@ -875,7 +890,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 								</FormItem>
 							)}
 						/>
-
+						{/* split type */}
 						<FormField
 							control={form.control}
 							name='splitType'
@@ -918,7 +933,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 								</FormItem>
 							)}
 						/>
-
+						{/* date */}
 						<FormField
 							control={form.control}
 							name='date'
@@ -1022,7 +1037,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 							<FormControl>
 								{paymentMode === 'single' ? (
 									<RadioGroup
-										value={payerFields[0]?.userId || ''}
+										value={payerFields[0]?.userId || '12'}
 										onValueChange={handleSinglePayerSelect}
 										className='grid gap-3'
 									>
