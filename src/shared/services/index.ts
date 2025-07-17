@@ -3,3 +3,4 @@ export * from "./verification.service";
 export * from "./passworRecovery.service";
 export * from "./user.service";
 export * from './groups.service'
+export * from './payment.service'

@@ -29,6 +29,11 @@ export interface IGroup {
 			type: 'owes_to_member' | 'member_owes_to'
 		}[]
 	}[]
+	paymentsBetweenMembers: {
+		from: IUserSafe
+		to: IUserSafe
+		amount: number
+	}[]
 	members: IGroupMember[]
 	expenses: IExpense[]
 }

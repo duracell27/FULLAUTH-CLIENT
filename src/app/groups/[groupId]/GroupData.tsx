@@ -43,10 +43,19 @@ import {
 } from '@/shared/utils/formatBalance'
 
 import { format } from 'date-fns'
-import { Edit2, Eye, HandCoins, MoveRight, Trash, X } from 'lucide-react'
+import {
+	ArrowRight,
+	Edit2,
+	Eye,
+	HandCoins,
+	MoveRight,
+	Trash,
+	X
+} from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'
+import { PaymentForm } from './PaymentForm'
 
 type Props = {
 	groupId: string
@@ -58,7 +67,9 @@ export const GroupData = ({ groupId }: Props) => {
 		useDeleteMemberFromGroupMutation(groupId)
 	const { user } = useProfile()
 
-	const [isOpen, setIsOpen] = useState(false)
+	const [isOpenBalances, setIsOpenBalances] = useState(false)
+	const [isOpenPayments, setIsOpenPayments] = useState(false)
+	const [isOpenAddPayment, setIsOpenAddPayment] = useState(false)
 
 	const handleDeleteMember = (recieverId: string) => {
 		deleteMember({ values: { groupId, userId: recieverId } })
@@ -78,6 +89,7 @@ export const GroupData = ({ groupId }: Props) => {
 	}
 	return (
 		<div className='w-full max-w-[400px] flex flex-col gap-3 pb-18'>
+			{/* group info */}
 			<Card className=''>
 				<CardHeader className='p-0'>
 					<CardTitle
@@ -207,15 +219,126 @@ export const GroupData = ({ groupId }: Props) => {
 				</CardContent>
 			</Card>
 
+			{/* payments between members */}
+			{group.paymentsBetweenMembers.length > 0 && (
+				<Card className=''>
+					<Collapsible
+						open={isOpenPayments}
+						onOpenChange={setIsOpenPayments}
+					>
+						<CollapsibleTrigger className='w-full'>
+							<CardHeader>
+								<CardTitle className='flex justify-between items-center'>
+									<span>Payments</span>
+									<div
+										className={buttonVariants({
+											size: 'xs'
+										})}
+									>
+										{isOpenPayments ? 'Close' : 'Open'}
+									</div>
+								</CardTitle>
+							</CardHeader>
+						</CollapsibleTrigger>
+						<CollapsibleContent>
+							<CardContent>
+								<ul>
+									{group.paymentsBetweenMembers.map(
+										payment => (
+											<li
+												className='flex w-full items-center gap-2 font-medium border-b border-ring/20 py-2 hover:bg-accent'
+												key={payment.from.id}
+											>
+												<div className='flex w-full gap-2 items-center'>
+													<Avatar className='cursor-pointer'>
+														<AvatarImage
+															src={
+																payment.from
+																	.picture
+																	? payment.from.picture.replace(
+																			'/upload/',
+																			'/upload/w_100,h_100,c_fill,f_webp,q_80/'
+																	  )
+																	: ''
+															}
+														/>
+														<AvatarFallback className='text-base'>
+															{payment.from.displayName
+																.slice(0, 2)
+																.toUpperCase()}
+														</AvatarFallback>
+													</Avatar>
+													<div className=''>
+														<span>
+															{
+																payment.from
+																	.displayName
+															}
+														</span>
+													</div>
+
+													<ArrowRight />
+
+													<Avatar className='cursor-pointer'>
+														<AvatarImage
+															src={
+																payment.to
+																	.picture
+																	? payment.to.picture.replace(
+																			'/upload/',
+																			'/upload/w_100,h_100,c_fill,f_webp,q_80/'
+																	  )
+																	: ''
+															}
+														/>
+														<AvatarFallback className='text-base'>
+															{payment.to.displayName
+																.slice(0, 2)
+																.toUpperCase()}
+														</AvatarFallback>
+													</Avatar>
+													<div className=''>
+														<span>
+															{
+																payment.to
+																	.displayName
+															}
+														</span>
+													</div>
+
+													<div className='text-right'>
+														<span className='font-bold'>
+															{formatBalance(payment.amount)}
+														</span>
+													</div>
+												</div>
+											</li>
+										)
+									)}
+								</ul>
+							</CardContent>
+						</CollapsibleContent>
+					</Collapsible>
+				</Card>
+			)}
+
+			{/* balances */}
 			{group.memberBalanceDetails.length > 0 && (
 				<Card className=''>
-					<Collapsible open={isOpen} onOpenChange={setIsOpen}>
+					<Collapsible
+						open={isOpenBalances}
+						onOpenChange={setIsOpenBalances}
+					>
 						<CollapsibleTrigger className='w-full'>
 							<CardHeader>
 								<CardTitle className='flex justify-between items-center'>
 									<span>Balances</span>
-									<div className={buttonVariants()}>
-										{isOpen ? 'Close' : 'Open'}
+									<div
+										className={buttonVariants({
+											size: 'xs'
+										})}
+									>
+										{isOpenBalances ? 'Close' : 'Open'}
 									</div>
 								</CardTitle>
 							</CardHeader>
@@ -372,29 +495,27 @@ export const GroupData = ({ groupId }: Props) => {
 																							.displayName
 																					}
 																				</span>
+																				<Dialog open={isOpenAddPayment} onOpenChange={setIsOpenAddPayment}>
+																					<DialogTrigger>
+																						<span className='ml-3 cursor-pointer px-2 py-1 bg-primary rounded-full text-background text-xs'>
+																							pay{' '}
+																							<HandCoins className='size-4 ml-1 inline-block' />
+																						</span>
+																					</DialogTrigger>
+																					<DialogContent>
+																						<DialogTitle>
+																							
+																						</DialogTitle>
+																						<div>
+																							<h1>
+																								<PaymentForm  amount={debtDetail.amount} groupId={group.id} creditor={debtDetail.user} debtor={memberBalance.user} closeDialog={setIsOpenAddPayment}/>
+																							</h1>
+																						</div>
+																					</DialogContent>
+																				</Dialog>
 																			</>
 																		)}
 																	</p>
-																	{/* {debtDetail.amount >
-													0 ? (
-														<span className='flex items-center gap-1'>
-															lended{' '}
-															{colorBalance({
-																balance:
-																	debtDetail.amount
-															})}{' '}
-															in total
-														</span>
-													) : (
-														<span className='flex items-center gap-1'>
-															owes{' '}
-															{colorBalance({
-																balance:
-																	debtDetail.amount
-															})}{' '}
-															in total
-														</span>
-													)} */}
 																</li>
 															)
 														)}
@@ -410,6 +531,7 @@ export const GroupData = ({ groupId }: Props) => {
 				</Card>
 			)}
 
+			{/* expenses */}
 			<Card className=''>
 				<CardHeader>
 					<CardTitle className='flex justify-between items-center'>
@@ -493,29 +615,42 @@ export const GroupData = ({ groupId }: Props) => {
 														<span>paid by</span>
 													</div>
 												</li>
-												{expense.payers.map(payer => (
-													<li key={payer.payer.id}>
-														<Avatar className='size-4'>
-															<AvatarImage
-																src={
+												{expense.payers &&
+													expense.payers.length > 0 &&
+													expense.payers.map(
+														payer => (
+															<li
+																key={
 																	payer.payer
-																		.picture
-																		.length
-																		? payer.payer.picture.replace(
-																				'/upload/',
-																				'/upload/w_100,h_100,c_fill,f_webp,q_80/'
-																		  )
-																		: ''
+																		.id
 																}
-															/>
-															<AvatarFallback className='text-[9px]'>
-																{payer.payer.displayName
-																	.slice(0, 2)
-																	.toUpperCase()}
-															</AvatarFallback>
-														</Avatar>
-													</li>
-												))}
+															>
+																<Avatar className='size-4'>
+																	<AvatarImage
+																		src={
+																			payer
+																				.payer
+																				.picture
+																				.length
+																				? payer.payer.picture.replace(
+																						'/upload/',
+																						'/upload/w_100,h_100,c_fill,f_webp,q_80/'
+																				  )
+																				: ''
+																		}
+																	/>
+																	<AvatarFallback className='text-[9px]'>
+																		{payer.payer.displayName
+																			.slice(
+																				0,
+																				2
+																			)
+																			.toUpperCase()}
+																	</AvatarFallback>
+																</Avatar>
+															</li>
+														)
+													)}
 											</ul>
 											<span className='text-secondary-foreground text-xs pl-1'>
 												on {format(expense.date, 'PPP')}
@@ -537,6 +672,7 @@ export const GroupData = ({ groupId }: Props) => {
 				</CardContent>
 			</Card>
 
+			{/* members */}
 			<Card className=''>
 				<CardHeader>
 					<CardTitle className='flex justify-between items-center'>

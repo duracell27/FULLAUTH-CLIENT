@@ -14,3 +14,8 @@ export const formatNumberWithSpaces = (value: string | number): string => {
   return `${integerWithSpaces}.${decimalPart}`;
 };
 
+export function round2(val: number): number {
+	return Math.round(val * 100) / 100
+}
+
+
