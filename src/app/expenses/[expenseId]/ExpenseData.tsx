@@ -259,7 +259,9 @@ const ExpenseData = ({ expenseId }: Props) => {
 			</Card>
 			<Card>
 				<CardContent className='flex justify-center items-center gap-3 pt-3'>
-					<Link href={`/expenses/edit/${expense.groupId}/${expense.id}`}>
+					<Link
+						href={`/expenses/edit/${expense.groupId}/${expense.id}`}
+					>
 						<Button className='px-5'>Edit</Button>
 					</Link>
 
@@ -276,7 +278,7 @@ const ExpenseData = ({ expenseId }: Props) => {
 								</AlertDialogTitle>
 								<AlertDialogDescription>
 									This action cannot be undone. This will
-									permanently delete this expense.
+									permanently delete this <span className='font-black text-lg'>expense</span>
 								</AlertDialogDescription>
 							</AlertDialogHeader>
 							<AlertDialogFooter>

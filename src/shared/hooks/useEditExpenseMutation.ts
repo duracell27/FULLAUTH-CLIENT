@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { TypeAddExpenseFormNumber } from '../schemas'
 import { expenseService } from '../services/expense.service'
 
-export function useEditExpenseMutation(groupId: string) {
+export function useEditExpenseMutation(groupId: string, expenseId: string) {
 	const router = useRouter()
 	const queryClient = useQueryClient()
 	const { mutate: editExpense, isPending: isLoadingEditExpense } =
@@ -18,6 +18,7 @@ export function useEditExpenseMutation(groupId: string) {
 				queryClient.invalidateQueries({
 					queryKey: ['group ' + groupId]
 				})
+				queryClient.invalidateQueries({ queryKey: ['expense ' + expenseId] })
 				queryClient.invalidateQueries({ queryKey: ['summary'] })
 				router.push('/groups/' + groupId)
 			},

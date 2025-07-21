@@ -244,10 +244,10 @@ export const GroupData = ({ groupId }: Props) => {
 							<CardContent>
 								<ul>
 									{group.paymentsBetweenMembers.map(
-										payment => (
+										(payment, index) => (
 											<li
 												className='flex w-full items-center gap-2 font-medium border-b border-ring/20 py-2 hover:bg-accent'
-												key={payment.from.id}
+												key={payment.from.id+index.toString()}
 											>
 												<div className='flex w-full gap-2 items-center'>
 													<Avatar className='cursor-pointer'>

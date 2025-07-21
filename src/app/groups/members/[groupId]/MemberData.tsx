@@ -140,7 +140,7 @@ export const MemberData = (props: Props) => {
 			</Card>
 
 			{friendsData && friendsData?.friends.length > 0 && (
-				<Card className='w-full max-w-[400px]'>
+				<Card className='w-full max-w-[400px] mb-18'>
 					<CardHeader>
 						<CardTitle>Or from friends</CardTitle>
 					</CardHeader>

@@ -85,7 +85,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 	)
 
 	const { editExpense, isLoadingEditExpense } =
-		useEditExpenseMutation(groupId)
+		useEditExpenseMutation(groupId, expenseId)
 
 	useEffect(() => {
 		if (edit && expenseFormData) {
