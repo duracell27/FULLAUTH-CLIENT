@@ -34,6 +34,11 @@ export interface IGroup {
 		to: IUserSafe
 		amount: number
 	}[]
+	overpays: {
+		from: IUserSafe
+		to: IUserSafe
+		amount: number
+	}[]
 	members: IGroupMember[]
 	expenses: IExpense[]
 }

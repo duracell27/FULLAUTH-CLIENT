@@ -127,7 +127,7 @@ const GroupsData = (props: Props) => {
 			)}
 
 			{/* GROUPS LIST */}
-			<Card className='w-full max-w-[400px]'>
+			<Card className='w-full max-w-[400px] mb-18'>
 				<CardHeader>
 					<CardTitle className='flex justify-between items-center'>
 						<span> Groups</span>

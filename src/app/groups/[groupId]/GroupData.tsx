@@ -45,6 +45,7 @@ import {
 import { format } from 'date-fns'
 import {
 	ArrowRight,
+	BadgeAlert,
 	Edit2,
 	Eye,
 	HandCoins,
@@ -247,70 +248,122 @@ export const GroupData = ({ groupId }: Props) => {
 										(payment, index) => (
 											<li
 												className='flex w-full items-center gap-2 font-medium border-b border-ring/20 py-2 hover:bg-accent'
-												key={payment.from.id+index.toString()}
+												key={
+													payment.from.id +
+													index.toString()
+												}
 											>
-												<div className='flex w-full gap-2 items-center'>
-													<Avatar className='cursor-pointer'>
-														<AvatarImage
-															src={
-																payment.from
-																	.picture
-																	? payment.from.picture.replace(
-																			'/upload/',
-																			'/upload/w_100,h_100,c_fill,f_webp,q_80/'
-																	  )
-																	: ''
-															}
-														/>
-														<AvatarFallback className='text-base'>
-															{payment.from.displayName
-																.slice(0, 2)
-																.toUpperCase()}
-														</AvatarFallback>
-													</Avatar>
-													<div className=''>
-														<span>
-															{
-																payment.from
-																	.displayName
-															}
-														</span>
-													</div>
+												<div className='flex flex-col'>
+													<div className='flex items-center w-full gap-2'>
+														<Avatar className='cursor-pointer'>
+															<AvatarImage
+																src={
+																	payment.from
+																		.picture
+																		? payment.from.picture.replace(
+																				'/upload/',
+																				'/upload/w_100,h_100,c_fill,f_webp,q_80/'
+																		  )
+																		: ''
+																}
+															/>
+															<AvatarFallback className='text-base'>
+																{payment.from.displayName
+																	.slice(0, 2)
+																	.toUpperCase()}
+															</AvatarFallback>
+														</Avatar>
+														<div className='flex-1'>
+															<span>
+																{
+																	payment.from
+																		.displayName
+																}
+															</span>
+														</div>
 
-													<ArrowRight />
+														<ArrowRight />
 
-													<Avatar className='cursor-pointer'>
-														<AvatarImage
-															src={
-																payment.to
-																	.picture
-																	? payment.to.picture.replace(
-																			'/upload/',
-																			'/upload/w_100,h_100,c_fill,f_webp,q_80/'
-																	  )
-																	: ''
-															}
-														/>
-														<AvatarFallback className='text-base'>
-															{payment.to.displayName
-																.slice(0, 2)
-																.toUpperCase()}
-														</AvatarFallback>
-													</Avatar>
-													<div className=''>
-														<span>
-															{
-																payment.to
-																	.displayName
-															}
-														</span>
-													</div>
+														<Avatar className='cursor-pointer'>
+															<AvatarImage
+																src={
+																	payment.to
+																		.picture
+																		? payment.to.picture.replace(
+																				'/upload/',
+																				'/upload/w_100,h_100,c_fill,f_webp,q_80/'
+																		  )
+																		: ''
+																}
+															/>
+															<AvatarFallback className='text-base'>
+																{payment.to.displayName
+																	.slice(0, 2)
+																	.toUpperCase()}
+															</AvatarFallback>
+														</Avatar>
+														<div className='flex-1'>
+															<span>
+																{
+																	payment.to
+																		.displayName
+																}
+															</span>
+														</div>
 
-													<div className='text-right'>
-														<span className='font-bold'>
-															{formatBalance(payment.amount)}
-														</span>
+														<div className='text-right'>
+															<span className='font-bold'>
+																{formatBalance(
+																	payment.amount
+																)}
+															</span>
+														</div>
 													</div>
+													{group.overpays &&
+														group.overpays.length >
+															0 &&
+														group.overpays.map(
+															overpay => {
+																return (
+																	overpay.from
+																		.id ===
+																		payment
+																			.from
+																			.id &&
+																	overpay.to
+																		.id ===
+																		payment
+																			.to
+																			.id && (
+																		<div
+																			key={
+																				overpay
+																					.from
+																					.id +
+																				overpay
+																					.to
+																					.id
+																			}
+																			className='flex justify-center items-center gap-2 bg-bad-red rounded-full px-2 w-full '
+																		>
+																			<span className='text-white'>
+																				<BadgeAlert className='size-5 -mt-1 inline-block' />{' '}
+																				overpaid{' '}
+																				{
+																					overpay.amount
+																				}{' '}
+																				to{' '}
+																				{
+																					overpay
+																						.to
+																						.displayName
+																				}
+																			</span>
+																		</div>
+																	)
+																)
+															}
+														)}
 												</div>
 											</li>
 										)
@@ -495,7 +548,14 @@ export const GroupData = ({ groupId }: Props) => {
 																							.displayName
 																					}
 																				</span>
-																				<Dialog open={isOpenAddPayment} onOpenChange={setIsOpenAddPayment}>
+																				<Dialog
+																					open={
+																						isOpenAddPayment
+																					}
+																					onOpenChange={
+																						setIsOpenAddPayment
+																					}
+																				>
 																					<DialogTrigger>
 																						<span className='ml-3 cursor-pointer px-2 py-1 bg-primary rounded-full text-background text-xs'>
 																							pay{' '}
@@ -503,12 +563,26 @@ export const GroupData = ({ groupId }: Props) => {
 																						</span>
 																					</DialogTrigger>
 																					<DialogContent>
-																						<DialogTitle>
-																							
-																						</DialogTitle>
+																						<DialogTitle></DialogTitle>
 																						<div>
 																							<h1>
-																								<PaymentForm  amount={debtDetail.amount} groupId={group.id} creditor={debtDetail.user} debtor={memberBalance.user} closeDialog={setIsOpenAddPayment}/>
+																								<PaymentForm
+																									amount={
+																										debtDetail.amount
+																									}
+																									groupId={
+																										group.id
+																									}
+																									creditor={
+																										debtDetail.user
+																									}
+																									debtor={
+																										memberBalance.user
+																									}
+																									closeDialog={
+																										setIsOpenAddPayment
+																									}
+																								/>
 																							</h1>
 																						</div>
 																					</DialogContent>

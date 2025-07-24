@@ -25,6 +25,9 @@ import {
 import { BackButton } from '@/shared/componets/ui/BackButton'
 import { useDeleteExpenseMutation } from '@/shared/hooks/useDeleteExpenseMutation'
 import { useExpense } from '@/shared/hooks/useExpense'
+import { useGroup } from '@/shared/hooks/useGroup'
+import { useProfile } from '@/shared/hooks/useProfile'
+import { GroupRole } from '@/shared/types/groupe.types'
 import { formatBalance } from '@/shared/utils/formatBalance'
 import { format } from 'date-fns'
 import { Calendar, ContactRound, Eye, HandCoins, MoveRight } from 'lucide-react'
@@ -39,16 +42,25 @@ type Props = {
 const ExpenseData = ({ expenseId }: Props) => {
 	const { expense, isLoadingExpense } = useExpense(expenseId)
 
+	const { user, isLoadingProfile } = useProfile()
+	const { group, isLoadingGroup } = useGroup(expense?.groupId || '')
+
 	const { deleteExpense, isLoadingDeleteExpense } = useDeleteExpenseMutation(
 		expense?.groupId || ''
 	)
-	if (isLoadingExpense) {
+	if (isLoadingExpense || isLoadingProfile || isLoadingGroup) {
 		return <div>Loading...</div>
 	}
 
-	if (!expense) {
+	if (!expense || !user || !group) {
 		return <div>Expense not found</div>
 	}
+
+	const isCreator = user.id === expense.creator.id
+	const isGroupAdmin = group.members?.some(
+		member => member.userId === user.id && member.role === GroupRole.ADMIN
+	)
+	const canEditOrDelete = isCreator || isGroupAdmin
 
 	const deleteExpenseHandler = async (expenseId: string) => {
 		await deleteExpense(expenseId)
@@ -260,14 +272,21 @@ const ExpenseData = ({ expenseId }: Props) => {
 			<Card>
 				<CardContent className='flex justify-center items-center gap-3 pt-3'>
 					<Link
+						className={`${!canEditOrDelete ? 'pointer-events-none' : ''}`}
 						href={`/expenses/edit/${expense.groupId}/${expense.id}`}
 					>
-						<Button className='px-5'>Edit</Button>
+						<Button className='px-5' disabled={!canEditOrDelete}>
+							Edit
+						</Button>
 					</Link>
 
 					<AlertDialog>
 						<AlertDialogTrigger asChild>
-							<Button className='px-5 ' variant={'danger'}>
+							<Button
+								className='px-5 '
+								variant={'danger'}
+								disabled={!canEditOrDelete}
+							>
 								Delete
 							</Button>
 						</AlertDialogTrigger>
@@ -278,7 +297,10 @@ const ExpenseData = ({ expenseId }: Props) => {
 								</AlertDialogTitle>
 								<AlertDialogDescription>
 									This action cannot be undone. This will
-									permanently delete this <span className='font-black text-lg'>expense</span>
+									permanently delete this{' '}
+									<span className='font-black text-lg'>
+										expense
+									</span>
 								</AlertDialogDescription>
 							</AlertDialogHeader>
 							<AlertDialogFooter>
