@@ -23,7 +23,6 @@ import { format } from 'date-fns'
 import { Check, X } from 'lucide-react'
 import Link from 'next/link'
 
-
 type Props = {}
 
 const GroupsData = (props: Props) => {
@@ -137,13 +136,15 @@ const GroupsData = (props: Props) => {
 					</CardTitle>
 				</CardHeader>
 				<CardContent>
-					{userGroups?.length === 0 && <div>You have no groups</div>}
+					{userGroups?.active?.length === 0 && (
+						<div>You have no groups</div>
+					)}
 					<ul>
 						{userGroups &&
-							userGroups.map(group => (
+							userGroups.active.map(group => (
 								<li className='' key={group.id}>
 									<Link
-										className='border-t border-b border-ring/20 py-2 hover:bg-accent flex justify-between items-center gap-2'
+										className='border px-1 border-ring/20 py-2 bg-primary/10 my-1 hover:bg-accent flex justify-between rounded-xl items-center gap-2'
 										href={`/groups/${group.id}`}
 									>
 										<div className='flex gap-2 items-center'>
@@ -232,6 +233,110 @@ const GroupsData = (props: Props) => {
 					</ul>
 				</CardContent>
 			</Card>
+
+			{/* GROUPS FINISHED LIST */}
+			{userGroups?.finished && userGroups?.finished?.length > 0 && (
+				<Card className='w-full max-w-[400px] mb-18'>
+					<CardHeader>
+						<CardTitle className='flex justify-between items-center'>
+							<span>Finished groups</span>
+						</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<ul>
+							{userGroups?.finished?.map(group => (
+								<li className='' key={group.id}>
+									<Link
+										className='border px-1 border-ring/20 py-2 bg-primary/10 my-1 hover:bg-accent flex justify-between rounded-xl items-center gap-2'
+										href={`/groups/${group.id}`}
+									>
+										<div className='flex gap-2 items-center'>
+											<div className=''>
+												<Avatar>
+													<AvatarImage
+														src={
+															group.avatarUrl
+																.length
+																? group.avatarUrl.replace(
+																		'/upload/',
+																		'/upload/w_100,h_100,c_fill,f_webp,q_80/'
+																  )
+																: ''
+														}
+													/>
+													<AvatarFallback>
+														{group.name
+															.slice(0, 2)
+															.toUpperCase()}
+													</AvatarFallback>
+												</Avatar>
+											</div>
+											<div className=''>
+												<h2 className='font-bold'>
+													{' '}
+													{group.name}
+												</h2>
+												<span className='text-xs'>
+													{format(
+														group.eventDate,
+														'PPP'
+													)}
+												</span>
+											</div>
+										</div>
+										<div className='flex flex-col gap-1 items-end'>
+											<h2>
+												{colorBalance({
+													balance: group.userBalance,
+													fontSize: 'text-md'
+												})}
+											</h2>
+											<div className=''>
+												<ul className='flex gap-1 items-center justify-end bg-primary/40 p-1 rounded-full'>
+													{group.members.map(
+														member => (
+															<li key={member.id}>
+																<Avatar className='size-4'>
+																	<AvatarImage
+																		src={
+																			member
+																				.picture
+																				.length
+																				? member.picture.replace(
+																						'/upload/',
+																						'/upload/w_100,h_100,c_fill,f_webp,q_80/'
+																				  )
+																				: ''
+																		}
+																	/>
+																	<AvatarFallback className='text-[9px]'>
+																		{member.displayName
+																			.slice(
+																				0,
+																				2
+																			)
+																			.toUpperCase()}
+																	</AvatarFallback>
+																</Avatar>
+															</li>
+														)
+													)}
+
+													<li key={'memberCount'}>
+														<div className='size-4 bg-primary text-center rounded-full text-background text-xs'>
+															{group.membersCount}
+														</div>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</Link>
+								</li>
+							))}
+						</ul>
+					</CardContent>
+				</Card>
+			)}
 		</div>
 	)
 }

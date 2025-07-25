@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { friendsService } from "../services/friends.service";
 import { groupsService } from "../services";
 
 export function useGroups() {

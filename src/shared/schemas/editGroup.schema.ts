@@ -8,7 +8,9 @@ export const editGroupSchema = z.object({
 		message: 'Name must be at least 1 characters'
 	}),
 	avatarUrl: z.optional(z.string()),
-	eventDate: z.optional(z.date())
+	eventDate: z.optional(z.date()),
+	isLocked: z.boolean(),
+	isFinished: z.boolean()
 })
 
 export type TypeEditGroupSchema = z.infer<typeof editGroupSchema>

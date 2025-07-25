@@ -84,13 +84,13 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 		edit ? expenseId : 'formdatatest'
 	)
 
-	const { editExpense, isLoadingEditExpense } =
-		useEditExpenseMutation(groupId, expenseId)
+	const { editExpense, isLoadingEditExpense } = useEditExpenseMutation(
+		groupId,
+		expenseId
+	)
 
 	useEffect(() => {
 		if (edit && expenseFormData) {
-			
-
 			const transformedPayers = expenseFormData.payers.map(p => ({
 				userId: p.userId,
 				amount: p.amount.toString()
@@ -252,7 +252,6 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 
 	useEffect(() => {
 		const subscription = form.watch((values, { name }) => {
-			
 			// Перевіряємо чи не валідуємо зараз
 			if (isValidatingRef.current) return
 
@@ -275,13 +274,11 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 						})
 					} else if (sumOfPayers < (parseFloat(amount) || 0)) {
 						if (paymentMode === 'single') {
-							
 							form.setError('payers', {
 								type: 'manual',
 								message: 'Please reselect payer'
 							})
 						} else if (paymentMode === 'multiple') {
-						
 							form.setError('payers', {
 								type: 'manual',
 								message: `${formatBalance(
@@ -538,6 +535,15 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 		name: 'debtors',
 		control: form.control
 	})
+
+	const groupMembersLength = group?.members?.length ?? 0
+	const allDebtorsSelected =
+		debtorMode === 'EQUAL' &&
+		groupMembersLength > 0 &&
+		debtorFields.length === groupMembersLength &&
+		group?.members?.every(member =>
+			debtorFields.some(d => d.userId === member.userId)
+		)
 
 	// Функція для обробки вибору платника (single mode)
 	const handleSinglePayerSelect = (userId: string) => {
@@ -1168,14 +1174,39 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 				</Card>
 
 				<Card className=''>
-					<CardHeader>
-						<CardTitle>Choose debtor</CardTitle>
+					<CardHeader className=''>
+						<div className='flex items-center justify-between'>
+							<CardTitle>Choose debtor</CardTitle>
+							{debtorMode === 'EQUAL' && (
+								<button
+									type='button'
+									className='cursor-pointer px-2 rounded-full bg-primary text-background hover:bg-primary/90 transition-colors w-fit'
+									onClick={() => {
+										if (allDebtorsSelected) {
+											replaceDebtors([])
+										} else {
+											const allDebtors =
+												group.members.map(member => ({
+													userId: member.userId
+												}))
+											replaceDebtors(allDebtors)
+										}
+									}}
+								>
+									{allDebtorsSelected
+										? 'Clear all'
+										: 'Choose all'}
+								</button>
+							)}
+						</div>
 					</CardHeader>
 					<CardContent>
 						{/* Вибір боржників */}
 						<FormItem>
 							<FormControl>
 								<div className='grid gap-3'>
+									{/* Додаємо кнопку "Вибрати всіх" тільки для EQUAL */}
+
 									{group.members.map(member => {
 										const fieldIndex =
 											debtorFields.findIndex(
@@ -1217,7 +1248,6 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 													</Avatar>
 													{member.user.displayName}
 												</label>
-
 												{/* Інпут з'являється тільки коли потрібно (не для EQUAL) та чекбокс обраний */}
 												{isSelected && inputConfig && (
 													<FormField

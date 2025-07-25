@@ -18,7 +18,8 @@ export function useEditGroupMutation(groupId: string) {
 				toastMessageHandler(data)
 			} else {
 				toast.success('Group edited successfully')
-				queryClient.invalidateQueries({queryKey: ['group ' + groupId]})
+				queryClient.invalidateQueries({ queryKey: ['group ' + groupId] })
+				queryClient.invalidateQueries({ queryKey: ['groups'] })
 				router.push(`/groups/${groupId}`)
 			}
 		},

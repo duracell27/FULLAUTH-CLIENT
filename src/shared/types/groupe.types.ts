@@ -5,6 +5,7 @@ export interface IGroup {
 	id: string
 	name: string
 	avatarUrl?: string | null
+	isLocked: boolean
 	isFinished: boolean
 	eventDate: Date
 	createdAt: Date
@@ -61,6 +62,11 @@ export interface IUserGroup {
 	membersCount: number
 	members: IUserSafe[]
 	userBalance: number
+}
+
+export interface IUserGroupObject {
+	finished: IUserGroup[]
+	active: IUserGroup[]
 }
 
 export enum GroupRole {

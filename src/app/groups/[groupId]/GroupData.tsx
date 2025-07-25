@@ -51,7 +51,9 @@ import {
 	HandCoins,
 	MoveRight,
 	Trash,
-	X
+	X,
+	Lock,
+	BookmarkCheck
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -217,6 +219,19 @@ export const GroupData = ({ groupId }: Props) => {
 					<p className='text-xs mt-1'>
 						{format(group.eventDate, 'PPP')}
 					</p>
+
+					{group.isLocked && (
+						<div className='flex justify-center items-center gap-2 bg-bad-red px-2 rounded-full text-white mt-1'>
+							<Lock className='size-4 ' />
+							<span>Locked</span>
+						</div>
+					)}
+					{group.isFinished && (
+						<div className='flex justify-center items-center gap-2 bg-good-green px-2 rounded-full text-white mt-1'>
+							<BookmarkCheck className='size-4 ' />
+							<span>Finished</span>
+						</div>
+					)}
 				</CardContent>
 			</Card>
 
@@ -247,7 +262,7 @@ export const GroupData = ({ groupId }: Props) => {
 									{group.paymentsBetweenMembers.map(
 										(payment, index) => (
 											<li
-												className='flex w-full items-center gap-2 font-medium border-b border-ring/20 py-2 hover:bg-accent'
+												className='flex w-full items-center gap-2 font-medium border border-ring/20 py-2 hover:bg-accent rounded-xl px-1 my-1 bg-primary/10'
 												key={
 													payment.from.id +
 													index.toString()
@@ -344,7 +359,7 @@ export const GroupData = ({ groupId }: Props) => {
 																					.to
 																					.id
 																			}
-																			className='flex justify-center items-center gap-2 bg-bad-red rounded-full px-2 w-full '
+																			className='flex justify-center items-center gap-2 bg-bad-red rounded-full mt-2 px-2 w-full '
 																		>
 																			<span className='text-white'>
 																				<BadgeAlert className='size-5 -mt-1 inline-block' />{' '}
@@ -614,7 +629,19 @@ export const GroupData = ({ groupId }: Props) => {
 						<Link
 							href={`/expenses/add/${group.id}`}
 							className={buttonVariants()}
+							aria-disabled={group.isLocked || group.isFinished}
+							tabIndex={
+								group.isLocked || group.isFinished ? -1 : 0
+							}
+							style={
+								group.isLocked || group.isFinished
+									? { pointerEvents: 'none', opacity: 0.6 }
+									: {}
+							}
 						>
+							{(group.isLocked || group.isFinished) && (
+								<Lock className='mr inline-block' />
+							)}
 							Add Expense
 						</Link>
 					</CardTitle>
@@ -623,7 +650,7 @@ export const GroupData = ({ groupId }: Props) => {
 					<ul>
 						{group.expenses.map(expense => (
 							<li
-								className='flex w-full items-center gap-2 font-medium border-b border-ring/20 py-2 hover:bg-accent'
+								className='flex w-full items-center gap-2 font-medium border px-1 border-ring/20 py-2 bg-primary/10 my-1 hover:bg-accent rounded-xl'
 								key={expense.id}
 							>
 								<div className='flex w-full gap-2 items-center'>
@@ -753,11 +780,35 @@ export const GroupData = ({ groupId }: Props) => {
 						<span>Members</span>
 						{group.members.find(member => member.userId === user.id)
 							?.role === GroupRole.ADMIN && (
+							// <Link
+							// 	href={`/groups/members/${group.id}`}
+							// 	className={buttonVariants()}
+							// >
+							// 	Add Member
+							// </Link>
+
 							<Link
 								href={`/groups/members/${group.id}`}
 								className={buttonVariants()}
+								aria-disabled={
+									group.isLocked || group.isFinished
+								}
+								tabIndex={
+									group.isLocked || group.isFinished ? -1 : 0
+								}
+								style={
+									group.isLocked || group.isFinished
+										? {
+												pointerEvents: 'none',
+												opacity: 0.6
+										  }
+										: {}
+								}
 							>
-								Add
+								{(group.isLocked || group.isFinished) && (
+									<Lock className='mr inline-block' />
+								)}
+								Add Member
 							</Link>
 						)}
 					</CardTitle>

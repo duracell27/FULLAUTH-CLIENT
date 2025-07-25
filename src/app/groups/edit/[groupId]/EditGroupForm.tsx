@@ -1,7 +1,6 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-// import { uk } from 'date-fns/locale'
 import React, { use, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
@@ -35,6 +34,7 @@ import { useGroup } from '@/shared/hooks'
 import { Loading } from '@/shared/componets/ui/Loading'
 import { editGroupSchema, TypeEditGroupSchema } from '@/shared/schemas'
 import { useEditGroupMutation } from '@/shared/hooks/useEditGroupMutation'
+import { Switch } from '@/shared/componets/ui/Switch'
 
 type Props = {
 	groupId: string
@@ -50,15 +50,15 @@ export const EditGroupForm = ({ groupId }: Props) => {
 
 	const form = useForm<TypeEditGroupSchema>({
 		resolver: zodResolver(editGroupSchema),
-
 		values: {
 			groupId: group?.id || groupId,
 			name: group?.name || '',
 			avatarUrl: (group?.avatarUrl as string) || '',
-			eventDate: new Date(group?.eventDate!) || new Date()
+			eventDate: new Date(group?.eventDate!) || new Date(),
+			isLocked: group?.isLocked ?? false,
+			isFinished: group?.isFinished ?? false
 		}
 	})
-
 
 	const { editGroup, isLoadingEditGroup } = useEditGroupMutation(groupId)
 
@@ -131,9 +131,6 @@ export const EditGroupForm = ({ groupId }: Props) => {
 		// Активуємо прихований input при кліку на прямокутник
 		fileInputRef.current?.click()
 	}
-
-	const avatarUrl = form.watch('avatarUrl')
-	const name = form.watch('name')
 
 	const onSubmit = (data: TypeEditGroupSchema) => {
 		editGroup({ values: data })
@@ -307,6 +304,50 @@ export const EditGroupForm = ({ groupId }: Props) => {
 											</PopoverContent>
 										</Popover>
 
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name='isLocked'
+								render={({ field }) => (
+									<FormItem className='flex flex-col gap-1'>
+										<div className='flex items-center gap-3'>
+											<FormLabel>Lock group</FormLabel>
+											<Switch
+												checked={field.value}
+												onCheckedChange={field.onChange}
+												disabled={isLoadingEditGroup}
+											/>
+										</div>
+										<p className='text-xs text-muted-foreground'>
+											In a locked group, you cannot add
+											new members or expenses
+										</p>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name='isFinished'
+								render={({ field }) => (
+									<FormItem className='flex flex-col gap-1 mt-2'>
+										<div className='flex items-center gap-3'>
+											<FormLabel>Finish group</FormLabel>
+											<Switch
+												checked={field.value}
+												onCheckedChange={field.onChange}
+												disabled={isLoadingEditGroup}
+											/>
+										</div>
+										<p className='text-xs text-muted-foreground'>
+											An finished group has no unsettled
+											balances and is not included in
+											overall expenses
+										</p>
 										<FormMessage />
 									</FormItem>
 								)}

@@ -1,6 +1,6 @@
 import { TypeEditGroupSchema } from '../schemas'
 import { TypeAddGroupSchema } from '../schemas/createGroup.schema'
-import { IGroup, IUserGroup, ResponseIfriend } from '../types'
+import { IGroup, IUserGroupObject } from '../types'
 import { api } from '../utils/api'
 
 class GroupsService {
@@ -15,7 +15,7 @@ class GroupsService {
 	}
 
     public async getGroups() {
-        const response = await api.get<IUserGroup[]>('group-members')
+        const response = await api.get<IUserGroupObject>('group-members')
         return response
     }
 
