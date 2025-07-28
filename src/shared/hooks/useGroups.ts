@@ -15,7 +15,7 @@ export function useGroups() {
         queryFn: async ({ pageParam = 0 }) => {
             const offset = typeof pageParam === 'number' ? pageParam : Number(pageParam) || 0;
             const res = await groupsService.getGroups({ type: 'active', limit: 10, offset });
-            return res.active || [];
+            return res || [];
         },
         getNextPageParam: (lastPage: IUserGroup[], allPages: IUserGroup[][]) =>
             lastPage.length === 10 ? allPages.length * 10 : undefined,
@@ -30,11 +30,11 @@ export function useGroups() {
         isLoading: isLoadingFinished,
         isFetchingNextPage: isFetchingNextFinished,
     } = useInfiniteQuery<IUserGroup[], Error>({
-        queryKey: ['groups', 'isFinished'],
+        queryKey: ['groups', 'finished'],
         queryFn: async ({ pageParam = 0 }) => {
             const offset = typeof pageParam === 'number' ? pageParam : Number(pageParam) || 0;
-            const res = await groupsService.getGroups({ type: 'isFinished', limit: 10, offset });
-            return res.finished || [];
+            const res = await groupsService.getGroups({ type: 'finished', limit: 10, offset });
+            return res || [];
         },
         getNextPageParam: (lastPage: IUserGroup[], allPages: IUserGroup[][]) =>
             lastPage.length === 10 ? allPages.length * 10 : undefined,

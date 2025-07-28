@@ -1,6 +1,7 @@
 import { TypeEditGroupSchema } from '../schemas'
 import { TypeAddGroupSchema } from '../schemas/createGroup.schema'
-import { IGroup, IUserGroupObject } from '../types'
+import { IGroup } from '../types'
+import { IUserGroup } from '../types/groupe.types'
 import { api } from '../utils/api'
 
 class GroupsService {
@@ -14,8 +15,8 @@ class GroupsService {
 		return response
 	}
 
-    public async getGroups({ type, limit = 10, offset = 0 }: { type: 'isFinished' | 'active', limit?: number, offset?: number }) {
-        const response = await api.get<IUserGroupObject>(`group-members`, {
+    public async getGroups({ type, limit = 10, offset = 0 }: { type: 'finished' | 'active', limit?: number, offset?: number }) {
+        const response = await api.get<IUserGroup[]>(`group-members`, {
             params: { type, limit, offset }
         })
         return response

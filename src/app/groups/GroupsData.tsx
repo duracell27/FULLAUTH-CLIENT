@@ -60,8 +60,11 @@ const GroupsData = (props: Props) => {
 		return <Loading />
 	}
 
+	console.log('activeGroups', activeGroups)
+	console.log('finishedGroups', finishedGroups)
+
 	return (
-		<div className='flex flex-col gap-3 justify-start items-center h-screen  pt-18'>
+		<div className='flex flex-col gap-3 justify-start items-center pt-18'>
 			{/* GROUP REQUESTS */}
 			{userGroupsRequests && userGroupsRequests.length > 0 && (
 				<Card className='w-full max-w-[400px]'>
