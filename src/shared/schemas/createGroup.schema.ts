@@ -1,4 +1,4 @@
-import { add } from 'date-fns'
+
 import { z } from 'zod'
 
 export const addGroupSchema = z.object({
@@ -7,8 +7,8 @@ export const addGroupSchema = z.object({
 	}),
 	avatarUrl: z.optional(z.string()),
 	eventDate: z.optional(z.date()),
-	isLocked: z.boolean().optional().default(false),
-	isFinished: z.boolean().optional().default(false)
+	isLocked: z.boolean().default(false),
+	isFinished: z.boolean().default(false)
 })
 
 export type TypeAddGroupSchema = z.infer<typeof addGroupSchema>

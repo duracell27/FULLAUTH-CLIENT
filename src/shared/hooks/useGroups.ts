@@ -1,11 +1,60 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { groupsService } from "../services";
+import { IUserGroup } from '../types/groupe.types';
 
 export function useGroups() {
-    const {data:userGroups, isLoading: isLoadingUserGroups} = useQuery({
-        queryKey: ['groups'],
-        queryFn: () => groupsService.getGroups(),
-    })
+    // Active groups
+    const {
+        data: activeData,
+        fetchNextPage: loadMoreActive,
+        hasNextPage: hasNextActive,
+        isLoading: isLoadingActive,
+        isFetchingNextPage: isFetchingNextActive,
+    } = useInfiniteQuery<IUserGroup[], Error>({
+        queryKey: ['groups', 'active'],
+        queryFn: async ({ pageParam = 0 }) => {
+            const offset = typeof pageParam === 'number' ? pageParam : Number(pageParam) || 0;
+            const res = await groupsService.getGroups({ type: 'active', limit: 10, offset });
+            return res.active || [];
+        },
+        getNextPageParam: (lastPage: IUserGroup[], allPages: IUserGroup[][]) =>
+            lastPage.length === 10 ? allPages.length * 10 : undefined,
+        initialPageParam: 0,
+    });
 
-    return {userGroups, isLoadingUserGroups}
+    // Finished groups
+    const {
+        data: finishedData,
+        fetchNextPage: loadMoreFinished,
+        hasNextPage: hasNextFinished,
+        isLoading: isLoadingFinished,
+        isFetchingNextPage: isFetchingNextFinished,
+    } = useInfiniteQuery<IUserGroup[], Error>({
+        queryKey: ['groups', 'isFinished'],
+        queryFn: async ({ pageParam = 0 }) => {
+            const offset = typeof pageParam === 'number' ? pageParam : Number(pageParam) || 0;
+            const res = await groupsService.getGroups({ type: 'isFinished', limit: 10, offset });
+            return res.finished || [];
+        },
+        getNextPageParam: (lastPage: IUserGroup[], allPages: IUserGroup[][]) =>
+            lastPage.length === 10 ? allPages.length * 10 : undefined,
+        initialPageParam: 0,
+    });
+
+    // Збираємо всі групи в один масив для кожного типу
+    const activeGroups = activeData?.pages ? activeData.pages.flat() : [];
+    const finishedGroups = finishedData?.pages ? finishedData.pages.flat() : [];
+
+    return {
+        activeGroups,
+        finishedGroups,
+        loadMoreActive,
+        loadMoreFinished,
+        hasNextActive,
+        hasNextFinished,
+        isLoadingActive,
+        isLoadingFinished,
+        isFetchingNextActive,
+        isFetchingNextFinished,
+    };
 }

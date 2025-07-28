@@ -14,8 +14,10 @@ class GroupsService {
 		return response
 	}
 
-    public async getGroups() {
-        const response = await api.get<IUserGroupObject>('group-members')
+    public async getGroups({ type, limit = 10, offset = 0 }: { type: 'isFinished' | 'active', limit?: number, offset?: number }) {
+        const response = await api.get<IUserGroupObject>(`group-members`, {
+            params: { type, limit, offset }
+        })
         return response
     }
 

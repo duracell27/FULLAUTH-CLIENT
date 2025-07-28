@@ -44,12 +44,14 @@ export const AddGroupForm = (props: Props) => {
 
 	const { addGroup, isLoadingAddGroup } = useAddGroupMutation()
 
-	const form = useForm<TypeAddGroupSchema>({
+	const form = useForm({
 		resolver: zodResolver(addGroupSchema),
 		defaultValues: {
 			name: '',
 			avatarUrl: '',
-			eventDate: new Date()
+			eventDate: new Date(),
+			isLocked: false,
+			isFinished: false
 		}
 	})
 

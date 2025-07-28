@@ -22,11 +22,24 @@ import colorBalance from '@/shared/utils/colorBalance'
 import { format } from 'date-fns'
 import { Check, X } from 'lucide-react'
 import Link from 'next/link'
+import { IUserGroup } from '@/shared/types/groupe.types'
+import { IUserSafe } from '@/shared/types/user.types'
 
 type Props = {}
 
 const GroupsData = (props: Props) => {
-	const { userGroups, isLoadingUserGroups } = useGroups()
+	const {
+		activeGroups,
+		finishedGroups,
+		loadMoreActive,
+		loadMoreFinished,
+		hasNextActive,
+		hasNextFinished,
+		isLoadingActive,
+		isLoadingFinished,
+		isFetchingNextActive,
+		isFetchingNextFinished,
+	} = useGroups();
 	const { userGroupsRequests, isLoadingUserGroupsRequests } =
 		useGroupsRequests()
 
@@ -43,7 +56,7 @@ const GroupsData = (props: Props) => {
 		rejectGroupRequest(groupId)
 	}
 
-	if (isLoadingUserGroups || isLoadingUserGroupsRequests) {
+	if (isLoadingActive || isLoadingFinished || isLoadingUserGroupsRequests) {
 		return <Loading />
 	}
 
@@ -67,19 +80,17 @@ const GroupsData = (props: Props) => {
 												<Avatar>
 													<AvatarImage
 														src={
-															requestItem
-																.avatarUrl
-																.length
+															requestItem.avatarUrl.length
 																? requestItem.avatarUrl.replace(
-																		'/upload/',
-																		'/upload/w_100,h_100,c_fill,f_webp,q_80/'
-																  )
+																	'/upload/',
+																	'/upload/w_100,h_100,c_fill,f_webp,q_80/'
+																)
 																: ''
 														}
 													/>
 													<AvatarFallback>
 														{requestItem.name
-															.slice(0, 2)
+																.slice(0, 2)
 															.toUpperCase()}
 													</AvatarFallback>
 												</Avatar>
@@ -125,7 +136,7 @@ const GroupsData = (props: Props) => {
 				</Card>
 			)}
 
-			{/* GROUPS LIST */}
+			{/* ACTIVE GROUPS LIST */}
 			<Card className='w-full max-w-[400px] mb-18'>
 				<CardHeader>
 					<CardTitle className='flex justify-between items-center'>
@@ -136,106 +147,100 @@ const GroupsData = (props: Props) => {
 					</CardTitle>
 				</CardHeader>
 				<CardContent>
-					{userGroups?.active?.length === 0 && (
+					{activeGroups.length === 0 && (
 						<div>You have no groups</div>
 					)}
 					<ul>
-						{userGroups &&
-							userGroups.active.map(group => (
-								<li className='' key={group.id}>
-									<Link
-										className='border px-1 border-ring/20 py-2 bg-primary/10 my-1 hover:bg-accent flex justify-between rounded-xl items-center gap-2'
-										href={`/groups/${group.id}`}
-									>
-										<div className='flex gap-2 items-center'>
-											<div className=''>
-												<Avatar>
-													<AvatarImage
-														src={
-															group.avatarUrl
-																.length
-																? group.avatarUrl.replace(
-																		'/upload/',
-																		'/upload/w_100,h_100,c_fill,f_webp,q_80/'
-																  )
-																: ''
-														}
-													/>
-													<AvatarFallback>
-														{group.name
-															.slice(0, 2)
-															.toUpperCase()}
-													</AvatarFallback>
-												</Avatar>
-											</div>
-											<div className=''>
-												<h2 className='font-bold'>
-													{' '}
-													{group.name}
-												</h2>
-												<span className='text-xs'>
-													{format(
-														group.eventDate,
-														'PPP'
-													)}
-												</span>
-											</div>
-										</div>
-										<div className='flex flex-col gap-1 items-end'>
-											<h2>
-												{colorBalance({
-													balance: group.userBalance,
-													fontSize: 'text-md'
-												})}
-											</h2>
-											<div className=''>
-												<ul className='flex gap-1 items-center justify-end bg-primary/40 p-1 rounded-full'>
-													{group.members.map(
-														member => (
-															<li key={member.id}>
-																<Avatar className='size-4'>
-																	<AvatarImage
-																		src={
-																			member
-																				.picture
-																				.length
-																				? member.picture.replace(
-																						'/upload/',
-																						'/upload/w_100,h_100,c_fill,f_webp,q_80/'
-																				  )
-																				: ''
-																		}
-																	/>
-																	<AvatarFallback className='text-[9px]'>
-																		{member.displayName
-																			.slice(
-																				0,
-																				2
-																			)
-																			.toUpperCase()}
-																	</AvatarFallback>
-																</Avatar>
-															</li>
+						{activeGroups.map((group: IUserGroup) => (
+							<li className='' key={group.id}>
+								<Link
+									className='border px-1 border-ring/20 py-2 bg-primary/10 my-1 hover:bg-accent flex justify-between rounded-xl items-center gap-2'
+									href={`/groups/${group.id}`}
+								>
+									<div className='flex gap-2 items-center'>
+										<div className=''>
+											<Avatar>
+												<AvatarImage
+													src={
+													group.avatarUrl.length
+														? group.avatarUrl.replace(
+															'/upload/',
+															'/upload/w_100,h_100,c_fill,f_webp,q_80/'
 														)
-													)}
-
-													<li key={'memberCount'}>
-														<div className='size-4 bg-primary text-center rounded-full text-background text-xs'>
-															{group.membersCount}
-														</div>
-													</li>
-												</ul>
-											</div>
+														: ''
+													}
+												/>
+												<AvatarFallback>
+													{group.name.slice(0, 2).toUpperCase()}
+												</AvatarFallback>
+											</Avatar>
 										</div>
-									</Link>
-								</li>
-							))}
+										<div className=''>
+											<h2 className='font-bold'>
+												{' '}
+												{group.name}
+											</h2>
+											<span className='text-xs'>
+												{format(group.eventDate, 'PPP')}
+											</span>
+										</div>
+									</div>
+									<div className='flex flex-col gap-1 items-end'>
+										<h2>
+											{colorBalance({
+												balance: group.userBalance,
+												fontSize: 'text-md'
+											})}
+										</h2>
+										<div className=''>
+											<ul className='flex gap-1 items-center justify-end bg-primary/40 p-1 rounded-full'>
+												{group.members.map((member: IUserSafe) => (
+													<li key={member.id}>
+														<Avatar className='size-4'>
+															<AvatarImage
+																src={
+																	member.picture.length
+																		? member.picture.replace(
+																			'/upload/',
+																			'/upload/w_100,h_100,c_fill,f_webp,q_80/'
+																		)
+																	: ''
+																}
+															/>
+															<AvatarFallback className='text-[9px]'>
+																{member.displayName
+																	.slice(0, 2)
+																	.toUpperCase()}
+															</AvatarFallback>
+														</Avatar>
+													</li>
+												))}
+												<li key={'memberCount'}>
+													<div className='size-4 bg-primary text-center rounded-full text-background text-xs'>
+														{group.membersCount}
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</Link>
+							</li>
+						))}
 					</ul>
+					{hasNextActive && (
+						<Button
+							className='w-full mt-2'
+							onClick={() => loadMoreActive()}
+							disabled={isFetchingNextActive}
+						>
+							{isFetchingNextActive ? 'Loading...' : 'Load more'}
+						</Button>
+					)}
 				</CardContent>
 			</Card>
 
-			{/* GROUPS FINISHED LIST */}
-			{userGroups?.finished && userGroups?.finished?.length > 0 && (
+			{/* FINISHED GROUPS LIST */}
+			{finishedGroups.length > 0 && (
 				<Card className='w-full max-w-[400px] mb-18'>
 					<CardHeader>
 						<CardTitle className='flex justify-between items-center'>
@@ -244,7 +249,7 @@ const GroupsData = (props: Props) => {
 					</CardHeader>
 					<CardContent>
 						<ul>
-							{userGroups?.finished?.map(group => (
+							{finishedGroups.map((group: IUserGroup) => (
 								<li className='' key={group.id}>
 									<Link
 										className='border px-1 border-ring/20 py-2 bg-primary/10 my-1 hover:bg-accent flex justify-between rounded-xl items-center gap-2'
@@ -255,19 +260,16 @@ const GroupsData = (props: Props) => {
 												<Avatar>
 													<AvatarImage
 														src={
-															group.avatarUrl
-																.length
+															group.avatarUrl.length
 																? group.avatarUrl.replace(
-																		'/upload/',
-																		'/upload/w_100,h_100,c_fill,f_webp,q_80/'
-																  )
+																	'/upload/',
+																	'/upload/w_100,h_100,c_fill,f_webp,q_80/'
+																)
 																: ''
 														}
 													/>
 													<AvatarFallback>
-														{group.name
-															.slice(0, 2)
-															.toUpperCase()}
+														{group.name.slice(0, 2).toUpperCase()}
 													</AvatarFallback>
 												</Avatar>
 											</div>
@@ -277,10 +279,7 @@ const GroupsData = (props: Props) => {
 													{group.name}
 												</h2>
 												<span className='text-xs'>
-													{format(
-														group.eventDate,
-														'PPP'
-													)}
+													{format(group.eventDate, 'PPP')}
 												</span>
 											</div>
 										</div>
@@ -293,48 +292,49 @@ const GroupsData = (props: Props) => {
 											</h2>
 											<div className=''>
 												<ul className='flex gap-1 items-center justify-end bg-primary/40 p-1 rounded-full'>
-													{group.members.map(
-														member => (
-															<li key={member.id}>
-																<Avatar className='size-4'>
-																	<AvatarImage
-																		src={
-																			member
-																				.picture
-																				.length
-																				? member.picture.replace(
-																						'/upload/',
-																						'/upload/w_100,h_100,c_fill,f_webp,q_80/'
-																				  )
-																				: ''
-																		}
-																	/>
-																	<AvatarFallback className='text-[9px]'>
-																		{member.displayName
-																			.slice(
-																				0,
-																				2
-																			)
-																			.toUpperCase()}
-																	</AvatarFallback>
-																</Avatar>
-															</li>
-														)
-													)}
-
-													<li key={'memberCount'}>
-														<div className='size-4 bg-primary text-center rounded-full text-background text-xs'>
-															{group.membersCount}
-														</div>
+													{group.members.map((member: IUserSafe) => (
+														<li key={member.id}>
+															<Avatar className='size-4'>
+																<AvatarImage
+																	src={
+																	member.picture.length
+																		? member.picture.replace(
+																			'/upload/',
+																			'/upload/w_100,h_100,c_fill,f_webp,q_80/'
+																		)
+																	: ''
+																}
+															/>
+															<AvatarFallback className='text-[9px]'>
+																{member.displayName
+																	.slice(0, 2)
+																	.toUpperCase()}
+															</AvatarFallback>
+														</Avatar>
 													</li>
-												</ul>
-											</div>
+												))}
+												<li key={'memberCount'}>
+													<div className='size-4 bg-primary text-center rounded-full text-background text-xs'>
+														{group.membersCount}
+													</div>
+												</li>
+											</ul>
 										</div>
-									</Link>
-								</li>
-							))}
-						</ul>
-					</CardContent>
+									</div>
+								</Link>
+							</li>
+						))}
+					</ul>
+					{hasNextFinished && (
+						<Button
+							className='w-full mt-2'
+							onClick={() => loadMoreFinished()}
+							disabled={isFetchingNextFinished}
+						>
+							{isFetchingNextFinished ? 'Loading...' : 'Load more'}
+						</Button>
+					)}
+				</CardContent>
 				</Card>
 			)}
 		</div>
