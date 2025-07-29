@@ -4,10 +4,10 @@ import { ISummary } from '../types/summary.types'
 import { api } from '../utils/api'
 
 class SummaryService {
-	// public async addExpense(body: TypeAddExpenseFormNumber) {
-	// 	const response = await api.post<IExpense>('expenses/add', body)
-	// 	return response
-	// }
+	public async settleUp(settlerUserId: string) {
+		const response = await api.post<boolean>('summary/settle-up', {settlerUserId})
+		return response
+	}
 
     public async getSummary() {
         const response = await api.get<ISummary[]>(`summary`)

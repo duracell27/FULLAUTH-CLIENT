@@ -6,19 +6,23 @@ import {
 	AccordionTrigger,
 	Avatar,
 	AvatarFallback,
-	AvatarImage
+	AvatarImage,
+	Button
 } from '@/shared/componets/ui'
+import { useSettleUpMutation } from '@/shared/hooks/useSettleUpMutation'
 import { useSummary } from '@/shared/hooks/useSummary'
 import colorBalance from '@/shared/utils/colorBalance'
-import { Users, Link as LinkIcon } from 'lucide-react'
+import { Users, Link as LinkIcon, HandCoins } from 'lucide-react'
 import Link from 'next/link'
 
 import React from 'react'
+
 
 type Props = {}
 
 export const SummaryData = (props: Props) => {
 	const { summary, isLoadingSummary } = useSummary()
+	const { settleUp, isLoadingSettleUp } = useSettleUpMutation()
 
 	if (isLoadingSummary) {
 		return <div>Loading summary...</div>
@@ -68,7 +72,8 @@ export const SummaryData = (props: Props) => {
 										</div>
 									</div>
 								</AccordionTrigger>
-								<AccordionContent className='flex flex-col gap-4 text-balance'>
+								<AccordionContent className='flex flex-col  text-balance'>
+									<Button disabled={isLoadingSettleUp} onClick={() => settleUp(summary.user.id)} size={'sm'}>Settle up <HandCoins /></Button>
 									<ul className='mt-2 space-y-1'>
 										{summary.groups.map((group, index) => (
 											<li
