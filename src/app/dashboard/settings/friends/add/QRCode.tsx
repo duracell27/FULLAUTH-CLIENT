@@ -13,7 +13,7 @@ export const QRCodeCard = (props: Props) => {
 	let qrCodeValue=''
 	if (!isLoadingProfile) {
 		if (user) {
-			qrCodeValue = `${process.env.FRONTEND_URL}/friends/add/${user.id}`
+			qrCodeValue = `${process.env.FRONTEND_URL}/dashboard/settings/friends/add/${user.id}`
 		}
 	}
 

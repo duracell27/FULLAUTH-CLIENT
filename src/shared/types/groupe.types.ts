@@ -33,7 +33,8 @@ export interface IGroup {
 	paymentsBetweenMembers: {
 		from: IUserSafe
 		to: IUserSafe
-		amount: number
+		amount: number,
+		creators: IUserSafe[]
 	}[]
 	overpays: {
 		from: IUserSafe

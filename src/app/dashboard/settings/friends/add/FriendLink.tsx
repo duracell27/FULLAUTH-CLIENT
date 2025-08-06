@@ -10,7 +10,7 @@ type Props = {}
 export const FriendLink = (props: Props) => {
     const {user} = useProfile()
     if(!user) return null
-    const qrCodeValue = `${process.env.FRONTEND_URL}/friends/add/${user.id}`
+    const qrCodeValue = `${process.env.FRONTEND_URL}/dashboard/settings/friends/add/${user.id}`
 
     const handleCopyLink = () => {
         navigator.clipboard.writeText(qrCodeValue)
@@ -23,7 +23,7 @@ export const FriendLink = (props: Props) => {
 					<CardTitle>Your user link</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<Link href={qrCodeValue} className='text-base block'>{qrCodeValue}</Link>
+					<Link href={qrCodeValue} className='text-base block break-all break-words'>{qrCodeValue}</Link>
                     <Button className='my-2' onClick={handleCopyLink}>Copy link</Button>
 				</CardContent>
 			</Card>

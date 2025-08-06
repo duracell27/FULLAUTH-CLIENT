@@ -23,7 +23,7 @@ const SettingsPage = () => {
 						<li className=''>
 							<Link
 								className='border-t border-b border-ring/20 py-2 hover:bg-accent block'
-								href='/friends'
+								href='/dashboard/settings/friends'
 							>
 								Friends
 							</Link>

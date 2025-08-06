@@ -29,7 +29,10 @@ import {
 	Dialog,
 	DialogContent,
 	DialogTitle,
-	DialogTrigger
+	DialogTrigger,
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger
 } from '@/shared/componets/ui'
 import { Loading } from '@/shared/componets/ui/Loading'
 import { useGroup, useProfile } from '@/shared/hooks'
@@ -334,6 +337,56 @@ export const GroupData = ({ groupId }: Props) => {
 															</span>
 														</div>
 													</div>
+													{payment.creators && (
+														<div className='flex justify-between items-center gap-2  rounded-full mt-2 '>
+															<span className='text-white text-xs flex bg-primary/30 rounded-full px-[2px] items-center gap-1 py-[2px]'>
+																<span className='bg-primary rounded-full px-1'>
+																	created by
+																</span>{' '}
+																{payment.creators.map(
+																	creator => (
+																		<Tooltip key={creator.id}>
+																			<TooltipTrigger
+																				asChild
+																			>
+																				<Avatar className='cursor-pointer mb-0 size-4'>
+																					<AvatarImage
+																						src={
+																							creator.picture
+																								? creator.picture.replace(
+																										'/upload/',
+																										'/upload/w_100,h_100,c_fill,f_webp,q_80/'
+																								  )
+																								: ''
+																						}
+																					/>
+																					<AvatarFallback className='text-[9px]'>
+																						{creator.displayName
+																							.slice(
+																								0,
+																								2
+																							)
+																							.toUpperCase()}
+																					</AvatarFallback>
+																				</Avatar>
+																			</TooltipTrigger>
+																			<TooltipContent>
+																				<p>
+																					{
+																						creator.displayName
+																					}
+																				</p>
+																			</TooltipContent>
+																		</Tooltip>
+																	)
+																)}
+															</span>
+															<span className='text-xs'>
+															<Trash className='size-5 bg-bad-red text-white rounded-full p-1 cursor-pointer' />
+															</span>
+														</div>
+													)}
+
 													{group.overpays &&
 														group.overpays.length >
 															0 &&
@@ -726,29 +779,44 @@ export const GroupData = ({ groupId }: Props) => {
 																		.id
 																}
 															>
-																<Avatar className='size-4'>
-																	<AvatarImage
-																		src={
-																			payer
-																				.payer
-																				.picture
-																				.length
-																				? payer.payer.picture.replace(
-																						'/upload/',
-																						'/upload/w_100,h_100,c_fill,f_webp,q_80/'
-																				  )
-																				: ''
-																		}
-																	/>
-																	<AvatarFallback className='text-[9px]'>
-																		{payer.payer.displayName
-																			.slice(
-																				0,
-																				2
-																			)
-																			.toUpperCase()}
-																	</AvatarFallback>
-																</Avatar>
+																<Tooltip>
+																	<TooltipTrigger
+																		asChild
+																	>
+																		<Avatar className='size-4'>
+																			<AvatarImage
+																				src={
+																					payer
+																						.payer
+																						.picture
+																						.length
+																						? payer.payer.picture.replace(
+																								'/upload/',
+																								'/upload/w_100,h_100,c_fill,f_webp,q_80/'
+																						  )
+																						: ''
+																				}
+																			/>
+																			<AvatarFallback className='text-[9px]'>
+																				{payer.payer.displayName
+																					.slice(
+																						0,
+																						2
+																					)
+																					.toUpperCase()}
+																			</AvatarFallback>
+																		</Avatar>
+																	</TooltipTrigger>
+																	<TooltipContent>
+																		<p>
+																			{
+																				payer
+																					.payer
+																					.displayName
+																			}
+																		</p>
+																	</TooltipContent>
+																</Tooltip>
 															</li>
 														)
 													)}

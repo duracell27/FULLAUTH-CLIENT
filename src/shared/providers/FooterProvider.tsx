@@ -31,6 +31,18 @@ export function FooterProvider() {
 					<Separator className='h-8' orientation='vertical' />
 					<Link
 						className={
+							pathname.includes('/friends')
+								? 'bg-muted-foreground/10 py-2 px-5 font-bold rounded-md flex-1 text-center'
+								: 'bg-background py-2 px-5 rounded-md flex-1 text-center'
+						}
+						href={'/friends'}
+					>
+						Friends
+					</Link>
+					<Separator className='h-8' orientation='vertical' />
+					
+					<Link
+						className={
 							pathname.includes('/groups')
 								? 'bg-muted-foreground/10 py-2 px-5 font-bold rounded-md flex-1 text-center'
 								: 'bg-background py-2 px-5 rounded-md flex-1 text-center'
