@@ -62,6 +62,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { PaymentForm } from './PaymentForm'
+import { useDeletePaymentMutation } from '@/shared/hooks/useDeletePaymentMutation'
 
 type Props = {
 	groupId: string
@@ -72,6 +73,8 @@ export const GroupData = ({ groupId }: Props) => {
 	const { deleteMember, isLoadingDeleteMember } =
 		useDeleteMemberFromGroupMutation(groupId)
 	const { user } = useProfile()
+	const { deletePayment, isLoadingDeletePayment } =
+		useDeletePaymentMutation(groupId)
 
 	const [isOpenBalances, setIsOpenBalances] = useState(false)
 	const [isOpenPayments, setIsOpenPayments] = useState(false)
@@ -345,7 +348,11 @@ export const GroupData = ({ groupId }: Props) => {
 																</span>{' '}
 																{payment.creators.map(
 																	creator => (
-																		<Tooltip key={creator.id}>
+																		<Tooltip
+																			key={
+																				creator.id
+																			}
+																		>
 																			<TooltipTrigger
 																				asChild
 																			>
@@ -382,7 +389,62 @@ export const GroupData = ({ groupId }: Props) => {
 																)}
 															</span>
 															<span className='text-xs'>
-															<Trash className='size-5 bg-bad-red text-white rounded-full p-1 cursor-pointer' />
+																{/* <Trash className='size-5 bg-bad-red text-white rounded-full p-1 cursor-pointer' /> */}
+																<AlertDialog>
+																	<AlertDialogTrigger
+																		asChild
+																	>
+																		<Trash className='size-5 bg-bad-red text-white rounded-full p-1 cursor-pointer hover:bg-bad-red/80 hover:outline-4 hover:outline-bad-red/50' />
+																	</AlertDialogTrigger>
+																	<AlertDialogContent>
+																		<AlertDialogHeader>
+																			<AlertDialogTitle>
+																				Are
+																				you
+																				absolutely
+																				sure?
+																			</AlertDialogTitle>
+																			<AlertDialogDescription>
+																				This
+																				action
+																				cannot
+																				be
+																				undone.
+																				This
+																				will
+																				permanently
+																				delete
+																				this
+																				payment.
+																			</AlertDialogDescription>
+																		</AlertDialogHeader>
+																		<AlertDialogFooter>
+																			<AlertDialogCancel>
+																				Cancel
+																			</AlertDialogCancel>
+																			<AlertDialogAction
+																				onClick={() =>
+																					deletePayment(
+																						{
+																							groupId,
+																							creditorId:
+																								payment
+																									.to
+																									.id,
+																							debtorId:
+																								payment
+																									.from
+																									.id
+																						}
+																					)
+																				}
+																				className='bg-bad-red hover:bg-bad-red/80'
+																			>
+																				Continue
+																			</AlertDialogAction>
+																		</AlertDialogFooter>
+																	</AlertDialogContent>
+																</AlertDialog>
 															</span>
 														</div>
 													)}
