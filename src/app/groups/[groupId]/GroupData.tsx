@@ -78,10 +78,20 @@ export const GroupData = ({ groupId }: Props) => {
 
 	const [isOpenBalances, setIsOpenBalances] = useState(false)
 	const [isOpenPayments, setIsOpenPayments] = useState(false)
-	const [isOpenAddPayment, setIsOpenAddPayment] = useState(false)
+	const [openPaymentDialog, setOpenPaymentDialog] = useState<string | null>(
+		null
+	)
 
 	const handleDeleteMember = (recieverId: string) => {
 		deleteMember({ values: { groupId, userId: recieverId } })
+	}
+
+	const handleOpenPaymentDialog = (userId: string) => {
+		setOpenPaymentDialog(userId)
+	}
+
+	const handleClosePaymentDialog = () => {
+		setOpenPaymentDialog(null)
 	}
 
 	const { deleteGroup, isLoadingDeleteGroup } = useDeleteGroupMutation()
@@ -96,6 +106,8 @@ export const GroupData = ({ groupId }: Props) => {
 	if (!group || !user) {
 		return <div>Group not found</div>
 	}
+
+	console.log(group.memberBalanceDetails)
 	return (
 		<div className='w-full max-w-[400px] flex flex-col gap-3 pb-18'>
 			{/* group info */}
@@ -274,7 +286,7 @@ export const GroupData = ({ groupId }: Props) => {
 													index.toString()
 												}
 											>
-												<div className='flex flex-col'>
+												<div className='flex flex-col w-full'>
 													<div className='flex items-center w-full gap-2'>
 														<Avatar className='cursor-pointer'>
 															<AvatarImage
@@ -606,6 +618,7 @@ export const GroupData = ({ groupId }: Props) => {
 																	}
 																	className='flex items-center gap-2 pl-10 mb-2'
 																>
+																	{/* {JSON.stringify(debtDetail)} */}
 																	<Avatar className='cursor-pointer mb-0'>
 																		<AvatarImage
 																			src={
@@ -680,11 +693,24 @@ export const GroupData = ({ groupId }: Props) => {
 																				</span>
 																				<Dialog
 																					open={
-																						isOpenAddPayment
+																						openPaymentDialog ===
+																						debtDetail
+																							.user
+																							.id
 																					}
-																					onOpenChange={
-																						setIsOpenAddPayment
-																					}
+																					onOpenChange={open => {
+																						if (
+																							open
+																						) {
+																							handleOpenPaymentDialog(
+																								debtDetail
+																									.user
+																									.id
+																							)
+																						} else {
+																							handleClosePaymentDialog()
+																						}
+																					}}
 																				>
 																					<DialogTrigger>
 																						<span className='ml-3 cursor-pointer px-2 py-1 bg-primary rounded-full text-background text-xs'>
@@ -710,7 +736,7 @@ export const GroupData = ({ groupId }: Props) => {
 																										memberBalance.user
 																									}
 																									closeDialog={
-																										setIsOpenAddPayment
+																										handleClosePaymentDialog
 																									}
 																								/>
 																							</h1>

@@ -17,7 +17,6 @@ import {
 	addPaymentSchema,
 	TypeAddPaymentSchema
 } from '@/shared/schemas/createPayment.schema'
-import { IUserSafe } from '@/shared/types'
 import { round2 } from '@/shared/utils/formatBalance'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowDown, HandCoins } from 'lucide-react'
@@ -29,7 +28,7 @@ type Props = {
 	groupId: string
 	creditor: { id: string; displayName: string; picture: string | null }
 	debtor: { id: string; displayName: string; picture: string | null }
-	closeDialog: (value: boolean) => void
+	closeDialog: () => void
 }
 
 export const PaymentForm = ({ amount, groupId, creditor, debtor, closeDialog }: Props) => {
@@ -48,7 +47,7 @@ export const PaymentForm = ({ amount, groupId, creditor, debtor, closeDialog }: 
 	const onSubmit = (data: TypeAddPaymentSchema) => {
 		// console.log(data)
 		addPayment(data)
-		closeDialog(false)
+		closeDialog()
 	}
 
 	return (
