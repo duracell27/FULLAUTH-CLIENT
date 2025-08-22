@@ -39,11 +39,16 @@ export function TanstackQueryProvider({
 				if (state.status === 'error') {
 					const error = state.error as any
 
-					// 401 помилка
+					// 401 помилка - не викидаємо на логін якщо користувач на сторінках auth
 					if (error?.statusCode === 401 && pathname !== '/') {
-						authService.logout()
-						router.push('/auth/login')
-						toast.error('Please login again')
+						// Перевіряємо чи користувач не знаходиться на сторінках auth
+						const isAuthPage = pathname.startsWith('/auth/')
+						
+						if (!isAuthPage) {
+							authService.logout()
+							router.push('/auth/login')
+							toast.error('Please login again')
+						}
 					}
 				}
 			}

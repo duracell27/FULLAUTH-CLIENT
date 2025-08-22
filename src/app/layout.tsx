@@ -25,7 +25,14 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='en' suppressHydrationWarning className={outfit.variable}>
-			<head></head>
+			<head>
+				{/* Google Ads */}
+				<script
+					async
+					src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3510558221335749'
+					crossOrigin='anonymous'
+				></script>
+			</head>
 			<body
 				className='bg-cover bg-fixed'
 				style={{ backgroundImage: "url('/images/bg6.png')" }}

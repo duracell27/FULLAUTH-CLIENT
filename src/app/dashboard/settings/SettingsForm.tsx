@@ -20,6 +20,7 @@ import { UserButton, UserButtonLoading } from '@/shared/componets/UserButton'
 import { useProfile, useUpdateProfileMutation } from '@/shared/hooks'
 import { settingsSchema, TypeSettingsSchema } from '@/shared/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { ChevronDown } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 
 const SettingsForm = () => {
@@ -39,7 +40,7 @@ const SettingsForm = () => {
 	const onSubmit = (data: TypeSettingsSchema) => {
 		updateProfile(data)
 	}
-	
+
 	return (
 		<Card className='w-full'>
 			<CardHeader className='flex flex-row items-center justify-between'>
@@ -47,7 +48,10 @@ const SettingsForm = () => {
 				{isLoadingProfile ? (
 					<UserButtonLoading />
 				) : (
-					<UserButton user={user} />
+					<div className='flex items-center gap-0.5'>
+						
+						<UserButton user={user} />
+					</div>
 				)}
 			</CardHeader>
 			{isLoadingProfile ? (

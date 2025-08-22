@@ -12,20 +12,27 @@ import {
 	Skeleton
 } from './ui'
 import { IUser } from '../types'
+import { ChevronDown } from 'lucide-react'
+import { useState } from 'react'
 
 interface UserButtonProps {
 	user: IUser | undefined
 }
 
 export function UserButton({ user }: UserButtonProps) {
-	
+	const [open, setOpen] = useState(false)
 	const { logout, isLoadingLogout } = useLogoutMutation()
 
 	if (!user) return null
 
 	return (
-		<DropdownMenu>
-			<DropdownMenuTrigger>
+		<DropdownMenu open={open} onOpenChange={setOpen}>
+			<DropdownMenuTrigger className='flex items-center gap-0.5 bg-primary/10 rounded-full cursor-pointer pl-1'>
+				<ChevronDown 
+					className={`h-4 w-4 transition-transform duration-200 ${
+						open ? 'rotate-180' : ''
+					}`} 
+				/>
 				<Avatar>
 					<AvatarImage src={user.picture} />
 					<AvatarFallback>

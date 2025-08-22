@@ -23,7 +23,7 @@ export function useLoginMutation(setIsShowFactor: React.Dispatch<React.SetStateA
 				setIsShowFactor(true)
 			}else{
 				toast.success('User logged in successfully')
-				router.push('/dashboard/settings')
+				router.push('/groups')
 			}
         },
 		onError: (error) => {
