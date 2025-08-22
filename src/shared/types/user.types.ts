@@ -10,7 +10,7 @@ export enum AuthMethod {
 	Google = 'GOOGLE'
 }
 
-enum FriendStatus {
+export enum FriendStatus {
 	Pending = 'PENDING',
 	Accepted = 'ACCEPTED',
 	Rejected = 'REJECTED'
