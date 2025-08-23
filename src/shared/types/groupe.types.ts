@@ -7,6 +7,7 @@ export interface IGroup {
 	avatarUrl?: string | null
 	isLocked: boolean
 	isFinished: boolean
+	isPersonal: boolean
 	eventDate: Date
 	createdAt: Date
 	updatedAt: Date

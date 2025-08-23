@@ -163,9 +163,25 @@ export const GroupData = ({ groupId }: Props) => {
 					>
 						{group.avatarUrl === '' && (
 							<div className='w-full flex items-center justify-center  text-background '>
-								<span className='bg-primary rounded-full px-5 py-2'>
-									{group.name.slice(0, 2).toUpperCase()}
-								</span>
+								{group.isPersonal ? (
+									<div className='flex items-center gap-2'>
+										{group.members.slice(0, 2).map((member, index) => (
+											<Avatar key={member.userId} className='size-20 border-2 border-background'>
+												<AvatarImage
+													src={member.user.picture || ''}
+													alt={member.user.displayName}
+												/>
+												<AvatarFallback className='text-lg font-semibold'>
+													{member.user.displayName.slice(0, 2).toUpperCase()}
+												</AvatarFallback>
+											</Avatar>
+										))}
+									</div>
+								) : (
+									<span className='bg-primary rounded-full px-5 py-2'>
+										{group.name.slice(0, 2).toUpperCase()}
+									</span>
+								)}
 							</div>
 						)}
 						<div className='absolute -bottom-2 inset-x-5 gap-5 flex justify-between items-center  text-background bg-primary rounded-full px-5 py-2'>

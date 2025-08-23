@@ -15,7 +15,7 @@ type Props = {}
 
 const FriendsPage = (props: Props) => {
 	return (
-		<div className='flex flex-col gap-3 justify-center items-center h-screen w-full max-w-[400px]'>
+		<div className='flex flex-col gap-3 justify-center items-center w-full max-w-[400px] pt-18'>
 			<div className="flex justify-between items-center w-full">
 				<BackButton/> 
 				<Link href={'/dashboard/settings/friends/add'} className={buttonVariants({variant: 'outline'})}>Add friend</Link>

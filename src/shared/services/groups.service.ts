@@ -5,10 +5,15 @@ import { IUserGroup } from '../types/groupe.types'
 import { api } from '../utils/api'
 
 class GroupsService {
-	public async addGroup(body: TypeAddGroupSchema) {
-		const response = await api.post<IGroup>('groups/create', body)
-		return response
-	}
+        public async addGroup(body: TypeAddGroupSchema) {
+            const response = await api.post<IGroup>('groups/create', body)
+            return response
+        }
+
+    public async addPersonalGroup(userId: string) {
+        const response = await api.post<IGroup>(`groups/create-personal`, { userId })
+        return response
+    }
 
     public async editGroup(body: TypeEditGroupSchema) {
 		const response = await api.patch<IGroup>('groups/update', body)
@@ -17,6 +22,13 @@ class GroupsService {
 
     public async getGroups({ type, limit = 10, offset = 0 }: { type: 'finished' | 'active', limit?: number, offset?: number }) {
         const response = await api.get<IUserGroup[]>(`group-members`, {
+            params: { type, limit, offset }
+        })
+        return response
+    }
+
+    public async getPersonalGroups({ type, limit = 10, offset = 0 }: { type: 'finished' | 'active', limit?: number, offset?: number }) {
+        const response = await api.get<IUserGroup[]>(`group-members/personal`, {
             params: { type, limit, offset }
         })
         return response

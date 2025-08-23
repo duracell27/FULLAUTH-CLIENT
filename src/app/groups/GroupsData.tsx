@@ -60,8 +60,6 @@ const GroupsData = (props: Props) => {
 		return <Loading />
 	}
 
-	console.log('activeGroups', activeGroups)
-	console.log('finishedGroups', finishedGroups)
 
 	return (
 		<div className='flex flex-col gap-3 justify-start items-center pt-18'>
