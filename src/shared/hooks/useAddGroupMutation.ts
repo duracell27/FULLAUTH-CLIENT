@@ -19,6 +19,7 @@ export function useAddGroupMutation() {
 			} else {
 				toast.success('Group created successfully')
 				queryClient.invalidateQueries({queryKey: ['groups']})
+				// queryClient.invalidateQueries({queryKey: ['notificationsUnread']})
 				router.push('/groups')
 			}
 		},

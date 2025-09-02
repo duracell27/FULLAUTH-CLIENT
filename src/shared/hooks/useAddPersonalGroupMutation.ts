@@ -19,6 +19,8 @@ export function useAddPersonalGroupMutation() {
 				toast.success('Personal group created successfully')
 				// Інвалідуємо всі запити, пов'язані з персональними групами
 				queryClient.invalidateQueries({queryKey: ['groups']})
+				queryClient.invalidateQueries({queryKey: ['notificationsUnread']})
+				queryClient.invalidateQueries({queryKey: ['notifications']})
 				// router.push('/friends')
 			}
 		},

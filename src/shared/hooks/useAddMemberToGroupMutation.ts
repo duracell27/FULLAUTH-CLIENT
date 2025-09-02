@@ -19,6 +19,8 @@ export function useAddMemberToGroupMutation(groupId: string) {
 			} else {
 				toast.success('Member request sent')
 				queryClient.invalidateQueries({queryKey: ['group ' + groupId]})
+				queryClient.invalidateQueries({queryKey: ['notificationsUnread']})
+				queryClient.invalidateQueries({queryKey: ['notifications']})
 				// router.push('/groups')
 			}
 		},

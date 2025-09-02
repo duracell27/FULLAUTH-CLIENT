@@ -985,9 +985,8 @@ export const GroupData = ({ groupId }: Props) => {
 					<CardTitle className='flex justify-between items-center'>
 						<span>Members</span>
 						{group.members.find(member => member.userId === user.id)
-							?.role === GroupRole.ADMIN && (
-							
-
+							?.role === GroupRole.ADMIN && 
+							!group.isPersonal && (
 							<Link
 								href={`/groups/members/${group.id}`}
 								className={buttonVariants()}

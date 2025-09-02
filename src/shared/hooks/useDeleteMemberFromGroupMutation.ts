@@ -19,6 +19,8 @@ export function useDeleteMemberFromGroupMutation(groupId: string) {
 			} else {
 				toast.success('Member deleted successfully')
 				 queryClient.invalidateQueries({queryKey: ['group ' + groupId]})
+				 queryClient.invalidateQueries({queryKey: ['notificationsUnread']})
+				 queryClient.invalidateQueries({queryKey: ['notifications']})
 				// router.push('/groups')
 			}
 		},

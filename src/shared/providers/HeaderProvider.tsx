@@ -5,19 +5,26 @@ import {
 	AvatarFallback,
 	AvatarImage,
 	Card,
+	Badge
 } from '../componets/ui'
 import { useProfile } from '../hooks'
 
 import { usePathname } from 'next/navigation'
+import { useNotificationsUnread } from '../hooks/useNotificationsUnread'
+import { Bell } from 'lucide-react'
 
 export function HeaderProvider() {
 	const { user } = useProfile()
+	const { notificationsUnread, isLoadingNotificationsUnread } =
+		useNotificationsUnread()
 	const pathname = usePathname()
 	const excludedPaths = ['/', '/auth/login', '/auth/register']
 
 	if (excludedPaths.includes(pathname) || !user) {
 		return null
 	}
+
+	const notificationCount = notificationsUnread?.length || 0
 
 	return (
 		<div className='fixed top-0 left-0 right-0 w-full overflow-hidden rounded-t-md z-10'>
@@ -27,7 +34,20 @@ export function HeaderProvider() {
 						Lendower
 					</Link>
 				</h1>
-				<div className=''>
+				<div className='flex items-center gap-5'>
+					<Link href={'/notifications'} className='relative mt-2'>
+						<Bell className='w-5 h-5' />
+						<Badge
+							variant={
+								notificationCount > 0
+									? 'destructive'
+									: 'secondary'
+							}
+							className='absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs'
+						>
+							{notificationCount > 99 ? '99+' : notificationCount}
+						</Badge>
+					</Link>
 					<Link href={'/dashboard/settings'}>
 						<Avatar>
 							<AvatarImage src={user.picture} />

@@ -46,9 +46,6 @@ export const FriendsGroups = (props: Props) => {
 		return <Loading />
 	}
 
-	console.log('activeGroups', activeGroups)
-	console.log('finishedGroups', finishedGroups)
-
 	return (
 		<div className='w-full max-w-[400px]'>
 			{/* ACTIVE GROUPS LIST */}
@@ -56,9 +53,9 @@ export const FriendsGroups = (props: Props) => {
 				<CardHeader>
 					<CardTitle className='flex justify-between items-center'>
 						<span>Personal groups</span>
-						<Link href='/groups/add' className={buttonVariants()}>
+						{/* <Link href='/groups/add' className={buttonVariants()}>
 							Add
-						</Link>
+						</Link> */}
 					</CardTitle>
 				</CardHeader>
 				<CardContent>

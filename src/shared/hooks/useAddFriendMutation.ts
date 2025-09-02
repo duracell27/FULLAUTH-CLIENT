@@ -14,6 +14,8 @@ export function useAddFriendMutation() {
         onSuccess: () => {
             toast.success('Friend request sent')
             queryClient.invalidateQueries({queryKey: ['friends']})
+            queryClient.invalidateQueries({queryKey: ['notificationsUnread']})
+            queryClient.invalidateQueries({queryKey: ['notifications']})
             router.push('/dashboard/settings/friends')
         },
         onError: error => {
