@@ -4,9 +4,10 @@ import { Card } from '../componets/ui'
 
 import { usePathname } from 'next/navigation'
 import { Separator } from '../componets/ui/Separator'
+import { useTranslations } from '../hooks'
 
 export function FooterProvider() {
-	
+	const { t } = useTranslations()
 	const pathname = usePathname()
 	const excludedPaths = ['/', '/auth/login', '/auth/register']
 
@@ -26,7 +27,7 @@ export function FooterProvider() {
 						}
 						href={'/summary'}
 					>
-						Summary
+						{t('summary')}
 					</Link>
 					<Separator className='h-8' orientation='vertical' />
 					<Link
@@ -37,7 +38,7 @@ export function FooterProvider() {
 						}
 						href={'/friends'}
 					>
-						Friends
+						{t('friends')}
 					</Link>
 					<Separator className='h-8' orientation='vertical' />
 					
@@ -49,7 +50,7 @@ export function FooterProvider() {
 						}
 						href={'/groups'}
 					>
-						Groups
+						{t('groups')}
 					</Link>
 				</div>
 			</Card>

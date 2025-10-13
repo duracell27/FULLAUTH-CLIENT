@@ -9,6 +9,7 @@ import {
 import { Loading } from '@/shared/componets/ui/Loading'
 import { useAddFriendMutation } from '@/shared/hooks/useAddFriendMutation'
 import { useProfileSafe } from '@/shared/hooks/useProfileSafe'
+import { useTranslations } from '@/shared/hooks'
 import React from 'react'
 
 type Props = {
@@ -18,6 +19,7 @@ type Props = {
 export const UserAddCard = ({ userId }: Props) => {
 	const { user, isLoadingProfile } = useProfileSafe(userId)
     const {addFriend, isLoadingAddFriend} = useAddFriendMutation()
+	const { t } = useTranslations()
 
 	if (isLoadingProfile) {
 		return <Loading />
@@ -30,7 +32,7 @@ export const UserAddCard = ({ userId }: Props) => {
 	return (
 		<div className=''>
 			<ul>
-				<li className='flex items-center gap-2 font-medium border-b border-ring/20 py-2 hover:bg-accent block'>
+				<li className='flex items-center gap-2 font-medium border-b border-ring/20 py-2 hover:bg-accent'>
 					<Avatar>
 						<AvatarImage src={user?.picture} />
 						<AvatarFallback>
@@ -39,7 +41,7 @@ export const UserAddCard = ({ userId }: Props) => {
 					</Avatar>
 					<p className='text-base'>{user?.displayName}</p>
 					<p className='flex-1 text-right'>
-						<Button onClick={() => handleAddFriend()}>send</Button>
+						<Button onClick={() => handleAddFriend()}>{t('send')}</Button>
 					</p>
 				</li>
 			</ul>

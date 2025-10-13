@@ -10,7 +10,7 @@ import {
 	FormMessage,
 	Input
 } from '@/shared/componets/ui'
-import { useLoginMutation } from '@/shared/hooks'
+import { useLoginMutation, useTranslations } from '@/shared/hooks'
 import { loginSchema, TypeLoginSchema } from '@/shared/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTheme } from 'next-themes'
@@ -26,6 +26,7 @@ export const LoginForm = (props: Props) => {
 	const { theme } = useTheme()
 	const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null)
 	const [isShowTwoFactor, setIsShowTwoFactor] = useState(false)
+	const { t } = useTranslations()
 
 	const form = useForm<TypeLoginSchema>({
 		resolver: zodResolver(loginSchema),
@@ -41,14 +42,14 @@ export const LoginForm = (props: Props) => {
 		if (recaptchaValue) {
 			login({ values: data, recaptcha: recaptchaValue })
 		} else {
-			toast.error('Please complete the captcha')
+			toast.error(t('pleaseCompleteTheCaptcha'))
 		}
 	}
 	return (
 		<AuthWrapper
-			heading='Login'
-			description='Provide your email and password'
-			backButtonLabel='Don`t have an account? Register'
+			heading={t('login')}
+			description={t('provideYourEmailAndPassword')}
+			backButtonLabel={t('dontHaveAnAccountRegister')}
 			backButtonHref='/auth/register'
 			isShowSocial
 		>
@@ -63,10 +64,10 @@ export const LoginForm = (props: Props) => {
 							name='code'
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Two factor code</FormLabel>
+									<FormLabel>{t('twoFactorCode')}</FormLabel>
 									<FormControl>
 										<Input
-											placeholder='Enter your code'
+											placeholder={t('enterYourCode')}
 											type='text'
 											disabled={isLoadingLogin}
 											{...field}
@@ -83,18 +84,18 @@ export const LoginForm = (props: Props) => {
 								control={form.control}
 								name='email'
 								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Email</FormLabel>
-										<FormControl>
-											<Input
-												placeholder='Enter your email'
-												type='email'
-												disabled={isLoadingLogin}
-												{...field}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
+								<FormItem>
+									<FormLabel>{t('email')}</FormLabel>
+									<FormControl>
+										<Input
+											placeholder={t('enterYourEmail')}
+											type='email'
+											disabled={isLoadingLogin}
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
 								)}
 							/>
 
@@ -104,17 +105,17 @@ export const LoginForm = (props: Props) => {
 								render={({ field }) => (
 									<FormItem>
 										<div className='flex items-center justify-between'>
-											<FormLabel>Password</FormLabel>
+											<FormLabel>{t('password')}</FormLabel>
 											<Link
 												href='/auth/reset-password'
 												className='ml-auto inline-block text-sm underline'
 											>
-												Forgot password?
+												{t('forgotPassword')}
 											</Link>
 										</div>
 										<FormControl>
 											<Input
-												placeholder='Enter your password'
+												placeholder={t('enterYourPassword')}
 												type='password'
 												disabled={isLoadingLogin}
 												{...field}
@@ -138,7 +139,7 @@ export const LoginForm = (props: Props) => {
 					</div>
 
 					<Button disabled={isLoadingLogin} type='submit'>
-						Login
+						{t('login')}
 					</Button>
 				</form>
 			</Form>

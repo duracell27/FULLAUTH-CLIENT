@@ -7,3 +7,17 @@ export * from './createGroup.schema'
 export * from './editGroup.schema'
 export * from './createExpense.schema'
 
+// Експортуємо функції для створення схем з перекладами
+export { createLoginSchema } from './login.schema'
+export { createRegisterSchema } from './register.schema'
+export { createGroupSchema } from './createGroup.schema'
+export { createExpenseSchema } from './createExpense.schema'
+export { createAddMemberToGroupSchema } from './addMemberToGroup.schema'
+export { createPaymentSchema } from './createPayment.schema'
+export { createEditGroupSchema } from './editGroup.schema'
+export { createPasswordResetSchema } from './passwordReset.schema'
+export { createNewPasswordSchema } from './newPassword.schema'
+export { createSettingsSchema } from './settings.schema'
+export { createSearchUserSchema } from './searchUser.schema'
+export { createChangeLanguageSchema } from './changeLanguage.schema'
+

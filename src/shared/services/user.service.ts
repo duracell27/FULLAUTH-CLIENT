@@ -1,4 +1,5 @@
 import { TypeSettingsSchema } from '../schemas'
+import { TypeChangeLanguageSchema } from '../schemas/changeLanguage.schema'
 import { IUser, IUserSafe } from '../types'
 import { api } from '../utils/api'
 
@@ -23,6 +24,12 @@ class UserService {
 
 	public async updateProfile(body: TypeSettingsSchema) {
 		const response = await api.patch<IUser>('user/profile', body)
+
+		return response
+	}
+
+	public async changeLanguage(body: TypeChangeLanguageSchema) {
+		const response = await api.patch<IUser>('user/language', body)
 
 		return response
 	}

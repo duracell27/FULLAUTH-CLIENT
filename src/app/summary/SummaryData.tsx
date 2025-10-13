@@ -11,6 +11,7 @@ import {
 } from '@/shared/componets/ui'
 import { useSettleUpMutation } from '@/shared/hooks/useSettleUpMutation'
 import { useSummary } from '@/shared/hooks/useSummary'
+import { useTranslations } from '@/shared/hooks'
 import colorBalance from '@/shared/utils/colorBalance'
 import { Users, Link as LinkIcon, HandCoins } from 'lucide-react'
 import Link from 'next/link'
@@ -23,13 +24,14 @@ type Props = {}
 export const SummaryData = (props: Props) => {
 	const { summary, isLoadingSummary } = useSummary()
 	const { settleUp, isLoadingSettleUp } = useSettleUpMutation()
+	const { t } = useTranslations()
 
 	if (isLoadingSummary) {
-		return <div>Loading summary...</div>
+		return <div>{t('loadingSummary')}</div>
 	}
 
 	if (!summary?.length) {
-		return <div>No summary found</div>
+		return <div>{t('noSummaryFound')}</div>
 	}
 	return (
 		<div>
@@ -73,7 +75,7 @@ export const SummaryData = (props: Props) => {
 									</div>
 								</AccordionTrigger>
 								<AccordionContent className='flex flex-col  text-balance'>
-									<Button disabled={isLoadingSettleUp} onClick={() => settleUp(summary.user.id)} size={'sm'}>Settle up <HandCoins /></Button>
+									<Button disabled={isLoadingSettleUp} onClick={() => settleUp(summary.user.id)} size={'sm'}>{t('settleUp')} <HandCoins /></Button>
 									<ul className='mt-2 space-y-1'>
 										{summary.groups.map((group, index) => (
 											<li

@@ -13,13 +13,15 @@ import {
 	CardTitle
 } from '@/shared/componets/ui'
 import { Loading } from '@/shared/componets/ui/Loading'
-import { useGroups } from '@/shared/hooks'
+import { useGroups, useTranslations } from '@/shared/hooks'
+import { useProfile } from '@/shared/hooks/useProfile'
+import { Language } from '@/shared/types/user.types'
 import { useAcceptGroupRequestMutation } from '@/shared/hooks/useAcceptGroupRequestMutation'
 import { useGroupsRequests } from '@/shared/hooks/useGroupsRequests'
 import { useRejectGroupRequestMutation } from '@/shared/hooks/useRejectGroupRequestMutation'
 
 import colorBalance from '@/shared/utils/colorBalance'
-import { format } from 'date-fns'
+import { formatDate } from '@/shared/utils'
 import { Check, X } from 'lucide-react'
 import Link from 'next/link'
 import { IUserGroup } from '@/shared/types/groupe.types'
@@ -48,6 +50,9 @@ const GroupsData = (props: Props) => {
 
 	const { rejectGroupRequest, isLoadingRejectGroupRequest } =
 		useRejectGroupRequestMutation()
+	
+	const { t } = useTranslations()
+	const { user } = useProfile()
 
 	const acceptGroupRequestHandler = (groupId: string) => {
 		acceptGroupRequest(groupId)
@@ -67,9 +72,9 @@ const GroupsData = (props: Props) => {
 			{userGroupsRequests && userGroupsRequests.length > 0 && (
 				<Card className='w-full max-w-[400px]'>
 					<CardHeader>
-						<CardTitle>
-							<span>Group requests</span>
-						</CardTitle>
+					<CardTitle>
+						<span>{t('groupRequests')}</span>
+					</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<ul>
@@ -101,10 +106,7 @@ const GroupsData = (props: Props) => {
 													{requestItem.name}
 												</h2>
 												<span className='text-xs'>
-													{format(
-														requestItem.eventDate,
-														'PPP'
-													)}
+													{formatDate(requestItem.eventDate, 'PP', user?.language || Language.EN)}
 												</span>
 											</div>
 											<div className='flex items-center gap-2'>
@@ -141,15 +143,15 @@ const GroupsData = (props: Props) => {
 			<Card className='w-full max-w-[400px] mb-18'>
 				<CardHeader>
 					<CardTitle className='flex justify-between items-center'>
-						<span> Groups</span>
+						<span>{t('groups')}</span>
 						<Link href='/groups/add' className={buttonVariants()}>
-							Add
+							{t('add')}
 						</Link>
 					</CardTitle>
 				</CardHeader>
 				<CardContent>
 					{activeGroups.length === 0 && (
-						<div>You have no groups</div>
+						<div>{t('youHaveNoGroups')}</div>
 					)}
 					<ul>
 						{activeGroups.map((group: IUserGroup) => (
@@ -182,7 +184,7 @@ const GroupsData = (props: Props) => {
 												{group.name}
 											</h2>
 											<span className='text-xs'>
-												{format(group.eventDate, 'PPP')}
+												{formatDate(group.eventDate, 'PP', user?.language || Language.EN)}
 											</span>
 										</div>
 									</div>
@@ -234,7 +236,7 @@ const GroupsData = (props: Props) => {
 							onClick={() => loadMoreActive()}
 							disabled={isFetchingNextActive}
 						>
-							{isFetchingNextActive ? 'Loading...' : 'Load more'}
+							{isFetchingNextActive ? t('loading') : t('loadMore')}
 						</Button>
 					)}
 				</CardContent>
@@ -244,9 +246,9 @@ const GroupsData = (props: Props) => {
 			{finishedGroups.length > 0 && (
 				<Card className='w-full max-w-[400px] mb-18'>
 					<CardHeader>
-						<CardTitle className='flex justify-between items-center'>
-							<span>Finished groups</span>
-						</CardTitle>
+					<CardTitle className='flex justify-between items-center'>
+						<span>{t('finishedGroups')}</span>
+					</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<ul>
@@ -280,7 +282,7 @@ const GroupsData = (props: Props) => {
 													{group.name}
 												</h2>
 												<span className='text-xs'>
-													{format(group.eventDate, 'PPP')}
+													{formatDate(group.eventDate, 'PP', user?.language || Language.EN)}
 												</span>
 											</div>
 										</div>
@@ -331,9 +333,9 @@ const GroupsData = (props: Props) => {
 							className='w-full mt-2'
 							onClick={() => loadMoreFinished()}
 							disabled={isFetchingNextFinished}
-						>
-							{isFetchingNextFinished ? 'Loading...' : 'Load more'}
-						</Button>
+							>
+								{isFetchingNextFinished ? t('loading') : t('loadMore')}
+							</Button>
 					)}
 				</CardContent>
 				</Card>

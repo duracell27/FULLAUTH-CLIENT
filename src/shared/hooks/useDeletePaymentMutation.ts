@@ -3,8 +3,10 @@ import { toast } from 'sonner'
 import { toastMessageHandler } from '../utils'
 import { useRouter } from 'next/navigation'
 import { paymentService } from '../services'
+import { useTranslations } from './useTranslations'
 
 export function useDeletePaymentMutation(groupId: string) {
+	const { t } = useTranslations()
 	const router = useRouter()
 	const queryClient = useQueryClient()
 	const { mutate: deletePayment, isPending: isLoadingDeletePayment } =
@@ -20,7 +22,7 @@ export function useDeletePaymentMutation(groupId: string) {
 				debtorId: string
 			}) => paymentService.deletePayment(groupId, creditorId, debtorId),
 			onSuccess: () => {
-				toast.success('Payment deleted successfully')
+				toast.success(t('paymentDeletedSuccessfully'))
 				queryClient.invalidateQueries({
 					queryKey: ['group ' + groupId]
 				})

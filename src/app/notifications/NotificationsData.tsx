@@ -9,10 +9,13 @@ import {
 	CardTitle
 } from '@/shared/componets/ui'
 
-import { format } from 'date-fns'
+import { formatDate } from '@/shared/utils'
 import { Bell, Check, Clock, Link2, Trash } from 'lucide-react'
 
+import { useTranslations } from '@/shared/hooks'
+import { useProfile } from '@/shared/hooks/useProfile'
 import { useNotifications } from '@/shared/hooks/useNotifications'
+import { Language } from '@/shared/types/user.types'
 import { Loading } from '@/shared/componets/ui/Loading'
 import { cn } from '@/shared/utils'
 import Link from 'next/link'
@@ -28,6 +31,9 @@ const NotificationsData = (props: Props) => {
 
 	const { deleteNotification, isLoadingDeleteNotification } =
 		useDeleteNotificationMutation()
+	
+	const { t } = useTranslations()
+	const { user } = useProfile()
 
 	const isNotificationsUnread = notifications?.some(
 		notification => !notification.isRead
@@ -45,7 +51,7 @@ const NotificationsData = (props: Props) => {
 		return (
 			<Card className='w-full'>
 				<CardHeader>
-					<CardTitle>Notifications</CardTitle>
+					<CardTitle>{t('notifications')}</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<div className='flex flex-col gap-3 justify-center items-center w-full max-w-[400px]'>
@@ -53,10 +59,9 @@ const NotificationsData = (props: Props) => {
 							<CardContent>
 								<div className='text-center text-muted-foreground py-8'>
 									<Bell className='mx-auto h-12 w-12 text-muted-foreground mb-4' />
-									<p>No notifications yet</p>
+									<p>{t('noNotificationsYet')}</p>
 									<p className='text-sm'>
-										You'll see notifications here when they
-										arrive
+										{t('youWillSeeNotificationsHereWhenTheyArrive')}
 									</p>
 								</div>
 							</CardContent>
@@ -71,13 +76,13 @@ const NotificationsData = (props: Props) => {
 		<Card className='w-full'>
 			<CardHeader>
 				<CardTitle className='flex justify-between items-center'>
-					Notifications
+					{t('notifications')}
 					{isNotificationsUnread && (
 						<Button
 							onClick={() => markAllNotificationsAsRead()}
 							disabled={isLoadingMarkAllNotificationsAsRead}
 						>
-							Read all
+							{t('readAll')}
 						</Button>
 					)}
 				</CardTitle>
@@ -101,27 +106,27 @@ const NotificationsData = (props: Props) => {
 								<div className='flex-1 space-y-1'>
 									<div className=' flex flex-1 items-center justify-between gap-2 '>
 										<h3 className='text-base'>
-											{notification.title}
+											{t(notification.title)}
 										</h3>
 										<p className='text-xs bg-primary px-2 py-0.5 rounded-full text-primary-foreground'>
 											{notification.type ===
 											'DEBT_SETTLED'
-												? 'Debt'
+												? t('debt')
 												: notification.type ===
 												  'FRIEND_REQUEST'
-												? 'Friend'
+												? t('friend')
 												: notification.type ===
 												  'GROUP_INVITATION'
-												? 'Group'
+												? t('group')
 												: notification.type ===
 												  'EXPENSE_ADDED'
-												? 'Expense'
+												? t('expense')
 												: notification.type ===
 												  'DEBT_CREATED'
-												? 'Debt'
+												? t('debt')
 												: notification.type ===
 												  'USER_REMOVED_FROM_GROUP'
-												? 'Group left'
+												? t('groupLeft')
 												: ''}
 										</p>
 									</div>
@@ -143,16 +148,13 @@ const NotificationsData = (props: Props) => {
 												'text-green-500/90'
 										)}
 									>
-										{notification.message}
+										{t(notification.message)}
 									</p>
 									<div className='text-xs flex items-center justify-between gap-1  '>
 										<div className=' text-muted-foreground flex items-center gap-2'>
 											<div className='flex items-center   px-2 py-1 rounded-full gap-1 bg-primary/10'>
 												<Clock className='size-3' />
-												{format(
-													notification.createdAt,
-													'dd.MM.yyyy'
-												)}
+												{formatDate(notification.createdAt, 'dd.MM.yyyy', user?.language || Language.EN)}
 											</div>
 											<div
 												className='flex items-center  gap-1 bg-bad-red px-1 py-1 rounded-full text-background'
@@ -172,7 +174,7 @@ const NotificationsData = (props: Props) => {
 													href={`/expenses/${notification.relatedExpenseId}`}
 													className='flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full text-primary '
 												>
-													Show{' '}
+													{t('show')}{' '}
 													<Link2 className='size-4 text-primary' />
 												</Link>
 											)}
@@ -182,7 +184,7 @@ const NotificationsData = (props: Props) => {
 													href={`/expenses/${notification.relatedExpenseId}`}
 													className='flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full text-primary '
 												>
-													Show{' '}
+													{t('show')}{' '}
 													<Link2 className='size-4 text-primary' />
 												</Link>
 											)}
@@ -192,7 +194,7 @@ const NotificationsData = (props: Props) => {
 													href={`/groups/${notification.relatedGroupId}`}
 													className='flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full text-primary '
 												>
-													Show{' '}
+													{t('show')}{' '}
 													<Link2 className='size-4 text-primary' />
 												</Link>
 											)}
@@ -202,7 +204,7 @@ const NotificationsData = (props: Props) => {
 													href={`/groups/${notification.relatedGroupId}`}
 													className='flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full text-primary '
 												>
-													Show{' '}
+													{t('show')}{' '}
 													<Link2 className='size-4 text-primary' />
 												</Link>
 											)}
@@ -212,7 +214,7 @@ const NotificationsData = (props: Props) => {
 													href={`/dashboard/settings/friends`}
 													className='flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full text-primary '
 												>
-													Show{' '}
+													{t('show')}{' '}
 													<Link2 className='size-4 text-primary' />
 												</Link>
 											)}

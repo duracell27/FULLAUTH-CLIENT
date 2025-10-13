@@ -1,10 +1,13 @@
+'use client'
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { friendsService } from "../services/friends.service"
 import { toast } from "sonner"
 import { toastMessageHandler } from "../utils"
 import { useRouter } from "next/navigation"
+import { useTranslations } from './useTranslations'
 
 export function useAddFriendMutation() {
+	const { t } = useTranslations()
     const router  = useRouter()
     const queryClient = useQueryClient()
     const {mutate: addFriend, isPending: isLoadingAddFriend} = useMutation({
@@ -12,7 +15,7 @@ export function useAddFriendMutation() {
         mutationFn: (userId: string) =>
             friendsService.addFriend(userId),
         onSuccess: () => {
-            toast.success('Friend request sent')
+            toast.success(t('friendRequestSent'))
             queryClient.invalidateQueries({queryKey: ['friends']})
             queryClient.invalidateQueries({queryKey: ['notificationsUnread']})
             queryClient.invalidateQueries({queryKey: ['notifications']})

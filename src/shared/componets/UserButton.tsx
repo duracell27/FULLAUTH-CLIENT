@@ -1,6 +1,6 @@
 'use client'
 import { LuLogOut } from 'react-icons/lu'
-import { useLogoutMutation } from '../hooks'
+import { useLogoutMutation, useTranslations } from '../hooks'
 import {
 	Avatar,
 	AvatarFallback,
@@ -22,6 +22,7 @@ interface UserButtonProps {
 export function UserButton({ user }: UserButtonProps) {
 	const [open, setOpen] = useState(false)
 	const { logout, isLoadingLogout } = useLogoutMutation()
+	const { t } = useTranslations()
 
 	if (!user) return null
 
@@ -46,7 +47,7 @@ export function UserButton({ user }: UserButtonProps) {
 					onClick={() => logout()}
 				>
 					<LuLogOut className='mr-2 size-4' />
-					Logout
+					{t('logout')}
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>

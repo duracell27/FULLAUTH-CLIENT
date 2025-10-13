@@ -1,11 +1,14 @@
+'use client'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { toastMessageHandler } from '../utils'
 import { useRouter } from 'next/navigation'
 import { TypeAddExpenseFormNumber } from '../schemas'
 import { expenseService } from '../services/expense.service'
+import { useTranslations } from './useTranslations'
 
 export function useEditExpenseMutation(groupId: string, expenseId: string) {
+	const { t } = useTranslations()
 	const router = useRouter()
 	const queryClient = useQueryClient()
 	const { mutate: editExpense, isPending: isLoadingEditExpense } =
@@ -14,7 +17,7 @@ export function useEditExpenseMutation(groupId: string, expenseId: string) {
 			mutationFn: ({ data, expenseId }: { data: TypeAddExpenseFormNumber; expenseId: string }) =>
 				expenseService.editExpense(data, expenseId),
 			onSuccess: () => {
-				toast.success('Expense edited successfully')
+				toast.success(t('expenseEditedSuccessfully'))
 				queryClient.invalidateQueries({
 					queryKey: ['group ' + groupId]
 				})

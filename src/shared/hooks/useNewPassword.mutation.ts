@@ -6,8 +6,10 @@ import { toastMessageHandler } from '../utils'
 import { toast } from 'sonner'
 import { TypeNewPasswordSchema } from '../schemas'
 import { passwordRecoveryService } from '../services'
+import { useTranslations } from './useTranslations'
 
 export function useNewPasswordMutation() {
+	const { t } = useTranslations()
 	const router = useRouter()
 	const searchParams = useSearchParams()
 	const token = searchParams.get('token')
@@ -22,7 +24,7 @@ export function useNewPasswordMutation() {
 				recaptcha: string
 			}) => passwordRecoveryService.new(values, token, recaptcha),
 			onSuccess: () => {
-				toast.success('Password changed successfully')
+				toast.success(t('passwordChangedSuccessfully'))
                 router.push('/dashboard/settings')
 			},
 			onError: error => {

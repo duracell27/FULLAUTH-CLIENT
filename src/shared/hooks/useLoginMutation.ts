@@ -1,13 +1,16 @@
+'use client'
 import { useMutation } from '@tanstack/react-query'
 import { TypeLoginSchema } from '../schemas'
 import { authService } from '../services'
 import { toastMessageHandler } from '../utils'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from './useTranslations'
 
 export function useLoginMutation(setIsShowFactor: React.Dispatch<React.SetStateAction<boolean>>) {
 
 	const router = useRouter()
+	const { t } = useTranslations()
 	const {mutate: login, isPending: isLoadingLogin} = useMutation({
 		mutationKey: ['login user'],
 		mutationFn: ({
@@ -22,7 +25,7 @@ export function useLoginMutation(setIsShowFactor: React.Dispatch<React.SetStateA
 				toastMessageHandler(data)
 				setIsShowFactor(true)
 			}else{
-				toast.success('User logged in successfully')
+				toast.success(t('userLoggedInSuccessfully'))
 				router.push('/groups')
 			}
         },

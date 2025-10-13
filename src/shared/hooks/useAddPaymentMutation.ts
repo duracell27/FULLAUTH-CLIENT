@@ -6,8 +6,10 @@ import { TypeAddExpenseForm, TypeAddExpenseFormNumber } from '../schemas'
 import { expenseService } from '../services/expense.service'
 import { TypeAddPaymentSchema } from '../schemas/createPayment.schema'
 import { paymentService } from '../services'
+import { useTranslations } from './useTranslations'
 
 export function useAddPaymentMutation(groupId: string) {
+	const { t } = useTranslations()
 	const router = useRouter()
 	const queryClient = useQueryClient()
 	const { mutate: addPayment, isPending: isLoadingAddPayment } = useMutation({
@@ -15,7 +17,7 @@ export function useAddPaymentMutation(groupId: string) {
 		mutationFn: (data: TypeAddPaymentSchema) =>
 			paymentService.addPayment(data),
 		onSuccess: () => {
-			toast.success('Payment added successfully')
+			toast.success(t('paymentAddedSuccessfully'))
 			queryClient.invalidateQueries({queryKey: ['group ' + groupId]})
 			queryClient.invalidateQueries({queryKey: ['summary']})
 			queryClient.invalidateQueries({queryKey: ['notificationsUnread']})

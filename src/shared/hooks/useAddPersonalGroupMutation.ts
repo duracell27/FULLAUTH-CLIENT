@@ -3,9 +3,11 @@ import { groupsService } from '../services'
 import { toastMessageHandler } from '../utils'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from './useTranslations'
 
 
 export function useAddPersonalGroupMutation() {
+	const { t } = useTranslations()
 	const router = useRouter()
 	const queryClient = useQueryClient()
 	const { mutate: addPersonalGroup, isPending: isLoadingAddPersonalGroup } = useMutation({
@@ -16,7 +18,7 @@ export function useAddPersonalGroupMutation() {
 			if (data.message) {
 				toastMessageHandler(data)
 			} else {
-				toast.success('Personal group created successfully')
+				toast.success(t('personalGroupCreatedSuccessfully'))
 				// Інвалідуємо всі запити, пов'язані з персональними групами
 				queryClient.invalidateQueries({queryKey: ['groups']})
 				queryClient.invalidateQueries({queryKey: ['notificationsUnread']})

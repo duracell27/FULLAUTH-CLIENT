@@ -22,15 +22,17 @@ import {
 	PopoverContent,
 	PopoverTrigger
 } from '@/shared/componets/ui/Popover'
-import { cn } from '@/shared/utils'
-import { format, set } from 'date-fns'
+import { cn, formatDate } from '@/shared/utils'
+import { set } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
 import { Calendar } from '@/shared/componets/ui/Calendar'
 import {
 	addGroupSchema,
 	TypeAddGroupSchema
 } from '@/shared/schemas/createGroup.schema'
-import { useGroup } from '@/shared/hooks'
+import { useGroup, useTranslations } from '@/shared/hooks'
+import { useProfile } from '@/shared/hooks/useProfile'
+import { Language } from '@/shared/types/user.types'
 import { Loading } from '@/shared/componets/ui/Loading'
 import { editGroupSchema, TypeEditGroupSchema } from '@/shared/schemas'
 import { useEditGroupMutation } from '@/shared/hooks/useEditGroupMutation'
@@ -42,6 +44,8 @@ type Props = {
 
 export const EditGroupForm = ({ groupId }: Props) => {
 	const { group, isLoadingGroup } = useGroup(groupId)
+	const { t } = useTranslations()
+	const { user } = useProfile()
 
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 	const [originalUrl, setOriginalUrl] = useState<string | null>(null)
@@ -149,7 +153,7 @@ export const EditGroupForm = ({ groupId }: Props) => {
 		<div className='flex flex-col gap-3 justify-start items-center h-screen  pt-18'>
 			<Card className='w-full max-w-[400px]'>
 				<CardHeader>
-					<CardTitle>Edit group</CardTitle>
+					<CardTitle>{t('editGroup')}</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<Form {...form}>
@@ -162,10 +166,10 @@ export const EditGroupForm = ({ groupId }: Props) => {
 								name='name'
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Group name</FormLabel>
+										<FormLabel>{t('groupName')}</FormLabel>
 										<FormControl>
 											<Input
-												placeholder='Enter group name'
+												placeholder={t('enterGroupName')}
 												disabled={isLoadingEditGroup}
 												{...field}
 											/>
@@ -180,7 +184,7 @@ export const EditGroupForm = ({ groupId }: Props) => {
 								name='avatarUrl'
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Avatar </FormLabel>
+										<FormLabel>{t('avatar')}</FormLabel>
 										<FormControl>
 											<div>
 												{/* Кастомний прямокутник */}
@@ -193,8 +197,8 @@ export const EditGroupForm = ({ groupId }: Props) => {
 													>
 														<span className='text-gray-600 font-medium'>
 															{isLoadingAvatar
-																? 'Завантажую ...'
-																: 'Завантажити фото'}
+																? t('uploading')
+																: t('uploadPhoto')}
 														</span>
 													</div>
 
@@ -207,13 +211,13 @@ export const EditGroupForm = ({ groupId }: Props) => {
 																}
 																target='_blank'
 																rel='noopener noreferrer'
-																title='Відкрити оригінальне зображення'
+																title={t('openOriginalImage')}
 															>
 																<img
 																	src={
 																		previewUrl
 																	}
-																	alt='Попередній перегляд аватара'
+																	alt={t('avatarPreview')}
 																	className='h-24 w-24 min-w-24 object-cover block rounded-full hover:opacity-80 transition-opacity'
 																/>
 															</a>
@@ -258,7 +262,7 @@ export const EditGroupForm = ({ groupId }: Props) => {
 								name='eventDate'
 								render={({ field }) => (
 									<FormItem className='flex flex-col'>
-										<FormLabel>Date of event</FormLabel>
+										<FormLabel>{t('dateOfEvent')}</FormLabel>
 										<Popover>
 											<PopoverTrigger asChild>
 												<FormControl>
@@ -270,14 +274,11 @@ export const EditGroupForm = ({ groupId }: Props) => {
 																'text-muted-foreground'
 														)}
 													>
-														{field.value ? (
-															format(
-																field.value,
-																'PPP'
-															)
+														{field.value && !isNaN(new Date(field.value).getTime()) ? (
+															formatDate(field.value, 'PP', user?.language || Language.EN)
 														) : (
 															<span>
-																Pick a date
+																{t('pickADate')}
 															</span>
 														)}
 														<CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
@@ -300,6 +301,7 @@ export const EditGroupForm = ({ groupId }: Props) => {
 															)
 													}
 													initialFocus
+													language={user?.language || Language.EN}
 												/>
 											</PopoverContent>
 										</Popover>
@@ -315,7 +317,7 @@ export const EditGroupForm = ({ groupId }: Props) => {
 								render={({ field }) => (
 									<FormItem className='flex flex-col gap-1'>
 										<div className='flex items-center gap-3'>
-											<FormLabel>Lock group</FormLabel>
+											<FormLabel>{t('lockGroup')}</FormLabel>
 											<Switch
 												checked={field.value}
 												onCheckedChange={field.onChange}
@@ -323,8 +325,7 @@ export const EditGroupForm = ({ groupId }: Props) => {
 											/>
 										</div>
 										<p className='text-xs text-muted-foreground'>
-											In a locked group, you cannot add
-											new members or expenses
+											{t('lockGroupDescription')}
 										</p>
 										<FormMessage />
 									</FormItem>
@@ -336,7 +337,7 @@ export const EditGroupForm = ({ groupId }: Props) => {
 								render={({ field }) => (
 									<FormItem className='flex flex-col gap-1 mt-2'>
 										<div className='flex items-center gap-3'>
-											<FormLabel>Finish group</FormLabel>
+											<FormLabel>{t('finishGroup')}</FormLabel>
 											<Switch
 												checked={field.value}
 												onCheckedChange={field.onChange}
@@ -344,16 +345,14 @@ export const EditGroupForm = ({ groupId }: Props) => {
 											/>
 										</div>
 										<p className='text-xs text-muted-foreground'>
-											An finished group has no unsettled
-											balances and is not included in
-											overall expenses
+											{t('finishGroupDescription')}
 										</p>
 										<FormMessage />
 									</FormItem>
 								)}
 							/>
 
-							<Button type='submit'>Edit group</Button>
+							<Button type='submit'>{t('updateGroup')}</Button>
 						</form>
 					</Form>
 				</CardContent>

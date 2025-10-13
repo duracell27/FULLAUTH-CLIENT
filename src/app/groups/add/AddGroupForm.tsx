@@ -23,15 +23,17 @@ import {
 	PopoverContent,
 	PopoverTrigger
 } from '@/shared/componets/ui/Popover'
-import { cn } from '@/shared/utils'
-import { format, set } from 'date-fns'
+import { cn, formatDate } from '@/shared/utils'
+import { set } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
 import { Calendar } from '@/shared/componets/ui/Calendar'
 import {
 	addGroupSchema,
 	TypeAddGroupSchema
 } from '@/shared/schemas/createGroup.schema'
-import { useAddGroupMutation } from '@/shared/hooks'
+import { useAddGroupMutation, useTranslations } from '@/shared/hooks'
+import { useProfile } from '@/shared/hooks/useProfile'
+import { Language } from '@/shared/types/user.types'
 import { BackButton } from '@/shared/componets/ui/BackButton'
 
 type Props = {}
@@ -43,6 +45,8 @@ export const AddGroupForm = (props: Props) => {
 	const fileInputRef = useRef<HTMLInputElement>(null)
 
 	const { addGroup, isLoadingAddGroup } = useAddGroupMutation()
+	const { t } = useTranslations()
+	const { user } = useProfile()
 
 	const form = useForm({
 		resolver: zodResolver(addGroupSchema),
@@ -137,7 +141,7 @@ export const AddGroupForm = (props: Props) => {
 			<BackButton />
 			<Card className='w-full max-w-[400px]'>
 				<CardHeader>
-					<CardTitle>Create group</CardTitle>
+					<CardTitle>{t('createGroup')}</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<Form {...form}>
@@ -150,10 +154,10 @@ export const AddGroupForm = (props: Props) => {
 								name='name'
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Group name</FormLabel>
+										<FormLabel>{t('groupName')}</FormLabel>
 										<FormControl>
 											<Input
-												placeholder='Enter group name'
+												placeholder={t('enterGroupName')}
 												disabled={isLoadingAddGroup}
 												{...field}
 											/>
@@ -168,7 +172,7 @@ export const AddGroupForm = (props: Props) => {
 								name='avatarUrl'
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Avatar </FormLabel>
+										<FormLabel>{t('avatar')}</FormLabel>
 										<FormControl>
 											<div>
 												{/* Кастомний прямокутник */}
@@ -181,8 +185,8 @@ export const AddGroupForm = (props: Props) => {
 													>
 														<span className='text-gray-600 font-medium'>
 															{isLoadingAvatar
-																? 'Завантажую ...'
-																: 'Завантажити фото'}
+																? t('uploading')
+																: t('uploadPhoto')}
 														</span>
 													</div>
 
@@ -195,13 +199,13 @@ export const AddGroupForm = (props: Props) => {
 																}
 																target='_blank'
 																rel='noopener noreferrer'
-																title='Відкрити оригінальне зображення'
+																title={t('openOriginalImage')}
 															>
 																<img
 																	src={
 																		previewUrl
 																	}
-																	alt='Попередній перегляд аватара'
+																	alt={t('avatarPreview')}
 																	className='h-24 w-24 min-w-24 object-cover block rounded-full hover:opacity-80 transition-opacity'
 																/>
 															</a>
@@ -252,7 +256,7 @@ export const AddGroupForm = (props: Props) => {
 								name='eventDate'
 								render={({ field }) => (
 									<FormItem className='flex flex-col'>
-										<FormLabel>Date of event</FormLabel>
+										<FormLabel>{t('dateOfEvent')}</FormLabel>
 										<Popover>
 											<PopoverTrigger asChild>
 												<FormControl>
@@ -265,13 +269,10 @@ export const AddGroupForm = (props: Props) => {
 														)}
 													>
 														{field.value ? (
-															format(
-																field.value,
-																'PPP'
-															)
+															formatDate(field.value, 'PP', user?.language || Language.EN)
 														) : (
 															<span>
-																Pick a date
+																{t('pickADate')}
 															</span>
 														)}
 														<CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
@@ -294,6 +295,7 @@ export const AddGroupForm = (props: Props) => {
 															)
 													}
 													initialFocus
+													language={user?.language || Language.EN}
 												/>
 											</PopoverContent>
 										</Popover>
@@ -304,7 +306,7 @@ export const AddGroupForm = (props: Props) => {
 							/>
 
 							<Button disabled={isLoadingAddGroup} type='submit'>
-								Create group
+								{t('createGroup')}
 							</Button>
 						</form>
 					</Form>

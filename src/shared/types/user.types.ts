@@ -16,6 +16,19 @@ export enum FriendStatus {
 	Rejected = 'REJECTED'
 }
 
+export enum Language {
+	EN = 'EN',
+	UK = 'UK',
+	DE = 'DE',
+	ES = 'ES',
+	FR = 'FR',
+	CS = 'CS',
+	PL = 'PL',
+	TR = 'TR',
+	HI = 'HI',
+	ZH = 'ZH'
+}
+
 export interface IAccount {
 	id: string
 	createdAt: string
@@ -37,6 +50,7 @@ export interface IUser {
 	displayName: string
 	picture: string
 	role: UserRole
+	language: Language
 	isVerified: boolean
 	isTwoFactorEnabled: boolean
 	method: AuthMethod
@@ -49,6 +63,7 @@ export interface IUserSafe {
 	email: string
 	displayName: string
 	picture: string
+	language: Language
 }
 
 export interface IFriend {

@@ -35,18 +35,19 @@ import {
 	TooltipTrigger
 } from '@/shared/componets/ui'
 import { Loading } from '@/shared/componets/ui/Loading'
-import { useGroup, useProfile, useFriends } from '@/shared/hooks'
+import { useGroup, useProfile, useFriends, useTranslations } from '@/shared/hooks'
 import { useDeleteGroupMutation } from '@/shared/hooks/useDeleteGroupMutation'
 import { useDeleteMemberFromGroupMutation } from '@/shared/hooks/useDeleteMemberFromGroupMutation'
 import { useAddFriendMutation } from '@/shared/hooks/useAddFriendMutation'
 import { GroupMemberStatus, GroupRole, FriendStatus } from '@/shared/types'
+import { Language } from '@/shared/types/user.types'
 import colorBalance from '@/shared/utils/colorBalance'
 import {
 	formatBalance,
 	formatNumberWithSpaces
 } from '@/shared/utils/formatBalance'
 
-import { format } from 'date-fns'
+import { formatDate } from '@/shared/utils'
 import {
 	ArrowRight,
 	BadgeAlert,
@@ -77,6 +78,7 @@ export const GroupData = ({ groupId }: Props) => {
 	const { user } = useProfile()
 	const { friendsData } = useFriends()
 	const { addFriend, isLoadingAddFriend } = useAddFriendMutation()
+	const { t } = useTranslations()
 	const { deletePayment, isLoadingDeletePayment } =
 		useDeletePaymentMutation(groupId)
 
@@ -138,10 +140,9 @@ export const GroupData = ({ groupId }: Props) => {
 	}
 
 	if (!group || !user) {
-		return <div>Group not found</div>
+		return <div>{t('groupNotFound')}</div>
 	}
 
-	console.log(group.memberBalanceDetails)
 	return (
 		<div className='w-full max-w-[400px] flex flex-col gap-3 pb-18'>
 			{/* group info */}
@@ -210,18 +211,15 @@ export const GroupData = ({ groupId }: Props) => {
 											<AlertDialogContent>
 												<AlertDialogHeader>
 													<AlertDialogTitle>
-														Are you absolutely sure?
+														{t('areYouAbsolutelySure')}
 													</AlertDialogTitle>
 													<AlertDialogDescription>
-														This action cannot be
-														undone. This will
-														permanently delete this
-														group.
+														{t('thisActionCannotBeUndoneThisWillPermanentlyDeleteThisGroup')}
 													</AlertDialogDescription>
 												</AlertDialogHeader>
 												<AlertDialogFooter>
 													<AlertDialogCancel>
-														Cancel
+														{t('cancel')}
 													</AlertDialogCancel>
 													<AlertDialogAction
 														onClick={() =>
@@ -229,7 +227,7 @@ export const GroupData = ({ groupId }: Props) => {
 														}
 														className='bg-bad-red hover:bg-bad-red/80'
 													>
-														Continue
+														{t('continue')}
 													</AlertDialogAction>
 												</AlertDialogFooter>
 											</AlertDialogContent>
@@ -273,31 +271,31 @@ export const GroupData = ({ groupId }: Props) => {
 
 				<CardContent className='mt-4'>
 					<div className='flex items-center gap-2'>
-						Group expenses:{' '}
+						{t('groupExpenses')}:{' '}
 						<span className='font-bold'>
 							{formatNumberWithSpaces(group.totalExpenses)}
 						</span>
 					</div>
 					<div className='flex items-center gap-2'>
-						Your balance:{' '}
+						{t('yourBalance')}:{' '}
 						<span className='font-bold'>
 							{colorBalance({ balance: group.userTotalBalance })}
 						</span>
 					</div>
 					<p className='text-xs mt-1'>
-						{format(group.eventDate, 'PPP')}
+						{formatDate(group.eventDate, 'PP', user?.language || Language.EN)}
 					</p>
 
 					{group.isLocked && (
 						<div className='flex justify-center items-center gap-2 bg-bad-red px-2 rounded-full text-white mt-1'>
 							<Lock className='size-4 ' />
-							<span>Locked</span>
+							<span>{t('locked')}</span>
 						</div>
 					)}
 					{group.isFinished && (
 						<div className='flex justify-center items-center gap-2 bg-good-green px-2 rounded-full text-white mt-1'>
 							<BookmarkCheck className='size-4 ' />
-							<span>Finished</span>
+							<span>{t('finished')}</span>
 						</div>
 					)}
 				</CardContent>
@@ -313,13 +311,13 @@ export const GroupData = ({ groupId }: Props) => {
 						<CollapsibleTrigger className='w-full'>
 							<CardHeader>
 								<CardTitle className='flex justify-between items-center'>
-									<span>Payments</span>
+									<span>{t('payments')}</span>
 									<div
 										className={buttonVariants({
 											size: 'xs'
 										})}
 									>
-										{isOpenPayments ? 'Close' : 'Open'}
+										{isOpenPayments ? t('close') : t('open')}
 									</div>
 								</CardTitle>
 							</CardHeader>
@@ -338,7 +336,7 @@ export const GroupData = ({ groupId }: Props) => {
 											>
 												<div className='flex flex-col w-full'>
 													<div className='flex items-center w-full gap-2'>
-														<Avatar className='cursor-pointer'>
+														<Avatar className='cursor-pointer size-6'>
 															<AvatarImage
 																src={
 																	payment.from
@@ -350,13 +348,13 @@ export const GroupData = ({ groupId }: Props) => {
 																		: ''
 																}
 															/>
-															<AvatarFallback className='text-base'>
+															<AvatarFallback className='text-[12px]'>
 																{payment.from.displayName
 																	.slice(0, 2)
 																	.toUpperCase()}
 															</AvatarFallback>
 														</Avatar>
-														<div className='flex-1'>
+														<div className='flex-1 text-md'>
 															<span>
 																{
 																	payment.from
@@ -367,7 +365,7 @@ export const GroupData = ({ groupId }: Props) => {
 
 														<ArrowRight />
 
-														<Avatar className='cursor-pointer'>
+														<Avatar className='cursor-pointer size-6'>
 															<AvatarImage
 																src={
 																	payment.to
@@ -379,13 +377,13 @@ export const GroupData = ({ groupId }: Props) => {
 																		: ''
 																}
 															/>
-															<AvatarFallback className='text-base'>
+															<AvatarFallback className='text-[12px]'>
 																{payment.to.displayName
 																	.slice(0, 2)
 																	.toUpperCase()}
 															</AvatarFallback>
 														</Avatar>
-														<div className='flex-1'>
+														<div className='flex-1 text-md'>
 															<span>
 																{
 																	payment.to
@@ -406,7 +404,7 @@ export const GroupData = ({ groupId }: Props) => {
 														<div className='flex justify-between items-center gap-2  rounded-full mt-2 '>
 															<span className='text-white text-xs flex bg-primary/30 rounded-full px-[2px] items-center gap-1 py-[2px]'>
 																<span className='bg-primary rounded-full px-1'>
-																	created by
+																	{t('createdBy')}
 																</span>{' '}
 																{payment.creators.map(
 																	creator => (
@@ -461,28 +459,15 @@ export const GroupData = ({ groupId }: Props) => {
 																	<AlertDialogContent>
 																		<AlertDialogHeader>
 																			<AlertDialogTitle>
-																				Are
-																				you
-																				absolutely
-																				sure?
+																				{t('areYouAbsolutelySure')}
 																			</AlertDialogTitle>
 																			<AlertDialogDescription>
-																				This
-																				action
-																				cannot
-																				be
-																				undone.
-																				This
-																				will
-																				permanently
-																				delete
-																				this
-																				payment.
+																				{t('thisActionCannotBeUndoneThisWillPermanentlyDeleteThisPayment')}
 																			</AlertDialogDescription>
 																		</AlertDialogHeader>
 																		<AlertDialogFooter>
 																			<AlertDialogCancel>
-																				Cancel
+																				{t('cancel')}
 																			</AlertDialogCancel>
 																			<AlertDialogAction
 																				onClick={() =>
@@ -502,7 +487,7 @@ export const GroupData = ({ groupId }: Props) => {
 																				}
 																				className='bg-bad-red hover:bg-bad-red/80'
 																			>
-																				Continue
+																				{t('continue')}
 																			</AlertDialogAction>
 																		</AlertDialogFooter>
 																	</AlertDialogContent>
@@ -540,11 +525,11 @@ export const GroupData = ({ groupId }: Props) => {
 																		>
 																			<span className='text-white'>
 																				<BadgeAlert className='size-5 -mt-1 inline-block' />{' '}
-																				overpaid{' '}
+																				{t('overpaid')}{' '}
 																				{
 																					overpay.amount
 																				}{' '}
-																				to{' '}
+																				{t('to')}{' '}
 																				{
 																					overpay
 																						.to
@@ -577,13 +562,13 @@ export const GroupData = ({ groupId }: Props) => {
 						<CollapsibleTrigger className='w-full'>
 							<CardHeader>
 								<CardTitle className='flex justify-between items-center'>
-									<span>Balances</span>
+									<span>{t('balances')}</span>
 									<div
 										className={buttonVariants({
 											size: 'xs'
 										})}
 									>
-										{isOpenBalances ? 'Close' : 'Open'}
+										{isOpenBalances ? t('close') : t('open')}
 									</div>
 								</CardTitle>
 							</CardHeader>
@@ -630,7 +615,7 @@ export const GroupData = ({ groupId }: Props) => {
 															{memberBalance.totalBalance >
 															0 ? (
 																<span className='inline-block'>
-																	gets back{' '}
+																	{t('getsBack')}{' '}
 																	<span>
 																		{colorBalance(
 																			{
@@ -639,18 +624,18 @@ export const GroupData = ({ groupId }: Props) => {
 																			}
 																		)}
 																	</span>{' '}
-																	in total
+																	{t('inTotal')}
 																</span>
 															) : (
 																<span className=''>
-																	owes{' '}
+																	{t('owes')}{' '}
 																	{colorBalance(
 																		{
 																			balance:
 																				memberBalance.totalBalance
 																		}
 																	)}{' '}
-																	in total
+																	{t('inTotal')}
 																</span>
 															)}
 														</div>
@@ -701,7 +686,7 @@ export const GroupData = ({ groupId }: Props) => {
 																		'owes_to_member' ? (
 																			<>
 																				<span className='text-good-green whitespace-nowrap font-semibold'>
-																					owes
+																					{t('owes')}
 																					+
 																					<span className=''>
 																						{formatBalance(
@@ -709,7 +694,7 @@ export const GroupData = ({ groupId }: Props) => {
 																						)}
 																					</span>
 																				</span>{' '}
-																				to{' '}
+																				{t('to')}{' '}
 																				<span className='text-neutral-grey text-xs'>
 																					<MoveRight className='size-4 inline-block' />
 																					<HandCoins className='size-4 inline-block' />
@@ -723,7 +708,7 @@ export const GroupData = ({ groupId }: Props) => {
 																		) : (
 																			<>
 																				<span className='text-bad-red whitespace-nowrap font-semibold'>
-																					lended
+																					{t('lended')}
 																					-
 																					<span className=''>
 																						{formatBalance(
@@ -731,7 +716,7 @@ export const GroupData = ({ groupId }: Props) => {
 																						)}
 																					</span>
 																				</span>{' '}
-																				to{' '}
+																				{t('to')}{' '}
 																				<span className='text-neutral-grey text-xs'>
 																					<MoveRight className='size-4 inline-block' />
 																					<HandCoins className='size-4 inline-block' />
@@ -764,7 +749,7 @@ export const GroupData = ({ groupId }: Props) => {
 																				>
 																					<DialogTrigger>
 																						<span className='ml-3 cursor-pointer px-2 py-1 bg-primary rounded-full text-background text-xs'>
-																							pay{' '}
+																							{t('pay')}{' '}
 																							<HandCoins className='size-4 ml-1 inline-block' />
 																						</span>
 																					</DialogTrigger>
@@ -815,7 +800,7 @@ export const GroupData = ({ groupId }: Props) => {
 			<Card className=''>
 				<CardHeader>
 					<CardTitle className='flex justify-between items-center'>
-						<span>Expenses</span>
+						<span>{t('expenses')}</span>
 
 						<Link
 							href={`/expenses/add/${group.id}`}
@@ -833,7 +818,7 @@ export const GroupData = ({ groupId }: Props) => {
 							{(group.isLocked || group.isFinished) && (
 								<Lock className='mr inline-block' />
 							)}
-							Add Expense
+							{t('addExpenseButton')}
 						</Link>
 					</CardTitle>
 				</CardHeader>
@@ -904,7 +889,7 @@ export const GroupData = ({ groupId }: Props) => {
 											<ul className='inline-flex gap-1 items-start justify-start bg-primary/40 p-0.5 rounded-full'>
 												<li key={'memberCount'}>
 													<div className='h-4 px-1 bg-primary text-center rounded-full text-background text-xs'>
-														<span>paid by</span>
+														<span>{t('paidBy')}</span>
 													</div>
 												</li>
 												{expense.payers &&
@@ -960,7 +945,7 @@ export const GroupData = ({ groupId }: Props) => {
 													)}
 											</ul>
 											<span className='text-secondary-foreground text-xs pl-1'>
-												on {format(expense.date, 'PPP')}
+												{t('on')} {formatDate(expense.date, 'PP', user?.language || Language.EN)}
 											</span>
 										</div>
 										<div className='text-right'>
@@ -983,7 +968,7 @@ export const GroupData = ({ groupId }: Props) => {
 			<Card className=''>
 				<CardHeader>
 					<CardTitle className='flex justify-between items-center'>
-						<span>Members</span>
+						<span>{t('members')}</span>
 						{group.members.find(member => member.userId === user.id)
 							?.role === GroupRole.ADMIN && 
 							!group.isPersonal && (
@@ -1008,7 +993,7 @@ export const GroupData = ({ groupId }: Props) => {
 								{(group.isLocked || group.isFinished) && (
 									<Lock className='mr inline-block' />
 								)}
-								Add Member
+								{t('addMember')}
 							</Link>
 						)}
 					</CardTitle>
@@ -1032,27 +1017,27 @@ export const GroupData = ({ groupId }: Props) => {
 										</AvatarFallback>
 									</Avatar>
 									<div className='flex gap-2 items-center flex-1'>
-										{member.status ===
-										GroupMemberStatus.PENDING ? (
-											<>
-												<span className='font-bold text-muted-foreground'>
-													{member.user.displayName}
-												</span>
-												<Badge className='text-xs bg-muted-foreground'>
-													invited
-												</Badge>
-											</>
-										) : (
-											<span className='font-bold'>
-												{member.user.displayName}
-											</span>
-										)}
+														{member.status ===
+														GroupMemberStatus.PENDING ? (
+															<>
+																<span className='font-bold text-muted-foreground'>
+																	{member.user.displayName}
+																</span>
+																<Badge className='text-xs bg-muted-foreground'>
+																	{t('invited')}
+																</Badge>
+															</>
+														) : (
+															<span className='font-bold'>
+																{member.user.displayName}
+															</span>
+														)}
 
-										{member.role === GroupRole.ADMIN && (
-											<Badge className='text-xs'>
-												admin
-											</Badge>
-										)}
+														{member.role === GroupRole.ADMIN && (
+															<Badge className='text-xs'>
+																{t('admin')}
+															</Badge>
+														)}
 									</div>
 
 									<div className='flex gap-2'>
@@ -1105,17 +1090,15 @@ export const GroupData = ({ groupId }: Props) => {
 													<AlertDialogContent>
 														<AlertDialogHeader>
 															<AlertDialogTitle>
-																Are you absolutely sure?
+																{t('areYouAbsolutelySure')}
 															</AlertDialogTitle>
 															<AlertDialogDescription>
-																This action cannot be
-																undone. This will remove
-																this member from the group.
+																{t('areYouSureYouWantToRemoveThisMember')}
 															</AlertDialogDescription>
 														</AlertDialogHeader>
 														<AlertDialogFooter>
 															<AlertDialogCancel>
-																Cancel
+																{t('cancel')}
 															</AlertDialogCancel>
 															<AlertDialogAction
 																onClick={() =>
@@ -1125,7 +1108,7 @@ export const GroupData = ({ groupId }: Props) => {
 																}
 																className='bg-bad-red hover:bg-bad-red/80'
 															>
-																Continue
+																{t('continue')}
 															</AlertDialogAction>
 														</AlertDialogFooter>
 													</AlertDialogContent>

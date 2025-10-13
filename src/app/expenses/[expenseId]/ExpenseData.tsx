@@ -26,10 +26,11 @@ import { BackButton } from '@/shared/componets/ui/BackButton'
 import { useDeleteExpenseMutation } from '@/shared/hooks/useDeleteExpenseMutation'
 import { useExpense } from '@/shared/hooks/useExpense'
 import { useGroup } from '@/shared/hooks/useGroup'
-import { useProfile } from '@/shared/hooks/useProfile'
+import { useProfile, useTranslations } from '@/shared/hooks'
 import { GroupRole } from '@/shared/types/groupe.types'
+import { Language } from '@/shared/types/user.types'
 import { formatBalance } from '@/shared/utils/formatBalance'
-import { format } from 'date-fns'
+import { formatDate } from '@/shared/utils'
 import { Calendar, ContactRound, Eye, HandCoins, MoveRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -44,16 +45,17 @@ const ExpenseData = ({ expenseId }: Props) => {
 
 	const { user, isLoadingProfile } = useProfile()
 	const { group, isLoadingGroup } = useGroup(expense?.groupId || '')
+	const { t } = useTranslations()
 
 	const { deleteExpense, isLoadingDeleteExpense } = useDeleteExpenseMutation(
 		expense?.groupId || ''
 	)
 	if (isLoadingExpense || isLoadingProfile || isLoadingGroup) {
-		return <div>Loading...</div>
+		return <div>{t('loading')}</div>
 	}
 
 	if (!expense || !user || !group) {
-		return <div>Expense not found</div>
+		return <div>{t('expenseNotFound')}</div>
 	}
 
 	const isCreator = user.id === expense.creator.id
@@ -132,11 +134,11 @@ const ExpenseData = ({ expenseId }: Props) => {
 						<div className='text-neutral-grey space-y-2'>
 							<p className='text-xs flex items-center gap-2'>
 								<Calendar className='size-5' />
-								{format(expense.date, 'PPP')}
+								{formatDate(expense.date, 'PP', user?.language || Language.EN)}
 							</p>
 							<p className='text-xs flex items-center gap-2'>
 								<ContactRound className='size-5' />
-								created by
+								{t('createdBy')}
 								<Avatar className='w-5 h-5'>
 									<AvatarImage
 										src={
@@ -158,7 +160,7 @@ const ExpenseData = ({ expenseId }: Props) => {
 							</p>
 						</div>
 						<div className='bg-primary text-background px-3 py-2 rounded-lg text-xs'>
-							{expense.splitType}
+							{t(expense.splitType.toLowerCase())}
 						</div>
 					</div>
 				</CardContent>
@@ -166,7 +168,7 @@ const ExpenseData = ({ expenseId }: Props) => {
 			<Card className=''>
 				<CardHeader>
 					<CardTitle className='flex justify-between items-center pb-1'>
-						<span>Payment Overview</span>
+						<span>{t('paymentOverview')}</span>
 					</CardTitle>
 				</CardHeader>
 				<CardContent>
@@ -276,7 +278,7 @@ const ExpenseData = ({ expenseId }: Props) => {
 						href={`/expenses/edit/${expense.groupId}/${expense.id}`}
 					>
 						<Button className='px-5' disabled={!canEditOrDelete}>
-							Edit
+							{t('edit')}
 						</Button>
 					</Link>
 
@@ -287,31 +289,30 @@ const ExpenseData = ({ expenseId }: Props) => {
 								variant={'danger'}
 								disabled={!canEditOrDelete}
 							>
-								Delete
+								{t('delete')}
 							</Button>
 						</AlertDialogTrigger>
 						<AlertDialogContent>
 							<AlertDialogHeader>
 								<AlertDialogTitle>
-									Are you absolutely sure?
+									{t('areYouAbsolutelySure')}
 								</AlertDialogTitle>
 								<AlertDialogDescription>
-									This action cannot be undone. This will
-									permanently delete this{' '}
+									{t('thisActionCannotBeUndone')}{' '}
 									<span className='font-black text-lg'>
-										expense
+										{t('expense')}
 									</span>
 								</AlertDialogDescription>
 							</AlertDialogHeader>
 							<AlertDialogFooter>
-								<AlertDialogCancel>Cancel</AlertDialogCancel>
+								<AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
 								<AlertDialogAction
 									onClick={() =>
 										deleteExpenseHandler(expense.id)
 									}
 									className='bg-bad-red hover:bg-bad-red/80'
 								>
-									Continue
+									{t('continue')}
 								</AlertDialogAction>
 							</AlertDialogFooter>
 						</AlertDialogContent>

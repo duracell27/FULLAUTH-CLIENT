@@ -17,7 +17,7 @@ import {
 } from '@/shared/componets/ui'
 import { Loading } from '@/shared/componets/ui/Loading'
 import { UserButton, UserButtonLoading } from '@/shared/componets/UserButton'
-import { useProfile, useUpdateProfileMutation } from '@/shared/hooks'
+import { useProfile, useUpdateProfileMutation, useTranslations } from '@/shared/hooks'
 import { settingsSchema, TypeSettingsSchema } from '@/shared/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ChevronDown } from 'lucide-react'
@@ -25,6 +25,7 @@ import { useForm } from 'react-hook-form'
 
 const SettingsForm = () => {
 	const { user, isLoadingProfile } = useProfile()
+	const { t } = useTranslations()
 
 	const form = useForm<TypeSettingsSchema>({
 		resolver: zodResolver(settingsSchema),
@@ -44,7 +45,7 @@ const SettingsForm = () => {
 	return (
 		<Card className='w-full'>
 			<CardHeader className='flex flex-row items-center justify-between'>
-				<CardTitle>Profile settings</CardTitle>
+				<CardTitle>{t('profileSettings')}</CardTitle>
 				{isLoadingProfile ? (
 					<UserButtonLoading />
 				) : (
@@ -72,10 +73,10 @@ const SettingsForm = () => {
 										name='name'
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel>Name</FormLabel>
+												<FormLabel>{t('name')}</FormLabel>
 												<FormControl>
 													<Input
-														placeholder='Enter your name'
+														placeholder={t('enterYourName')}
 														disabled={
 															isLoadingUpdateProfile
 														}
@@ -92,10 +93,10 @@ const SettingsForm = () => {
 										name='email'
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel>Email</FormLabel>
+												<FormLabel>{t('email')}</FormLabel>
 												<FormControl>
 													<Input
-														placeholder='Enter your email'
+														placeholder={t('enterYourEmail')}
 														type='email'
 														disabled={
 															isLoadingUpdateProfile
@@ -115,13 +116,10 @@ const SettingsForm = () => {
 											<FormItem className='flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm'>
 												<div className='space-y-0.5'>
 													<FormLabel>
-														Two factor
-														authentication
+														{t('twoFactorAuth')}
 													</FormLabel>
 													<FormDescription>
-														Enable two factor
-														authentication to secure
-														your account
+														{t('twoFactorDescription')}
 													</FormDescription>
 												</div>
 												<FormControl>
@@ -140,7 +138,7 @@ const SettingsForm = () => {
 										disabled={isLoadingUpdateProfile}
 										type='submit'
 									>
-										Save
+										{t('save')}
 									</Button>
 								</form>
 							</Form>

@@ -3,8 +3,10 @@ import { toastMessageHandler } from '../utils'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { groupsService } from '../services'
+import { useTranslations } from './useTranslations'
 
 export function useDeleteGroupMutation() {
+	const { t } = useTranslations()
 	const queryClient = useQueryClient()
 	const router = useRouter()
 	const { mutate: deleteGroup, isPending: isLoadingDeleteGroup } =
@@ -16,7 +18,7 @@ export function useDeleteGroupMutation() {
 				if (data.message) {
 					toastMessageHandler(data)
 				} else {
-					toast.success('Group deleted successfully')
+					toast.success(t('groupDeletedSuccessfully'))
 					queryClient.invalidateQueries({
 						queryKey: ['groups']
 					})

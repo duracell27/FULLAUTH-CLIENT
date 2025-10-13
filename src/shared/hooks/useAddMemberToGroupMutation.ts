@@ -4,8 +4,10 @@ import { toast } from 'sonner'
 
 import { TypeAddMemberToGroupSchema } from '../schemas/addMemberToGroup.schema'
 import { memberService } from '../services/members.service'
+import { useTranslations } from './useTranslations'
 
 export function useAddMemberToGroupMutation(groupId: string) {
+	const { t } = useTranslations()
 
 	const queryClient = useQueryClient()
 
@@ -17,7 +19,7 @@ export function useAddMemberToGroupMutation(groupId: string) {
 			if (data.message) {
 				toastMessageHandler(data)
 			} else {
-				toast.success('Member request sent')
+				toast.success(t('memberRequestSent'))
 				queryClient.invalidateQueries({queryKey: ['group ' + groupId]})
 				queryClient.invalidateQueries({queryKey: ['notificationsUnread']})
 				queryClient.invalidateQueries({queryKey: ['notifications']})

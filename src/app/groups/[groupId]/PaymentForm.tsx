@@ -13,6 +13,7 @@ import {
 	Input
 } from '@/shared/componets/ui'
 import { useAddPaymentMutation } from '@/shared/hooks/useAddPaymentMutation'
+import { useTranslations } from '@/shared/hooks'
 import {
 	addPaymentSchema,
 	TypeAddPaymentSchema
@@ -33,6 +34,7 @@ type Props = {
 
 export const PaymentForm = ({ amount, groupId, creditor, debtor, closeDialog }: Props) => {
 	const { addPayment, isLoadingAddPayment } = useAddPaymentMutation(groupId)
+	const { t } = useTranslations()
 
 	const form = useForm<TypeAddPaymentSchema>({
 		resolver: zodResolver(addPaymentSchema),
@@ -45,7 +47,6 @@ export const PaymentForm = ({ amount, groupId, creditor, debtor, closeDialog }: 
 	})
 
 	const onSubmit = (data: TypeAddPaymentSchema) => {
-		// console.log(data)
 		addPayment(data)
 		closeDialog()
 	}
@@ -70,7 +71,7 @@ export const PaymentForm = ({ amount, groupId, creditor, debtor, closeDialog }: 
 				</Avatar>
 				<p>
 					{debtor.displayName}{' '}
-					<span className='font-bold'>returns</span>
+					<span className='font-bold'>{t('returns')}</span>
 				</p>
 			</div>
 			<div className='flex items-center gap-2'>
@@ -89,7 +90,7 @@ export const PaymentForm = ({ amount, groupId, creditor, debtor, closeDialog }: 
 								<FormControl>
 									<Input
 										className='w-[110px]'
-										placeholder='Sum of payment'
+										placeholder={t('sumOfPayment')}
 										type='number'
 										disabled={isLoadingAddPayment}
 										{...field}
@@ -109,7 +110,7 @@ export const PaymentForm = ({ amount, groupId, creditor, debtor, closeDialog }: 
 
 					<div className='flex items-center gap-2 py-2 mb-3 my-1 border-y border-primary/30'>
 						<p>
-							<span className='font-bold'>to</span>{' '}
+							<span className='font-bold'>{t('to')}</span>{' '}
 						</p>
 						<Avatar className='cursor-pointer mb-0'>
 							<AvatarImage
@@ -130,7 +131,7 @@ export const PaymentForm = ({ amount, groupId, creditor, debtor, closeDialog }: 
 					</div>
 
 					<Button disabled={isLoadingAddPayment} type='submit'>
-						Create payment
+						{t('createPayment')}
 					</Button>
 				</form>
 			</Form>

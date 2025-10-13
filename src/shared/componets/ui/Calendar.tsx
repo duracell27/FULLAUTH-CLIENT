@@ -3,23 +3,44 @@
 import * as React from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { DayPicker } from "react-day-picker"
-
+import { uk, enUS, de, es, fr, cs, pl, tr, hi, zhCN } from 'date-fns/locale'
+import { Language } from '@/shared/types/user.types'
 
 import { cn } from "@/shared/utils"
 import { buttonVariants } from "./Button"
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>
+// Мапінг мов на локалі react-day-picker
+const dayPickerLocales = {
+  [Language.UK]: uk,
+  [Language.EN]: enUS,
+  [Language.DE]: de,
+  [Language.ES]: es,
+  [Language.FR]: fr,
+  [Language.CS]: cs,
+  [Language.PL]: pl,
+  [Language.TR]: tr,
+  [Language.HI]: hi,
+  [Language.ZH]: zhCN,
+}
+
+export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
+  language?: Language
+}
 
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
+  language = Language.EN,
   ...props
 }: CalendarProps) {
+  const locale = dayPickerLocales[language] || enUS
+  
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
       className={cn("p-3", className)}
+      locale={locale}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",

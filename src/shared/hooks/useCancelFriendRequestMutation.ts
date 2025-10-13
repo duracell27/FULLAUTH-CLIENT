@@ -2,8 +2,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { friendsService } from '../services/friends.service'
 import { toastMessageHandler } from '../utils'
 import { toast } from 'sonner'
+import { useTranslations } from './useTranslations'
 
 export function useCancelFriendRequestMutation() {
+	const { t } = useTranslations()
 
     const queryClient = useQueryClient()
 
@@ -15,7 +17,7 @@ export function useCancelFriendRequestMutation() {
 		mutationFn: (friendRequestId: string) =>
 			friendsService.deleteFriendRequest(friendRequestId),
 		onSuccess: () => {
-			toast.success('Friend request cancelled')
+			toast.success(t('friendRequestCancelled'))
             queryClient.invalidateQueries({queryKey: ['friends']})
 		},
 		onError: error => {

@@ -1,7 +1,7 @@
 'use client'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/componets/ui'
 import { Loading } from '@/shared/componets/ui/Loading'
-import { useProfile } from '@/shared/hooks'
+import { useProfile, useTranslations } from '@/shared/hooks'
 import React from 'react'
 import QRCode from 'react-qr-code'
 
@@ -9,6 +9,8 @@ type Props = {}
 
 export const QRCodeCard = (props: Props) => {
 	const { user, isLoadingProfile } = useProfile()
+	const { t } = useTranslations()
+	
 	// if (!user) return null
 	let qrCodeValue=''
 	if (!isLoadingProfile) {
@@ -21,7 +23,7 @@ export const QRCodeCard = (props: Props) => {
 		<div className='flex flex-col justify-center items-center w-full'>
 			<Card className='w-full max-w-[400px]'>
 				<CardHeader>
-					<CardTitle>Your QR code</CardTitle>
+					<CardTitle>{t('yourQRCode')}</CardTitle>
 				</CardHeader>
 				<CardContent className='flex justify-center items-center'>
 					{isLoadingProfile ? (

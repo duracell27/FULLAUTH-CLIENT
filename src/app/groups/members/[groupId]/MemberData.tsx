@@ -17,7 +17,7 @@ import {
 	Input
 } from '@/shared/componets/ui'
 import { BackButton } from '@/shared/componets/ui/BackButton'
-import { useFriends, useProfile } from '@/shared/hooks'
+import { useFriends, useProfile, useTranslations } from '@/shared/hooks'
 import { useAddMemberToGroupMutation } from '@/shared/hooks/useAddMemberToGroupMutation'
 import { useProfileByNameSafe } from '@/shared/hooks/useProfileByNameSafe'
 import {
@@ -25,6 +25,7 @@ import {
 	TypeSearchUserSchema
 } from '@/shared/schemas/searchUser.schema'
 import { IUserSafe } from '@/shared/types'
+import { Language } from '@/shared/types/user.types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { set } from 'date-fns'
 import React, { useState } from 'react'
@@ -43,6 +44,7 @@ export const MemberData = (props: Props) => {
 	)
 	const { friendsData, isLoadingFriend } = useFriends()
 	const { user } = useProfile()
+	const { t } = useTranslations()
 	
 
 	const form = useForm<TypeSearchUserSchema>({
@@ -66,7 +68,7 @@ export const MemberData = (props: Props) => {
 			<BackButton />
 			<Card className='w-full max-w-[400px]'>
 				<CardHeader>
-					<CardTitle>Search user</CardTitle>
+					<CardTitle>{t('searchUser')}</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<Form {...form}>
@@ -81,7 +83,7 @@ export const MemberData = (props: Props) => {
 									<FormItem>
 										<FormControl>
 											<Input
-												placeholder='Type user name ...'
+												placeholder={t('typeUserName')}
 												type='text'
 												{...field}
 											/>
@@ -91,7 +93,7 @@ export const MemberData = (props: Props) => {
 								)}
 							/>
 
-							<Button disabled={isLoadingProfile} type='submit'>Search</Button>
+							<Button disabled={isLoadingProfile} type='submit'>{t('search')}</Button>
 						</form>
 					</Form>
 				</CardContent>
@@ -99,11 +101,11 @@ export const MemberData = (props: Props) => {
 
 			<Card className='w-full max-w-[400px]'>
 				<CardHeader>
-					<CardTitle>Results</CardTitle>
+					<CardTitle>{t('results')}</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<ul>
-						{users?.length === 0 && <div>No results</div>}
+						{users?.length === 0 && <div>{t('noResults')}</div>}
 						{users &&
 							users.map(user => (
 								<li
@@ -129,7 +131,7 @@ export const MemberData = (props: Props) => {
 													handleAddMember(user.id)
 												}
 											>
-												Invite
+												{t('invite')}
 											</Button>
 										</div>
 									</div>
@@ -142,7 +144,7 @@ export const MemberData = (props: Props) => {
 			{friendsData && friendsData?.friends.length > 0 && (
 				<Card className='w-full max-w-[400px] mb-18'>
 					<CardHeader>
-						<CardTitle>Or from friends</CardTitle>
+						<CardTitle>{t('orFromFriends')}</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<ul>
@@ -190,7 +192,7 @@ export const MemberData = (props: Props) => {
 													)
 												}
 											>
-												Invite
+												{t('invite')}
 											</Button>
 										</div>
 									</div>

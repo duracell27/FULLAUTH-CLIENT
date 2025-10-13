@@ -32,12 +32,16 @@ import { BackButton } from '@/shared/componets/ui/BackButton'
 import {
 	useEditExpenseMutation,
 	useExpenseFormData,
-	useGroup
+	useGroup,
+	useTranslations
 } from '@/shared/hooks'
+import { useProfile } from '@/shared/hooks/useProfile'
 import { useAddExpenseMutation } from '@/shared/hooks/useAddExpenseMutation'
+import { Language } from '@/shared/types/user.types'
 
 import {
 	addExpenseSchema,
+	createExpenseSchema,
 	TypeAddExpenseForm,
 	TypeAddExpenseFormNumber
 } from '@/shared/schemas'
@@ -45,7 +49,7 @@ import { cn } from '@/shared/utils'
 import { formatBalance } from '@/shared/utils/formatBalance'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { format } from 'date-fns'
+import { formatDate } from '@/shared/utils'
 import { CalendarIcon } from 'lucide-react'
 
 import React, { useEffect, useRef, useState } from 'react'
@@ -71,6 +75,8 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 	const [originalUrl, setOriginalUrl] = useState<string | null>(null)
 	const [isLoadingAvatar, setIsLoadingAvatar] = useState(false)
 	const fileInputRef = useRef<HTMLInputElement>(null)
+	const { t, isLoading: isLoadingTranslations } = useTranslations()
+	const { user } = useProfile()
 
 	const [paymentMode, setPaymentMode] = useState<'single' | 'multiple'>(
 		'single'
@@ -81,7 +87,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 
 	const { group, isLoadingGroup } = useGroup(groupId)
 	const { expenseFormData, isLoadingExpenseFormData } = useExpenseFormData(
-		edit ? expenseId : 'formdatatest'
+		edit ? expenseId : ''
 	)
 
 	const { editExpense, isLoadingEditExpense } = useEditExpenseMutation(
@@ -139,8 +145,11 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 
 	const { addExpense, isLoadingAddExpense } = useAddExpenseMutation(groupId)
 
+	// Створюємо схему з перекладами
+	const translatedSchema = createExpenseSchema(t)
+
 	const form = useForm<TypeAddExpenseForm>({
-		resolver: zodResolver(addExpenseSchema),
+		resolver: zodResolver(translatedSchema),
 		defaultValues: {
 			description: '',
 			amount: '',
@@ -165,7 +174,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 		if (file.size > maxSize) {
 			form.setError('photoUrl', {
 				type: 'manual',
-				message: 'Max file size is 5 MB'
+				message: t('maxFileSizeIs5MB')
 			})
 			setIsLoadingAvatar(false)
 			return
@@ -205,14 +214,14 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 			} else {
 				form.setError('photoUrl', {
 					type: 'manual',
-					message: 'Error uploading photo to server.'
+					message: t('errorUploadingPhotoToServer')
 				})
 				setIsLoadingAvatar(false)
 			}
 		} catch (error) {
 			form.setError('photoUrl', {
 				type: 'manual',
-				message: 'Error uploading photo to server.'
+				message: t('errorUploadingPhotoToServer')
 			})
 			setIsLoadingAvatar(false)
 		}
@@ -233,6 +242,11 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 		control: form.control,
 		rules: {
 			validate: payers => {
+				// Не валідуємо, поки переклади не завантажені
+				if (isLoadingTranslations) {
+					return true
+				}
+				
 				const amount = form.getValues('amount')
 				const sumOfPayers = payers.reduce(
 					(acc, curr) => acc + (parseFloat(curr.amount) || 0),
@@ -240,7 +254,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 				)
 				return (
 					sumOfPayers <= parseFloat(amount) ||
-					'Sum of payers must be less than amount'
+					t('sumOfPayersMustBeLessThanAmount')
 				)
 			}
 		}
@@ -268,30 +282,36 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 					)
 
 					if (payers.length === 0) {
-						form.setError('payers', {
-							type: 'manual',
-							message: 'Add at least one payer'
-						})
-					} else if (sumOfPayers < (parseFloat(amount) || 0)) {
-						if (paymentMode === 'single') {
+						// Не встановлюємо помилку, поки переклади не завантажені
+						if (!isLoadingTranslations) {
 							form.setError('payers', {
 								type: 'manual',
-								message: 'Please reselect payer'
-							})
-						} else if (paymentMode === 'multiple') {
-							form.setError('payers', {
-								type: 'manual',
-								message: `${formatBalance(
-									parseFloat(amount) - sumOfPayers
-								)} remain of ${amount}`
+								message: t('addAtLeastOnePayer')
 							})
 						}
+					} else if (sumOfPayers < (parseFloat(amount) || 0)) {
+						if (!isLoadingTranslations) {
+							if (paymentMode === 'single') {
+								form.setError('payers', {
+									type: 'manual',
+									message: t('pleaseReselectPayer')
+								})
+							} else if (paymentMode === 'multiple') {
+								form.setError('payers', {
+									type: 'manual',
+									message: `${formatBalance(
+										parseFloat(amount) - sumOfPayers
+									)} ${t('remainOf')} ${amount}`
+								})
+							}
+						}
 					} else if (sumOfPayers > (parseFloat(amount) || 0)) {
-						form.setError('payers', {
-							type: 'manual',
-							message:
-								'Sum of payers must be less than expense sum'
-						})
+						if (!isLoadingTranslations) {
+							form.setError('payers', {
+								type: 'manual',
+								message: t('sumOfPayersMustBeLessThanExpenseSum')
+							})
+						}
 					} else {
 						form.clearErrors('payers')
 					}
@@ -391,10 +411,13 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 	const validateEqualSplit = (debtors: TypeAddExpenseForm['debtors']) => {
 		// При рівному розподілі просто перевіряємо чи є учасники
 		if (debtors.length === 0) {
-			form.setError('debtors', {
-				type: 'manual',
-				message: 'Add at least one debtor'
-			})
+			// Не встановлюємо помилку, поки переклади не завантажені
+			if (!isLoadingTranslations) {
+				form.setError('debtors', {
+					type: 'manual',
+					message: t('addAtLeastOneDebtor')
+				})
+			}
 		} else {
 			form.clearErrors('debtors')
 		}
@@ -410,22 +433,28 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 		)
 
 		if (debtors.length === 0) {
-			form.setError('debtors', {
-				type: 'manual',
-				message: 'Add at least one debtor'
-			})
+			if (!isLoadingTranslations) {
+				form.setError('debtors', {
+					type: 'manual',
+					message: t('addAtLeastOneDebtor')
+				})
+			}
 		} else if (sumOfDebtors > totalAmount) {
-			form.setError('debtors', {
-				type: 'manual',
-				message: 'Sum of debtors must be less than expense sum'
-			})
+			if (!isLoadingTranslations) {
+				form.setError('debtors', {
+					type: 'manual',
+					message: t('sumOfDebtorsMustBeLessThanExpenseSum')
+				})
+			}
 		} else if (sumOfDebtors < totalAmount && sumOfDebtors >= 0) {
-			form.setError('debtors', {
-				type: 'manual',
-				message: `${formatBalance(
-					totalAmount - sumOfDebtors
-				)} remain of ${totalAmount}`
-			})
+			if (!isLoadingTranslations) {
+				form.setError('debtors', {
+					type: 'manual',
+					message: `${formatBalance(
+						totalAmount - sumOfDebtors
+					)} ${t('remain')} ${t('of')} ${totalAmount}`
+				})
+			}
 		} else if (sumOfDebtors === totalAmount) {
 			form.clearErrors('debtors')
 		}
@@ -440,20 +469,26 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 		)
 
 		if (debtors.length === 0) {
-			form.setError('debtors', {
-				type: 'manual',
-				message: 'Add at least one debtor'
-			})
+			if (!isLoadingTranslations) {
+				form.setError('debtors', {
+					type: 'manual',
+					message: t('addAtLeastOneDebtor')
+				})
+			}
 		} else if (sumOfPercentages > 100) {
-			form.setError('debtors', {
-				type: 'manual',
-				message: 'Sum of percentages cannot exceed 100%'
-			})
+			if (!isLoadingTranslations) {
+				form.setError('debtors', {
+					type: 'manual',
+					message: t('sumOfPercentagesCannotExceed100')
+				})
+			}
 		} else if (sumOfPercentages < 100 && sumOfPercentages >= 0) {
-			form.setError('debtors', {
-				type: 'manual',
-				message: `${formatBalance(100 - sumOfPercentages)}% remain`
-			})
+			if (!isLoadingTranslations) {
+				form.setError('debtors', {
+					type: 'manual',
+					message: `${formatBalance(100 - sumOfPercentages)}% ${t('remain')}`
+				})
+			}
 		} else if (sumOfPercentages === 100) {
 			form.clearErrors('debtors')
 		}
@@ -465,15 +500,19 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 		)
 
 		if (debtors.length === 0) {
-			form.setError('debtors', {
-				type: 'manual',
-				message: 'Add at least one debtor'
-			})
+			if (!isLoadingTranslations) {
+				form.setError('debtors', {
+					type: 'manual',
+					message: t('addAtLeastOneDebtor')
+				})
+			}
 		} else if (!hasShares && debtors.length > 0) {
-			form.setError('debtors', {
-				type: 'manual',
-				message: 'Add shares for at least one debtor'
-			})
+			if (!isLoadingTranslations) {
+				form.setError('debtors', {
+					type: 'manual',
+					message: t('addSharesForAtLeastOneDebtor')
+				})
+			}
 		} else {
 			// При розподілі по частках немає фіксованої суми для перевірки
 			form.clearErrors('debtors')
@@ -485,10 +524,12 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 		totalAmount: number
 	) => {
 		if (debtors.length === 0) {
-			form.setError('debtors', {
-				type: 'manual',
-				message: 'Add at least one debtor'
-			})
+			if (!isLoadingTranslations) {
+				form.setError('debtors', {
+					type: 'manual',
+					message: t('addAtLeastOneDebtor')
+				})
+			}
 			return
 		}
 
@@ -503,22 +544,28 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 			(totalAmount - sumOfExtraAmounts) / debtors.length
 
 		if (debtors.length === 0) {
-			form.setError('debtors', {
-				type: 'manual',
-				message: 'Add at least one debtor'
-			})
+			if (!isLoadingTranslations) {
+				form.setError('debtors', {
+					type: 'manual',
+					message: t('addAtLeastOneDebtor')
+				})
+			}
 		} else if (baseAmountPerPerson < 0) {
-			form.setError('debtors', {
-				type: 'manual',
-				message: `Extra amounts (${sumOfExtraAmounts.toFixed(
-					2
-				)}) exceed total expense (${totalAmount})`
-			})
+			if (!isLoadingTranslations) {
+				form.setError('debtors', {
+					type: 'manual',
+					message: `${t('extraAmountsExceedTotalExpense')} (${sumOfExtraAmounts.toFixed(
+						2
+					)}) exceed total expense (${totalAmount})`
+				})
+			}
 		} else if (sumOfExtraAmounts > totalAmount) {
-			form.setError('debtors', {
-				type: 'manual',
-				message: `Sum of extra amounts must be less than expense sum`
-			})
+			if (!isLoadingTranslations) {
+				form.setError('debtors', {
+					type: 'manual',
+					message: t('sumOfExtraAmountsMustBeLessThanExpenseSum')
+				})
+			}
 		} else {
 			form.clearErrors('debtors')
 		}
@@ -639,25 +686,25 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 				return {
 					fieldName: 'amount',
 					placeholder: '0.00',
-					label: 'Amount'
+					label: t('amount')
 				}
 			case 'PERCENTAGE':
 				return {
 					fieldName: 'percentage',
 					placeholder: '0',
-					label: 'Percentage'
+					label: t('percentage')
 				}
 			case 'SHARES':
 				return {
 					fieldName: 'shares',
 					placeholder: '1',
-					label: 'Shares'
+					label: t('shares')
 				}
 			case 'EXTRA':
 				return {
 					fieldName: 'extraAmount',
 					placeholder: '0.00',
-					label: 'Extra Amount'
+					label: t('extraAmount')
 				}
 			default:
 				return null
@@ -753,11 +800,11 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 	}
 
 	if (isLoadingGroup) {
-		return <div>Loading group members...</div>
+		return <div>{t('loadingGroupMembers')}</div>
 	}
 
 	if (!group?.members?.length) {
-		return <div>No group members found</div>
+		return <div>{t('noGroupMembersFound')}</div>
 	}
 
 	const inputConfig = getDebtorInputConfig()
@@ -772,7 +819,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 				<Card className=''>
 					<CardHeader>
 						<CardTitle>
-							{edit ? 'Edit expense' : 'Create expense'}
+							{edit ? t('editExpense') : t('createExpense')}
 						</CardTitle>
 					</CardHeader>
 					{/* form fields */}
@@ -786,10 +833,10 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 							}
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Expense name</FormLabel>
+									<FormLabel>{t('expenseName')}</FormLabel>
 									<FormControl>
 										<Input
-											placeholder='Enter expense name'
+											placeholder={t('enterExpenseName')}
 											{...field}
 										/>
 									</FormControl>
@@ -806,7 +853,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 							}
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Expense sum</FormLabel>
+									<FormLabel>{t('expenseSum')}</FormLabel>
 									<FormControl>
 										<Input type='number' {...field} />
 									</FormControl>
@@ -825,7 +872,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 							}
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Expense pic</FormLabel>
+									<FormLabel>{t('expensePic')}</FormLabel>
 									<FormControl>
 										<div>
 											{/* Кастомний прямокутник */}
@@ -836,8 +883,8 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 												>
 													<span className='text-gray-600 font-medium'>
 														{isLoadingAvatar
-															? 'Uploading ...'
-															: 'Upload photo'}
+															? t('uploading')
+															: t('uploadPhoto')}
 													</span>
 												</div>
 
@@ -850,11 +897,11 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 															}
 															target='_blank'
 															rel='noopener noreferrer'
-															title='Відкрити оригінальне зображення'
+															title={t('openOriginalImage')}
 														>
 															<img
 																src={previewUrl}
-																alt='Попередній перегляд аватара'
+																alt={t('avatarPreview')}
 																className='h-24 w-24 min-w-24 object-cover block rounded-full hover:opacity-80 transition-opacity'
 															/>
 														</a>
@@ -905,7 +952,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 							}
 							render={({ field }) => (
 								<FormItem className='w-full'>
-									<FormLabel>Split type</FormLabel>
+									<FormLabel>{t('splitType')}</FormLabel>
 									<FormControl className='w-full'>
 										<Select
 											onValueChange={
@@ -914,23 +961,23 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 											value={field.value}
 										>
 											<SelectTrigger className='w-full'>
-												<SelectValue placeholder='Select split type' />
+												<SelectValue placeholder={t('selectSplitType')} />
 											</SelectTrigger>
 											<SelectContent>
 												<SelectItem value='EQUAL'>
-													Equal
+													{t('equal')}
 												</SelectItem>
 												<SelectItem value='CUSTOM'>
-													Custom
+													{t('custom')}
 												</SelectItem>
 												<SelectItem value='PERCENTAGE'>
-													Percentage
+													{t('percentage')}
 												</SelectItem>
 												<SelectItem value='SHARES'>
-													Shares
+													{t('shares')}
 												</SelectItem>
 												<SelectItem value='EXTRA'>
-													Extra
+													{t('extra')}
 												</SelectItem>
 											</SelectContent>
 										</Select>
@@ -948,7 +995,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 							}
 							render={({ field }) => (
 								<FormItem className='flex flex-col'>
-									<FormLabel>Date of expense</FormLabel>
+									<FormLabel>{t('dateOfExpense')}</FormLabel>
 									<Popover>
 										<PopoverTrigger asChild>
 											<FormControl>
@@ -961,12 +1008,9 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 													)}
 												>
 													{field.value ? (
-														format(
-															field.value,
-															'PPP'
-														)
+														formatDate(field.value, 'PP', user?.language || Language.EN)
 													) : (
-														<span>Pick a date</span>
+														<span>{t('pickDate')}</span>
 													)}
 													<CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
 												</Button>
@@ -986,6 +1030,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 														new Date('2000-01-01')
 												}
 												initialFocus
+												language={user?.language || Language.EN}
 											/>
 										</PopoverContent>
 									</Popover>
@@ -999,11 +1044,11 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 
 				<Card className=''>
 					<CardHeader>
-						<CardTitle>Choose payer</CardTitle>
+						<CardTitle>{t('choosePayer')}</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<FormItem>
-							<FormLabel>Payment mode</FormLabel>
+							{/* <FormLabel>{t('paymentMode')}</FormLabel> */}
 							<FormControl>
 								<div className='flex p-1 bg-muted rounded-lg mb-4'>
 									<button
@@ -1018,7 +1063,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 												: 'text-muted-foreground hover:text-foreground'
 										}`}
 									>
-										Single payer
+										{t('singlePayer')}
 									</button>
 									<button
 										type='button'
@@ -1032,7 +1077,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 												: 'text-muted-foreground hover:text-foreground'
 										}`}
 									>
-										Multiple payers
+										{t('multiplePayers')}
 									</button>
 								</div>
 							</FormControl>
@@ -1176,7 +1221,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 				<Card className=''>
 					<CardHeader className=''>
 						<div className='flex items-center justify-between'>
-							<CardTitle>Choose debtor</CardTitle>
+							<CardTitle>{t('chooseDebtor')}</CardTitle>
 							{debtorMode === 'EQUAL' && (
 								<button
 									type='button'
@@ -1194,8 +1239,8 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 									}}
 								>
 									{allDebtorsSelected
-										? 'Clear all'
-										: 'Choose all'}
+										? t('clearAll')
+										: t('chooseAll')}
 								</button>
 							)}
 						</div>
@@ -1302,7 +1347,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 						form.getValues('debtors').length === 0
 					}
 				>
-					{edit ? 'Edit expense' : 'Create expense'}
+					{edit ? t('editExpense') : t('createExpense')}
 				</Button>
 			</form>
 		</Form>

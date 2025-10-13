@@ -4,9 +4,11 @@ import { toast } from 'sonner'
 
 import { TypeAddMemberToGroupSchema } from '../schemas/addMemberToGroup.schema'
 import { memberService } from '../services/members.service'
+import { useTranslations } from './useTranslations'
 
 
 export function useDeleteMemberFromGroupMutation(groupId: string) {
+	const { t } = useTranslations()
 	const queryClient = useQueryClient()
 
 	const { mutate: deleteMember, isPending: isLoadingDeleteMember } = useMutation({
@@ -17,7 +19,7 @@ export function useDeleteMemberFromGroupMutation(groupId: string) {
 			if (data.message) {
 				toastMessageHandler(data)
 			} else {
-				toast.success('Member deleted successfully')
+				toast.success(t('memberDeletedSuccessfully'))
 				 queryClient.invalidateQueries({queryKey: ['group ' + groupId]})
 				 queryClient.invalidateQueries({queryKey: ['notificationsUnread']})
 				 queryClient.invalidateQueries({queryKey: ['notifications']})

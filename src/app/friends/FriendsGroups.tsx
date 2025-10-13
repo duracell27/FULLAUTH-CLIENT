@@ -11,12 +11,13 @@ import {
 	CardTitle
 } from '@/shared/componets/ui'
 import { Loading } from '@/shared/componets/ui/Loading'
-import { useFriends, useProfile } from '@/shared/hooks'
+import { useFriends, useProfile, useTranslations } from '@/shared/hooks'
 import { useAddPersonalGroupMutation } from '@/shared/hooks/useAddPersonalGroupMutation'
 import { usePersonalGroups } from '@/shared/hooks/usePersonalGroups'
 import { IUserGroup, IUserSafe } from '@/shared/types'
+import { Language } from '@/shared/types/user.types'
 import colorBalance from '@/shared/utils/colorBalance'
-import { format } from 'date-fns'
+import { formatDate } from '@/shared/utils'
 import Link from 'next/link'
 import React from 'react'
 
@@ -27,6 +28,7 @@ export const FriendsGroups = (props: Props) => {
 	const { friendsData, isLoadingFriend } = useFriends()
 	const { addPersonalGroup, isLoadingAddPersonalGroup } =
 		useAddPersonalGroupMutation()
+	const { t } = useTranslations()
 
 	const {
 		activeGroups,
@@ -52,14 +54,14 @@ export const FriendsGroups = (props: Props) => {
 			<Card className='w-full max-w-[400px] mb-18'>
 				<CardHeader>
 					<CardTitle className='flex justify-between items-center'>
-						<span>Personal groups</span>
+						<span>{t('personalGroups')}</span>
 						{/* <Link href='/groups/add' className={buttonVariants()}>
 							Add
 						</Link> */}
 					</CardTitle>
 				</CardHeader>
 				<CardContent>
-					{activeGroups && activeGroups.length === 0 && <div>You have no groups</div>}
+					{activeGroups && activeGroups.length === 0 && <div>{t('youHaveNoGroups')}</div>}
 					<ul>
 						{activeGroups.map((group: IUserGroup) => (
 							<li className='' key={group.id}>
@@ -90,10 +92,10 @@ export const FriendsGroups = (props: Props) => {
 										<div className=''>
 											<h2 className='font-bold'>
 												{' '}
-												{group.members.find(member => member.id !== user?.id)?.displayName || 'Unknown'}
+												{group.members.find(member => member.id !== user?.id)?.displayName || t('unknown')}
 											</h2>
 											<span className='text-xs'>
-												{format(group.eventDate, 'PPP')}
+												{formatDate(group.eventDate, 'PP', user?.language || Language.EN)}
 											</span>
 										</div>
 									</div>
@@ -152,7 +154,7 @@ export const FriendsGroups = (props: Props) => {
 							onClick={() => loadMoreActive()}
 							disabled={isFetchingNextActive}
 						>
-							{isFetchingNextActive ? 'Loading...' : 'Load more'}
+							{isFetchingNextActive ? t('loading') : t('loadMore')}
 						</Button>
 					)}
 				</CardContent>
@@ -163,7 +165,7 @@ export const FriendsGroups = (props: Props) => {
 				<Card className='w-full max-w-[400px] mb-18'>
 					<CardHeader>
 						<CardTitle className='flex justify-between items-center'>
-							<span>Finished groups</span>
+							<span>{t('finishedGroups')}</span>
 						</CardTitle>
 					</CardHeader>
 					<CardContent>
@@ -197,13 +199,10 @@ export const FriendsGroups = (props: Props) => {
 											<div className=''>
 												<h2 className='font-bold'>
 													{' '}
-													{group.members.find(member => member.id !== user?.id)?.displayName || 'Unknown'}
+													{group.members.find(member => member.id !== user?.id)?.displayName || t('unknown')}
 												</h2>
 												<span className='text-xs'>
-													{format(
-														group.eventDate,
-														'PPP'
-													)}
+													{formatDate(group.eventDate, 'PP', user?.language || Language.EN)}
 												</span>
 											</div>
 										</div>
@@ -263,8 +262,8 @@ export const FriendsGroups = (props: Props) => {
 								disabled={isFetchingNextFinished}
 							>
 								{isFetchingNextFinished
-									? 'Loading...'
-									: 'Load more'}
+									? t('loading')
+									: t('loadMore')}
 							</Button>
 						)}
 					</CardContent>
@@ -288,7 +287,7 @@ export const FriendsGroups = (props: Props) => {
 			}).length > 0 && (
 				<Card className=''>
 					<CardHeader>
-						<CardTitle>Friends to invite</CardTitle>
+						<CardTitle>{t('friendsToInvite')}</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<ul>
@@ -344,7 +343,7 @@ export const FriendsGroups = (props: Props) => {
 												})
 											}
 										>
-											Create
+											{t('create')}
 										</Button>
 									</p>
 								</li>

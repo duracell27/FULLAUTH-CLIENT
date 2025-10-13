@@ -3,8 +3,10 @@ import { TypeRegisterSchema } from '../schemas'
 import { authService } from '../services'
 import { toastMessageHandler } from '../utils'
 import { toast } from 'sonner'
+import { useTranslations } from './useTranslations'
 
 export function useRegisterMutation() {
+	const { t } = useTranslations()
 	const { mutate: register, isPending: isLoadingRegister } = useMutation({
 		mutationKey: ['register user'],
 		mutationFn: ({

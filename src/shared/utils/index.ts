@@ -5,3 +5,4 @@ export * from "./fetch/fetchErrors";
 export * from "./fetch/fetchTypes";
 
 export * from "./toastMessageHandler";
+export * from "./dateFormat";

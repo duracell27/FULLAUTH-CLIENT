@@ -1,5 +1,39 @@
 import { z } from 'zod'
 
+// Функція для створення схеми з перекладами
+export const createExpenseSchema = (t: (key: string) => string) => {
+	const payersSchema = z.object({
+		userId: z.string().uuid({ message: t('userIdInvalid') }),
+		amount: z.string().min(1, { message: t('amountRequired') })
+	})
+
+	const debtorsSchema = z.object({
+		userId: z.string().uuid({ message: t('userIdInvalid') }),
+		amount: z.string().optional(),
+		percentage: z.string().optional(),
+		shares: z.string().optional(),
+		extraAmount: z.string().optional()
+	})
+
+	return z.object({
+		description: z.string().min(1, {
+			message: t('descriptionRequired')
+		}),
+		amount: z.string().min(1, {
+			message: t('amountRequired')
+		}),
+		groupId: z.string().uuid({
+			message: t('groupIdInvalid')
+		}),
+		splitType: z.enum(['EQUAL', 'CUSTOM', 'PERCENTAGE', 'SHARES', 'EXTRA']),
+		photoUrl: z.string().optional(),
+		date: z.optional(z.date()),
+		payers: z.array(payersSchema),
+		debtors: z.array(debtorsSchema)
+	})
+}
+
+// Для зворотної сумісності - створюємо схему з англійськими повідомленнями
 const payersSchema = z.object({
 	userId: z.string().uuid({ message: 'Invalid user ID' }),
 	amount: z.string().min(1, { message: 'Amount is required' })

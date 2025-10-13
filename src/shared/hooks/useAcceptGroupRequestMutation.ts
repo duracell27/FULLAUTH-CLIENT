@@ -2,8 +2,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 import { toastMessageHandler } from "../utils"
 import { memberService } from "../services/members.service"
+import { useTranslations } from './useTranslations'
 
 export function useAcceptGroupRequestMutation() {
+	const { t } = useTranslations()
     const queryClient = useQueryClient()
 
     const {mutate: acceptGroupRequest, isPending: isLoadingAcceptGroupRequest} = useMutation({
@@ -11,7 +13,7 @@ export function useAcceptGroupRequestMutation() {
         mutationFn: (groupId: string) =>
             memberService.patchAcceptGroupRequest(groupId),
         onSuccess: () => {
-            toast.success('Group request accepted successfully')
+            toast.success(t('groupRequestAcceptedSuccessfully'))
             queryClient.invalidateQueries({queryKey: ['groups']})
             queryClient.invalidateQueries({queryKey: ['groups requests']})
 

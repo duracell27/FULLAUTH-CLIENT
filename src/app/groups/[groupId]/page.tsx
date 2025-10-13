@@ -3,7 +3,7 @@ import { GroupData } from './GroupData'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-	title: 'Group details'
+	title: 'Деталі групи'
 }
 
 

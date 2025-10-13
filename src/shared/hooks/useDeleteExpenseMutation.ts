@@ -3,8 +3,10 @@ import { toastMessageHandler } from '../utils'
 import { toast } from 'sonner'
 import { expenseService } from '../services/expense.service'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from './useTranslations'
 
 export function useDeleteExpenseMutation(groupId: string) {
+	const { t } = useTranslations()
 	const queryClient = useQueryClient()
 	const router = useRouter()
 	const { mutate: deleteExpense, isPending: isLoadingDeleteExpense } =
@@ -16,7 +18,7 @@ export function useDeleteExpenseMutation(groupId: string) {
 				if (data.message) {
 					toastMessageHandler(data)
 				} else {
-					toast.success('Expense deleted successfully')
+					toast.success(t('expenseDeletedSuccessfully'))
 					queryClient.invalidateQueries({
 						queryKey: ['group ' + groupId]
 					})
