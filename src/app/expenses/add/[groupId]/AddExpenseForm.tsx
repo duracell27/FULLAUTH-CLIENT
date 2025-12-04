@@ -325,7 +325,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 		})
 
 		return () => subscription.unsubscribe()
-	}, [form, expenseFormData, paymentMode])
+	}, [form, expenseFormData, paymentMode, isLoadingTranslations, t])
 
 	const isValidatingDebtorsRef = useRef(false)
 
@@ -380,7 +380,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 		})
 
 		return () => subscription.unsubscribe()
-	}, [form, expenseFormData])
+	}, [form, expenseFormData, isLoadingTranslations, t])
 
 	const validateDebtorsBySplitType = (
 		debtors: TypeAddExpenseForm['debtors'],
