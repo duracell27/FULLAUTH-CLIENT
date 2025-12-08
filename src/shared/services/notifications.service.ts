@@ -22,6 +22,10 @@ class NotificationsService {
 		return response
 	}
 
+	public async deleteAllNotifications() {
+		const response = await api.delete('notifications/all')
+		return response
+	}
 
 	// public async deletePayment(groupId: string, creditorId: string, debtorId: string) {
 	// 	const response = await api.post<boolean>('debts/delete-payments', {groupId, creditorId, debtorId})

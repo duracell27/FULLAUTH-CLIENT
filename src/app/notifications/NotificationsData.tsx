@@ -10,7 +10,7 @@ import {
 } from '@/shared/componets/ui'
 
 import { formatDate } from '@/shared/utils'
-import { Bell, Check, Clock, Link2, Trash } from 'lucide-react'
+import { Bell, Check, Clock, Link2, Trash, Eye } from 'lucide-react'
 
 import { useTranslations } from '@/shared/hooks'
 import { useProfile } from '@/shared/hooks/useProfile'
@@ -21,6 +21,7 @@ import { cn } from '@/shared/utils'
 import Link from 'next/link'
 import { useMarkAllNotificationsAsReadMutation } from '@/shared/hooks/useMarkAllNotificationsAsReadMutation'
 import { useDeleteNotificationMutation } from '@/shared/hooks/useDeleteNotificationMutation'
+import { useDeleteAllNotificationsMutation } from '@/shared/hooks/useDeleteAllNotificationsMutation'
 
 type Props = {}
 
@@ -31,7 +32,10 @@ const NotificationsData = (props: Props) => {
 
 	const { deleteNotification, isLoadingDeleteNotification } =
 		useDeleteNotificationMutation()
-	
+
+	const { deleteAllNotifications, isLoadingDeleteAllNotifications } =
+		useDeleteAllNotificationsMutation()
+
 	const { t } = useTranslations()
 	const { user } = useProfile()
 
@@ -77,14 +81,27 @@ const NotificationsData = (props: Props) => {
 			<CardHeader>
 				<CardTitle className='flex justify-between items-center'>
 					{t('notifications')}
-					{isNotificationsUnread && (
+					<div className='flex gap-2'>
+						{isNotificationsUnread && (
+							<Button
+								onClick={() => markAllNotificationsAsRead()}
+								disabled={isLoadingMarkAllNotificationsAsRead}
+								className='flex items-center gap-1'
+							>
+								<Eye className='size-4' />
+								{t('readAll')}
+							</Button>
+						)}
 						<Button
-							onClick={() => markAllNotificationsAsRead()}
-							disabled={isLoadingMarkAllNotificationsAsRead}
+							variant='destructive'
+							onClick={() => deleteAllNotifications()}
+							disabled={isLoadingDeleteAllNotifications}
+							className='flex items-center gap-1'
 						>
-							{t('readAll')}
+							<Trash className='size-4' />
+							{t('deleteAll')}
 						</Button>
-					)}
+					</div>
 				</CardTitle>
 			</CardHeader>
 			<CardContent>
@@ -148,7 +165,12 @@ const NotificationsData = (props: Props) => {
 												'text-green-500/90'
 										)}
 									>
-										{t(notification.message)}
+										{t(notification.message)} {" "}
+										{notification.type === 'DEBT_CREATED' && (notification.metadata?.amount)}
+										{notification.type === 'DEBT_SETTLED' && (notification.metadata?.totalAmount)}
+
+										{notification.type ===  "EXPENSE_ADDED" && (notification.metadata?.groupName)}
+			
 									</p>
 									<div className='text-xs flex items-center justify-between gap-1  '>
 										<div className=' text-muted-foreground flex items-center gap-2'>
