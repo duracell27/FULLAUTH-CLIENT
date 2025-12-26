@@ -131,6 +131,7 @@
   "groupDeletedSuccessfully": "समूह सफलतापूर्वक हटाया गया",
   "groupEditedSuccessfully": "समूह सफलतापूर्वक संपादित किया गया",
   "groupExpenses": "समूह खर्च",
+  "yourTotalExpenses": "आपके खर्च",
   "groupIdInvalid": "अमान्य समूह आईडी",
   "groupLeft": "समूह छोड़ दिया",
   "groupMinLength": "समूह आईडी में कम से कम {min} अक्षर होने चाहिए",
@@ -336,5 +337,19 @@
   "lockGroup": "समूह लॉक करें",
   "lockGroupDescription": "लॉक किए गए समूह में आप नए सदस्य या खर्च नहीं जोड़ सकते",
   "finishGroup": "समूह समाप्त करें",
-  "finishGroupDescription": "समाप्त समूह में कोई बकाया शेष नहीं होता और इसे समग्र खर्चों में शामिल नहीं किया जाता"
+  "finishGroupDescription": "समाप्त समूह में कोई बकाया शेष नहीं होता और इसे समग्र खर्चों में शामिल नहीं किया जाता",
+  "simplifyDebts": "शेष राशि सरल बनाएं",
+  "simplifyDebtsDescription": "यह सुविधा समूह सदस्यों के बीच अनावश्यक भुगतानों की संख्या को कम करेगी",
+  "simplifyDebtsExample": "उदाहरण: A→B ₹20, B→C ₹20 = A→C ₹20",
+  "simplifyDebtsWarning": "यदि आप समूह के लिए सरलीकृत ऋण सक्षम करते हैं, तो आप इस क्रिया को वापस नहीं कर सकते!",
+  "debtsSimplifiedSuccessfully": "शेष राशि सफलतापूर्वक सरल बनाई गई",
+  "simplifiedDebtsEnabled": "सरलीकृत",
+  "payment": "भुगतान",
+  "enterPaymentAmount": "भुगतान राशि दर्ज करें",
+  "groupImage": "समूह छवि",
+  "viewGroupImage": "समूह छवि देखें",
+  "expensePhoto": "व्यय फोटो",
+  "allSettledUp": "सब चुकता!",
+  "allSettledUpDescription": "आप किसी के भी कर्जदार नहीं हैं और कोई भी आपका कर्जदार नहीं है।",
+  "simplificationAdded": "समूहों के लिए सरलीकरण जोड़ा गया। अब सभी समूहों में सदस्यों के बीच भुगतान की संख्या अनुकूलित है।"
 }

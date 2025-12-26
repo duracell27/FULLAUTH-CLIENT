@@ -13,7 +13,7 @@ import { useSettleUpMutation } from '@/shared/hooks/useSettleUpMutation'
 import { useSummary } from '@/shared/hooks/useSummary'
 import { useTranslations } from '@/shared/hooks'
 import colorBalance from '@/shared/utils/colorBalance'
-import { Users, Link as LinkIcon, HandCoins } from 'lucide-react'
+import { Users, Link as LinkIcon, HandCoins, Coins } from 'lucide-react'
 import Link from 'next/link'
 
 import React from 'react'
@@ -23,6 +23,7 @@ type Props = {}
 
 export const SummaryData = (props: Props) => {
 	const { summary, isLoadingSummary } = useSummary()
+	
 	const { settleUp, isLoadingSettleUp } = useSettleUpMutation()
 	const { t } = useTranslations()
 
@@ -33,11 +34,24 @@ export const SummaryData = (props: Props) => {
 	if (!summary?.length) {
 		return <div>{t('noSummaryFound')}</div>
 	}
+
+	const filteredSummary = summary.filter(summary => Math.abs(summary.totalBalance) > 0.01)
+
+	if (filteredSummary.length === 0) {
+		return (
+			<div className='flex flex-col items-center justify-center py-10 text-center'>
+				<div className='text-6xl mb-4'><Coins width={30} height={30} /></div>
+				<h2 className='text-2xl font-bold mb-2'>{t('allSettledUp')}</h2>
+				<p className='text-muted-foreground'>{t('allSettledUpDescription')}</p>
+			</div>
+		)
+	}
+
 	return (
 		<div>
 			<Accordion type='single' collapsible className='w-full'>
 				<ul>
-					{summary.map((summary, index) => (
+					{filteredSummary.map((summary) => (
 						<li key={summary.user.id} className='border-y'>
 							<AccordionItem
 								value={summary.user.id}
@@ -77,7 +91,9 @@ export const SummaryData = (props: Props) => {
 								<AccordionContent className='flex flex-col  text-balance'>
 									<Button disabled={isLoadingSettleUp} onClick={() => settleUp(summary.user.id)} size={'sm'}>{t('settleUp')} <HandCoins /></Button>
 									<ul className='mt-2 space-y-1'>
-										{summary.groups.map((group, index) => (
+										{summary.groups
+											.filter(group => Math.abs(group.balance) > 0.01)
+											.map((group, index) => (
 											<li
 												key={group.groupInfo.id}
 												className=''

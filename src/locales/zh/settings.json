@@ -131,6 +131,7 @@
   "groupDeletedSuccessfully": "群组删除成功",
   "groupEditedSuccessfully": "群组编辑成功",
   "groupExpenses": "群组支出",
+  "yourTotalExpenses": "您的支出",
   "groupIdInvalid": "无效的组ID",
   "groupLeft": "离开群组",
   "groupMinLength": "组ID必须至少包含{min}个字符",
@@ -336,5 +337,19 @@
   "lockGroup": "锁定群组",
   "lockGroupDescription": "在锁定的群组中，您无法添加新成员或费用",
   "finishGroup": "完成群组",
-  "finishGroupDescription": "已完成的群组没有未结算余额，不包括在总费用中"
+  "finishGroupDescription": "已完成的群组没有未结算余额，不包括在总费用中",
+  "simplifyDebts": "简化余额",
+  "simplifyDebtsDescription": "此功能将减少群组成员之间不必要的付款次数",
+  "simplifyDebtsExample": "示例：A→B ¥20，B→C ¥20 = A→C ¥20",
+  "simplifyDebtsWarning": "如果您为群组启用简化债务，则无法撤消此操作！",
+  "debtsSimplifiedSuccessfully": "成功简化余额",
+  "simplifiedDebtsEnabled": "已简化",
+  "payment": "付款",
+  "enterPaymentAmount": "输入付款金额",
+  "groupImage": "群组图片",
+  "viewGroupImage": "查看群组图片",
+  "expensePhoto": "费用照片",
+  "allSettledUp": "全部结清！",
+  "allSettledUpDescription": "您不欠任何人，也没有人欠您。",
+  "simplificationAdded": "为群组添加了简化功能。现在所有群组的成员之间的支付数量都已优化。"
 }

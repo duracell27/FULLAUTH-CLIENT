@@ -30,12 +30,20 @@ import {
 	DialogContent,
 	DialogTitle,
 	DialogTrigger,
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger
 } from '@/shared/componets/ui'
 import { Loading } from '@/shared/componets/ui/Loading'
-import { useGroup, useProfile, useFriends, useTranslations } from '@/shared/hooks'
+import {
+	useGroup,
+	useProfile,
+	useFriends,
+	useTranslations
+} from '@/shared/hooks'
 import { useDeleteGroupMutation } from '@/shared/hooks/useDeleteGroupMutation'
 import { useDeleteMemberFromGroupMutation } from '@/shared/hooks/useDeleteMemberFromGroupMutation'
 import { useAddFriendMutation } from '@/shared/hooks/useAddFriendMutation'
@@ -102,27 +110,29 @@ export const GroupData = ({ groupId }: Props) => {
 
 	const isUserInFriends = (userId: string) => {
 		if (!friendsData?.friends) return false
-		return friendsData.friends.some(friend => 
-			(friend.senderId === userId || friend.receiverId === userId) && 
-			friend.status === FriendStatus.Accepted
+		return friendsData.friends.some(
+			friend =>
+				(friend.senderId === userId || friend.receiverId === userId) &&
+				friend.status === FriendStatus.Accepted
 		)
 	}
 
 	const getFriendRequestStatus = (userId: string) => {
-		if (!friendsData?.friendRequests && !friendsData?.friendRequestsSended) return null
-		
+		if (!friendsData?.friendRequests && !friendsData?.friendRequestsSended)
+			return null
+
 		// Перевіряємо вхідні запити
-		const incomingRequest = friendsData.friendRequests?.find(friend => 
-			friend.senderId === userId
+		const incomingRequest = friendsData.friendRequests?.find(
+			friend => friend.senderId === userId
 		)
 		if (incomingRequest) return incomingRequest.status
-		
+
 		// Перевіряємо відправлені запити
-		const outgoingRequest = friendsData.friendRequestsSended?.find(friend => 
-			friend.receiverId === userId
+		const outgoingRequest = friendsData.friendRequestsSended?.find(
+			friend => friend.receiverId === userId
 		)
 		if (outgoingRequest) return outgoingRequest.status
-		
+
 		return null
 	}
 
@@ -166,17 +176,30 @@ export const GroupData = ({ groupId }: Props) => {
 							<div className='w-full flex items-center justify-center  text-background '>
 								{group.isPersonal ? (
 									<div className='flex items-center gap-2'>
-										{group.members.slice(0, 2).map((member, index) => (
-											<Avatar key={member.userId} className='size-20 border-2 border-background'>
-												<AvatarImage
-													src={member.user.picture || ''}
-													alt={member.user.displayName}
-												/>
-												<AvatarFallback className='text-lg font-semibold'>
-													{member.user.displayName.slice(0, 2).toUpperCase()}
-												</AvatarFallback>
-											</Avatar>
-										))}
+										{group.members
+											.slice(0, 2)
+											.map((member, index) => (
+												<Avatar
+													key={member.userId}
+													className='size-20 border-2 border-background'
+												>
+													<AvatarImage
+														src={
+															member.user
+																.picture || ''
+														}
+														alt={
+															member.user
+																.displayName
+														}
+													/>
+													<AvatarFallback className='text-lg font-semibold'>
+														{member.user.displayName
+															.slice(0, 2)
+															.toUpperCase()}
+													</AvatarFallback>
+												</Avatar>
+											))}
 									</div>
 								) : (
 									<span className='bg-primary rounded-full px-5 py-2'>
@@ -211,10 +234,14 @@ export const GroupData = ({ groupId }: Props) => {
 											<AlertDialogContent>
 												<AlertDialogHeader>
 													<AlertDialogTitle>
-														{t('areYouAbsolutelySure')}
+														{t(
+															'areYouAbsolutelySure'
+														)}
 													</AlertDialogTitle>
 													<AlertDialogDescription>
-														{t('thisActionCannotBeUndoneThisWillPermanentlyDeleteThisGroup')}
+														{t(
+															'thisActionCannotBeUndoneThisWillPermanentlyDeleteThisGroup'
+														)}
 													</AlertDialogDescription>
 												</AlertDialogHeader>
 												<AlertDialogFooter>
@@ -277,14 +304,31 @@ export const GroupData = ({ groupId }: Props) => {
 						</span>
 					</div>
 					<div className='flex items-center gap-2'>
+						{t('yourTotalExpenses')}:{' '}
+						<span className='font-bold'>
+							{formatNumberWithSpaces(group.userTotalExpenses)}
+						</span>
+					</div>
+					<div className='flex items-center gap-2'>
 						{t('yourBalance')}:{' '}
 						<span className='font-bold'>
 							{colorBalance({ balance: group.userTotalBalance })}
 						</span>
 					</div>
-					<p className='text-xs mt-1'>
-						{formatDate(group.eventDate, 'PP', user?.language || Language.EN)}
-					</p>
+					<Popover>
+						<PopoverTrigger asChild>
+							<p className='text-xs mt-1 cursor-pointer w-fit'>
+								{formatDate(
+									group.eventDate,
+									'PP',
+									user?.language || Language.EN
+								)}
+							</p>
+						</PopoverTrigger>
+						<PopoverContent className='w-auto'>
+							<p className='text-sm'>{formatDate(group.eventDate, 'PPpp', user?.language || Language.EN)}</p>
+						</PopoverContent>
+					</Popover>
 
 					{group.isLocked && (
 						<div className='flex justify-center items-center gap-2 bg-bad-red px-2 rounded-full text-white mt-1'>
@@ -317,7 +361,9 @@ export const GroupData = ({ groupId }: Props) => {
 											size: 'xs'
 										})}
 									>
-										{isOpenPayments ? t('close') : t('open')}
+										{isOpenPayments
+											? t('close')
+											: t('open')}
 									</div>
 								</CardTitle>
 							</CardHeader>
@@ -400,27 +446,21 @@ export const GroupData = ({ groupId }: Props) => {
 															</span>
 														</div>
 													</div>
-													{payment.creators && (
-														<div className='flex justify-between items-center gap-2  rounded-full mt-2 '>
-															<span className='text-white text-xs flex bg-primary/30 rounded-full px-[2px] items-center gap-1 py-[2px]'>
-																<span className='bg-primary rounded-full px-1'>
-																	{t('createdBy')}
-																</span>{' '}
-																{payment.creators.map(
-																	creator => (
-																		<Tooltip
-																			key={
-																				creator.id
-																			}
-																		>
-																			<TooltipTrigger
-																				asChild
-																			>
+													{payment.payments && payment.payments.length > 0 && (
+														<div className='flex flex-col gap-1 mt-2'>
+															{payment.payments.map((singlePayment) => (
+																<div key={singlePayment.id} className='flex justify-between items-center gap-2 rounded-full bg-primary/30 px-2 py-1'>
+																	<span className='text-white text-xs flex items-center gap-1'>
+																		<span className='bg-primary rounded-full px-1'>
+																			{t('createdBy')}
+																		</span>
+																		<Tooltip>
+																			<TooltipTrigger asChild>
 																				<Avatar className='cursor-pointer mb-0 size-4'>
 																					<AvatarImage
 																						src={
-																							creator.picture
-																								? creator.picture.replace(
+																							singlePayment.creator.picture
+																								? singlePayment.creator.picture.replace(
 																										'/upload/',
 																										'/upload/w_100,h_100,c_fill,f_webp,q_80/'
 																								  )
@@ -428,71 +468,58 @@ export const GroupData = ({ groupId }: Props) => {
 																						}
 																					/>
 																					<AvatarFallback className='text-[9px]'>
-																						{creator.displayName
-																							.slice(
-																								0,
-																								2
-																							)
+																						{singlePayment.creator.displayName
+																							.slice(0, 2)
 																							.toUpperCase()}
 																					</AvatarFallback>
 																				</Avatar>
 																			</TooltipTrigger>
 																			<TooltipContent>
-																				<p>
-																					{
-																						creator.displayName
-																					}
-																				</p>
+																				<p>{singlePayment.creator.displayName}</p>
 																			</TooltipContent>
 																		</Tooltip>
-																	)
-																)}
-															</span>
-															<span className='text-xs'>
-																{/* <Trash className='size-5 bg-bad-red text-white rounded-full p-1 cursor-pointer' /> */}
-																<AlertDialog>
-																	<AlertDialogTrigger
-																		asChild
-																	>
-																		<Trash className='size-5 bg-bad-red text-white rounded-full p-1 cursor-pointer hover:bg-bad-red/80 hover:outline-4 hover:outline-bad-red/50' />
-																	</AlertDialogTrigger>
-																	<AlertDialogContent>
-																		<AlertDialogHeader>
-																			<AlertDialogTitle>
-																				{t('areYouAbsolutelySure')}
-																			</AlertDialogTitle>
-																			<AlertDialogDescription>
-																				{t('thisActionCannotBeUndoneThisWillPermanentlyDeleteThisPayment')}
-																			</AlertDialogDescription>
-																		</AlertDialogHeader>
-																		<AlertDialogFooter>
-																			<AlertDialogCancel>
-																				{t('cancel')}
-																			</AlertDialogCancel>
-																			<AlertDialogAction
-																				onClick={() =>
-																					deletePayment(
-																						{
-																							groupId,
-																							creditorId:
-																								payment
-																									.to
-																									.id,
-																							debtorId:
-																								payment
-																									.from
-																									.id
-																						}
-																					)
-																				}
-																				className='bg-bad-red hover:bg-bad-red/80'
-																			>
-																				{t('continue')}
-																			</AlertDialogAction>
-																		</AlertDialogFooter>
-																	</AlertDialogContent>
-																</AlertDialog>
-															</span>
+																		<span className='font-semibold text-foreground'>{formatBalance(singlePayment.amount)}</span>
+																		<Popover>
+																			<PopoverTrigger asChild>
+																				<span className='text-[10px] opacity-70 text-foreground cursor-pointer'>
+																					{formatDate(new Date(singlePayment.createdAt), 'PP', user?.language || Language.EN)}
+																				</span>
+																			</PopoverTrigger>
+																			<PopoverContent className='w-auto'>
+																				<p className='text-sm'>{formatDate(new Date(singlePayment.createdAt), 'PPpp', user?.language || Language.EN)}</p>
+																			</PopoverContent>
+																		</Popover>
+																	</span>
+																	<AlertDialog>
+																		<AlertDialogTrigger asChild>
+																			<Trash className='size-5 bg-bad-red text-white rounded-full p-1 cursor-pointer hover:bg-bad-red/80 hover:outline-4 hover:outline-bad-red/50' />
+																		</AlertDialogTrigger>
+																		<AlertDialogContent>
+																			<AlertDialogHeader>
+																				<AlertDialogTitle>
+																					{t('areYouAbsolutelySure')}
+																				</AlertDialogTitle>
+																				<AlertDialogDescription>
+																					{t('thisActionCannotBeUndoneThisWillPermanentlyDeleteThisPayment')}
+																				</AlertDialogDescription>
+																			</AlertDialogHeader>
+																			<AlertDialogFooter>
+																				<AlertDialogCancel>
+																					{t('cancel')}
+																				</AlertDialogCancel>
+																				<AlertDialogAction
+																					onClick={() =>
+																						deletePayment(singlePayment.id)
+																					}
+																					className='bg-bad-red hover:bg-bad-red/80'
+																				>
+																					{t('continue')}
+																				</AlertDialogAction>
+																			</AlertDialogFooter>
+																		</AlertDialogContent>
+																	</AlertDialog>
+																</div>
+															))}
 														</div>
 													)}
 
@@ -525,11 +552,15 @@ export const GroupData = ({ groupId }: Props) => {
 																		>
 																			<span className='text-white'>
 																				<BadgeAlert className='size-5 -mt-1 inline-block' />{' '}
-																				{t('overpaid')}{' '}
+																				{t(
+																					'overpaid'
+																				)}{' '}
 																				{
 																					overpay.amount
 																				}{' '}
-																				{t('to')}{' '}
+																				{t(
+																					'to'
+																				)}{' '}
 																				{
 																					overpay
 																						.to
@@ -568,7 +599,9 @@ export const GroupData = ({ groupId }: Props) => {
 											size: 'xs'
 										})}
 									>
-										{isOpenBalances ? t('close') : t('open')}
+										{isOpenBalances
+											? t('close')
+											: t('open')}
 									</div>
 								</CardTitle>
 							</CardHeader>
@@ -615,7 +648,9 @@ export const GroupData = ({ groupId }: Props) => {
 															{memberBalance.totalBalance >
 															0 ? (
 																<span className='inline-block'>
-																	{t('getsBack')}{' '}
+																	{t(
+																		'getsBack'
+																	)}{' '}
 																	<span>
 																		{colorBalance(
 																			{
@@ -624,7 +659,9 @@ export const GroupData = ({ groupId }: Props) => {
 																			}
 																		)}
 																	</span>{' '}
-																	{t('inTotal')}
+																	{t(
+																		'inTotal'
+																	)}
 																</span>
 															) : (
 																<span className=''>
@@ -635,7 +672,9 @@ export const GroupData = ({ groupId }: Props) => {
 																				memberBalance.totalBalance
 																		}
 																	)}{' '}
-																	{t('inTotal')}
+																	{t(
+																		'inTotal'
+																	)}
 																</span>
 															)}
 														</div>
@@ -686,7 +725,10 @@ export const GroupData = ({ groupId }: Props) => {
 																		'owes_to_member' ? (
 																			<>
 																				<span className='text-good-green whitespace-nowrap font-semibold'>
-																					{t('owes')}
+																					{t(
+																						'owes'
+																					)}
+
 																					+
 																					<span className=''>
 																						{formatBalance(
@@ -694,7 +736,9 @@ export const GroupData = ({ groupId }: Props) => {
 																						)}
 																					</span>
 																				</span>{' '}
-																				{t('to')}{' '}
+																				{t(
+																					'to'
+																				)}{' '}
 																				<span className='text-neutral-grey text-xs'>
 																					<MoveRight className='size-4 inline-block' />
 																					<HandCoins className='size-4 inline-block' />
@@ -708,7 +752,10 @@ export const GroupData = ({ groupId }: Props) => {
 																		) : (
 																			<>
 																				<span className='text-bad-red whitespace-nowrap font-semibold'>
-																					{t('lended')}
+																					{t(
+																						'lended'
+																					)}
+
 																					-
 																					<span className=''>
 																						{formatBalance(
@@ -716,7 +763,9 @@ export const GroupData = ({ groupId }: Props) => {
 																						)}
 																					</span>
 																				</span>{' '}
-																				{t('to')}{' '}
+																				{t(
+																					'to'
+																				)}{' '}
 																				<span className='text-neutral-grey text-xs'>
 																					<MoveRight className='size-4 inline-block' />
 																					<HandCoins className='size-4 inline-block' />
@@ -749,7 +798,9 @@ export const GroupData = ({ groupId }: Props) => {
 																				>
 																					<DialogTrigger>
 																						<span className='ml-3 cursor-pointer px-2 py-1 bg-primary rounded-full text-background text-xs'>
-																							{t('pay')}{' '}
+																							{t(
+																								'pay'
+																							)}{' '}
 																							<HandCoins className='size-4 ml-1 inline-block' />
 																						</span>
 																					</DialogTrigger>
@@ -889,7 +940,9 @@ export const GroupData = ({ groupId }: Props) => {
 											<ul className='inline-flex gap-1 items-start justify-start bg-primary/40 p-0.5 rounded-full'>
 												<li key={'memberCount'}>
 													<div className='h-4 px-1 bg-primary text-center rounded-full text-background text-xs'>
-														<span>{t('paidBy')}</span>
+														<span>
+															{t('paidBy')}
+														</span>
 													</div>
 												</li>
 												{expense.payers &&
@@ -944,9 +997,33 @@ export const GroupData = ({ groupId }: Props) => {
 														)
 													)}
 											</ul>
-											<span className='text-secondary-foreground text-xs pl-1'>
-												{t('on')} {formatDate(expense.date, 'PP', user?.language || Language.EN)}
-											</span>
+											<div
+												onClick={(e) => {
+													e.stopPropagation()
+													e.preventDefault()
+												}}
+												onMouseDown={(e) => {
+													e.stopPropagation()
+												}}
+												className='inline-block'
+											>
+												<Popover>
+													<PopoverTrigger asChild>
+														<span className='text-secondary-foreground text-xs pl-1 cursor-pointer'>
+															{t('on')}{' '}
+															{formatDate(
+																expense.date,
+																'PP',
+																user?.language ||
+																	Language.EN
+															)}
+														</span>
+													</PopoverTrigger>
+													<PopoverContent className='w-auto'>
+														<p className='text-sm'>{formatDate(expense.date, 'PPpp', user?.language || Language.EN)}</p>
+													</PopoverContent>
+												</Popover>
+											</div>
 										</div>
 										<div className='text-right'>
 											<div className='font-bold'>
@@ -970,32 +1047,34 @@ export const GroupData = ({ groupId }: Props) => {
 					<CardTitle className='flex justify-between items-center'>
 						<span>{t('members')}</span>
 						{group.members.find(member => member.userId === user.id)
-							?.role === GroupRole.ADMIN && 
+							?.role === GroupRole.ADMIN &&
 							!group.isPersonal && (
-							<Link
-								href={`/groups/members/${group.id}`}
-								className={buttonVariants()}
-								aria-disabled={
-									group.isLocked || group.isFinished
-								}
-								tabIndex={
-									group.isLocked || group.isFinished ? -1 : 0
-								}
-								style={
-									group.isLocked || group.isFinished
-										? {
-												pointerEvents: 'none',
-												opacity: 0.6
-										  }
-										: {}
-								}
-							>
-								{(group.isLocked || group.isFinished) && (
-									<Lock className='mr inline-block' />
-								)}
-								{t('addMember')}
-							</Link>
-						)}
+								<Link
+									href={`/groups/members/${group.id}`}
+									className={buttonVariants()}
+									aria-disabled={
+										group.isLocked || group.isFinished
+									}
+									tabIndex={
+										group.isLocked || group.isFinished
+											? -1
+											: 0
+									}
+									style={
+										group.isLocked || group.isFinished
+											? {
+													pointerEvents: 'none',
+													opacity: 0.6
+											  }
+											: {}
+									}
+								>
+									{(group.isLocked || group.isFinished) && (
+										<Lock className='mr inline-block' />
+									)}
+									{t('addMember')}
+								</Link>
+							)}
 					</CardTitle>
 				</CardHeader>
 				<CardContent>
@@ -1017,64 +1096,84 @@ export const GroupData = ({ groupId }: Props) => {
 										</AvatarFallback>
 									</Avatar>
 									<div className='flex gap-2 items-center flex-1'>
-														{member.status ===
-														GroupMemberStatus.PENDING ? (
-															<>
-																<span className='font-bold text-muted-foreground'>
-																	{member.user.displayName}
-																</span>
-																<Badge className='text-xs bg-muted-foreground'>
-																	{t('invited')}
-																</Badge>
-															</>
-														) : (
-															<span className='font-bold'>
-																{member.user.displayName}
-															</span>
-														)}
+										{member.status ===
+										GroupMemberStatus.PENDING ? (
+											<>
+												<span className='font-bold text-muted-foreground'>
+													{member.user.displayName}
+												</span>
+												<Badge className='text-xs bg-muted-foreground'>
+													{t('invited')}
+												</Badge>
+											</>
+										) : (
+											<span className='font-bold'>
+												{member.user.displayName}
+											</span>
+										)}
 
-														{member.role === GroupRole.ADMIN && (
-															<Badge className='text-xs'>
-																{t('admin')}
-															</Badge>
-														)}
+										{member.role === GroupRole.ADMIN && (
+											<Badge className='text-xs'>
+												{t('admin')}
+											</Badge>
+										)}
 									</div>
 
 									<div className='flex gap-2'>
 										{/* Add Friend Button */}
-										{member.userId !== user.id && 
-										 member.status !== GroupMemberStatus.PENDING &&
-										 !isUserInFriends(member.userId) && (
-											<Button
-												type='button'
-												variant={'outline'}
-												size={'xs'}
-												onClick={() => {
-													if (getFriendRequestStatus(member.userId) !== FriendStatus.Pending) {
-														handleAddFriend(member.userId)
+										{member.userId !== user.id &&
+											member.status !==
+												GroupMemberStatus.PENDING &&
+											!isUserInFriends(member.userId) && (
+												<Button
+													type='button'
+													variant={'outline'}
+													size={'xs'}
+													onClick={() => {
+														if (
+															getFriendRequestStatus(
+																member.userId
+															) !==
+															FriendStatus.Pending
+														) {
+															handleAddFriend(
+																member.userId
+															)
+														}
+													}}
+													disabled={
+														isLoadingAddFriend
 													}
-												}}
-												disabled={isLoadingAddFriend}
-												className={`${
-													getFriendRequestStatus(member.userId) === FriendStatus.Pending
-														? 'text-orange-500 border-orange-500 cursor-not-allowed'
-														: 'text-good-green border-good-green hover:bg-good-green hover:text-white'
-												}`}
-											>
-												{getFriendRequestStatus(member.userId) === FriendStatus.Pending ? (
-													<span className='flex items-center gap-1 text-xs'>Pending <UserPlus className='size-4' /></span>
-												) : isLoadingAddFriend ? (
-													<span className='text-xs'>...</span>
-												) : (
-													<UserPlus className='size-4' />
-												)}
-											</Button>
-										)}
+													className={`${
+														getFriendRequestStatus(
+															member.userId
+														) ===
+														FriendStatus.Pending
+															? 'text-orange-500 border-orange-500 cursor-not-allowed'
+															: 'text-good-green border-good-green hover:bg-good-green hover:text-white'
+													}`}
+												>
+													{getFriendRequestStatus(
+														member.userId
+													) ===
+													FriendStatus.Pending ? (
+														<span className='flex items-center gap-1 text-xs'>
+															Pending{' '}
+															<UserPlus className='size-4' />
+														</span>
+													) : isLoadingAddFriend ? (
+														<span className='text-xs'>
+															...
+														</span>
+													) : (
+														<UserPlus className='size-4' />
+													)}
+												</Button>
+											)}
 
 										{/* Remove Member Button */}
 										{group.members.find(
-											member =>
-												member.userId === user.id
+											member => member.userId === user.id
 										)?.role === GroupRole.ADMIN &&
 											member.userId !== user.id && (
 												<AlertDialog>
@@ -1090,10 +1189,14 @@ export const GroupData = ({ groupId }: Props) => {
 													<AlertDialogContent>
 														<AlertDialogHeader>
 															<AlertDialogTitle>
-																{t('areYouAbsolutelySure')}
+																{t(
+																	'areYouAbsolutelySure'
+																)}
 															</AlertDialogTitle>
 															<AlertDialogDescription>
-																{t('areYouSureYouWantToRemoveThisMember')}
+																{t(
+																	'areYouSureYouWantToRemoveThisMember'
+																)}
 															</AlertDialogDescription>
 														</AlertDialogHeader>
 														<AlertDialogFooter>

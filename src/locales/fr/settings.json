@@ -131,6 +131,7 @@
   "groupDeletedSuccessfully": "Groupe supprimé avec succès",
   "groupEditedSuccessfully": "Groupe modifié avec succès",
   "groupExpenses": "Dépenses du groupe",
+  "yourTotalExpenses": "Vos dépenses",
   "groupIdInvalid": "ID de groupe invalide",
   "groupLeft": "A quitté le groupe",
   "groupMinLength": "L'ID du groupe doit contenir au moins {min} caractères",
@@ -336,5 +337,19 @@
   "lockGroup": "Verrouiller le groupe",
   "lockGroupDescription": "Dans un groupe verrouillé, vous ne pouvez pas ajouter de nouveaux membres ou dépenses",
   "finishGroup": "Terminer le groupe",
-  "finishGroupDescription": "Un groupe terminé n'a pas de soldes impayés et n'est pas inclus dans les dépenses globales"
+  "finishGroupDescription": "Un groupe terminé n'a pas de soldes impayés et n'est pas inclus dans les dépenses globales",
+  "simplifyDebts": "Simplifier les soldes",
+  "simplifyDebtsDescription": "Cette fonction réduira le nombre de paiements inutiles entre les membres du groupe",
+  "simplifyDebtsExample": "Exemple: A→B 20€, B→C 20€ = A→C 20€",
+  "simplifyDebtsWarning": "Si vous activez les dettes simplifiées pour le groupe, vous ne pourrez pas annuler cette action!",
+  "debtsSimplifiedSuccessfully": "Soldes simplifiés avec succès",
+  "simplifiedDebtsEnabled": "Simplifié",
+  "payment": "Paiement",
+  "enterPaymentAmount": "Entrez le montant du paiement",
+  "groupImage": "Image du groupe",
+  "viewGroupImage": "Voir l'image du groupe",
+  "expensePhoto": "Photo de la dépense",
+  "allSettledUp": "Tout est réglé!",
+  "allSettledUpDescription": "Vous ne devez rien à personne et personne ne vous doit rien.",
+  "simplificationAdded": "Simplification ajoutée pour les groupes. Maintenant, tous les groupes ont un nombre optimisé de paiements entre membres."
 }

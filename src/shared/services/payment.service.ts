@@ -7,8 +7,8 @@ class PaymentService {
 		return response
 	}
 
-	public async deletePayment(groupId: string, creditorId: string, debtorId: string) {
-		const response = await api.post<boolean>('debts/delete-payments', {groupId, creditorId, debtorId})
+	public async deletePayment(paymentId: string) {
+		const response = await api.post<boolean>('debts/delete-payments', { paymentId })
 		return response
 	}
 

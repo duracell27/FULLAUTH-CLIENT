@@ -84,6 +84,7 @@
   "add": "Додати",
   "groupNotFound": "Групу не знайдено",
   "groupExpenses": "Витрати групи",
+  "yourTotalExpenses": "Ваші витрати",
   "yourBalance": "Ваш баланс",
   "locked": "Заблоковано",
   "finished": "Завершено",
@@ -336,5 +337,19 @@
   "lockGroup": "Заблокувати групу",
   "lockGroupDescription": "У заблокованій групі не можна додавати нових учасників або витрати",
   "finishGroup": "Завершити групу",
-  "finishGroupDescription": "Завершена група не має незбалансованих залишків і не включається в загальні витрати"
+  "finishGroupDescription": "Завершена група не має незбалансованих залишків і не включається в загальні витрати",
+  "simplifyDebts": "Спростити баланси",
+  "simplifyDebtsDescription": "Ця функція зменшить кількість непотрібних платежів між учасниками групи",
+  "simplifyDebtsExample": "Приклад: А→Б 20₴, Б→В 20₴ = А→В 20₴",
+  "simplifyDebtsWarning": "Якщо перевести групу на спрощені борги, повернути назад вже не можна!",
+  "debtsSimplifiedSuccessfully": "Баланси успішно спрощено",
+  "simplifiedDebtsEnabled": "Спрощено",
+  "payment": "Платіж",
+  "enterPaymentAmount": "Введіть суму платежу",
+  "groupImage": "Зображення групи",
+  "viewGroupImage": "Переглянути зображення групи",
+  "expensePhoto": "Фото витрати",
+  "allSettledUp": "Все сплачено!",
+  "allSettledUpDescription": "Ви нікому не винні і вам теж ніхто не винен.",
+  "simplificationAdded": "Додано симпліфікацію для груп. Тепер у всіх групах оптимізовано кількість платежів між членами групи."
 }

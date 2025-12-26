@@ -84,6 +84,7 @@
   "add": "Add",
   "groupNotFound": "Group not found",
   "groupExpenses": "Group expenses",
+  "yourTotalExpenses": "Your expenses",
   "yourBalance": "Your balance",
   "locked": "Locked",
   "finished": "Finished",
@@ -336,5 +337,19 @@
   "lockGroup": "Lock group",
   "lockGroupDescription": "In a locked group, you cannot add new members or expenses",
   "finishGroup": "Finish group",
-  "finishGroupDescription": "A finished group has no unsettled balances and is not included in overall expenses"
+  "finishGroupDescription": "A finished group has no unsettled balances and is not included in overall expenses",
+  "simplifyDebts": "Simplify balances",
+  "simplifyDebtsDescription": "This feature will reduce the number of unnecessary payments between group members",
+  "simplifyDebtsExample": "Example: A→B $20, B→C $20 = A→C $20",
+  "simplifyDebtsWarning": "If you enable simplified debts for the group, you cannot revert this action!",
+  "debtsSimplifiedSuccessfully": "Balances simplified successfully",
+  "simplifiedDebtsEnabled": "Simplified",
+  "payment": "Payment",
+  "enterPaymentAmount": "Enter payment amount",
+  "groupImage": "Group Image",
+  "viewGroupImage": "View group image",
+  "expensePhoto": "Expense Photo",
+  "allSettledUp": "All settled up!",
+  "allSettledUpDescription": "You don't owe anyone and no one owes you.",
+  "simplificationAdded": "Added simplification for groups. Now all groups have optimized number of payments between members."
 }

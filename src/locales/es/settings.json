@@ -131,6 +131,7 @@
   "groupDeletedSuccessfully": "Grupo eliminado exitosamente",
   "groupEditedSuccessfully": "Grupo editado exitosamente",
   "groupExpenses": "Gastos del grupo",
+  "yourTotalExpenses": "Tus gastos",
   "groupIdInvalid": "ID de grupo inválido",
   "groupLeft": "Dejó el grupo",
   "groupMinLength": "El ID del grupo debe tener al menos {min} caracteres",
@@ -336,5 +337,19 @@
   "lockGroup": "Bloquear grupo",
   "lockGroupDescription": "En un grupo bloqueado, no puedes agregar nuevos miembros o gastos",
   "finishGroup": "Finalizar grupo",
-  "finishGroupDescription": "Un grupo finalizado no tiene saldos pendientes y no se incluye en los gastos generales"
+  "finishGroupDescription": "Un grupo finalizado no tiene saldos pendientes y no se incluye en los gastos generales",
+  "simplifyDebts": "Simplificar saldos",
+  "simplifyDebtsDescription": "Esta función reducirá el número de pagos innecesarios entre miembros del grupo",
+  "simplifyDebtsExample": "Ejemplo: A→B $20, B→C $20 = A→C $20",
+  "simplifyDebtsWarning": "¡Si activas las deudas simplificadas para el grupo, no podrás revertir esta acción!",
+  "debtsSimplifiedSuccessfully": "Saldos simplificados con éxito",
+  "simplifiedDebtsEnabled": "Simplificado",
+  "payment": "Pago",
+  "enterPaymentAmount": "Ingrese el monto del pago",
+  "groupImage": "Imagen del grupo",
+  "viewGroupImage": "Ver imagen del grupo",
+  "expensePhoto": "Foto del gasto",
+  "allSettledUp": "¡Todo saldado!",
+  "allSettledUpDescription": "No le debes a nadie y nadie te debe a ti.",
+  "simplificationAdded": "Se agregó simplificación para grupos. Ahora todos los grupos tienen un número optimizado de pagos entre miembros."
 }

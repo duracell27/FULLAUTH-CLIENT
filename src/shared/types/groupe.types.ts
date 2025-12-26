@@ -13,6 +13,7 @@ export interface IGroup {
 	updatedAt: Date
 	totalExpenses: number
 	userTotalBalance: number
+	userTotalExpenses: number
 	memberBalanceDetails: {
 		user: {
 			id: string
@@ -34,8 +35,13 @@ export interface IGroup {
 	paymentsBetweenMembers: {
 		from: IUserSafe
 		to: IUserSafe
-		amount: number,
-		creators: IUserSafe[]
+		amount: number
+		payments: {
+			id: string
+			creator: IUserSafe
+			amount: number
+			createdAt: string
+		}[]
 	}[]
 	overpays: {
 		from: IUserSafe

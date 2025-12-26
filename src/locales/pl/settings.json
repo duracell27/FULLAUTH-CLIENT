@@ -131,6 +131,7 @@
   "groupDeletedSuccessfully": "Grupa pomyślnie usunięta",
   "groupEditedSuccessfully": "Grupa pomyślnie edytowana",
   "groupExpenses": "Wydatki grupy",
+  "yourTotalExpenses": "Twoje wydatki",
   "groupIdInvalid": "Nieprawidłowe ID grupy",
   "groupLeft": "Opuścił grupę",
   "groupMinLength": "ID grupy musi mieć co najmniej {min} znaków",
@@ -336,5 +337,19 @@
   "lockGroup": "Zablokuj grupę",
   "lockGroupDescription": "W zablokowanej grupie nie można dodawać nowych członków ani wydatków",
   "finishGroup": "Zakończ grupę",
-  "finishGroupDescription": "Zakończona grupa nie ma niezrównoważonych sald i nie jest uwzględniana w ogólnych wydatkach"
+  "finishGroupDescription": "Zakończona grupa nie ma niezrównoważonych sald i nie jest uwzględniana w ogólnych wydatkach",
+  "simplifyDebts": "Uprość salda",
+  "simplifyDebtsDescription": "Ta funkcja zmniejszy liczbę niepotrzebnych płatności między członkami grupy",
+  "simplifyDebtsExample": "Przykład: A→B 20zł, B→C 20zł = A→C 20zł",
+  "simplifyDebtsWarning": "Jeśli włączysz uproszczone długi dla grupy, nie będziesz mógł cofnąć tej akcji!",
+  "debtsSimplifiedSuccessfully": "Salda zostały pomyślnie uproszczone",
+  "simplifiedDebtsEnabled": "Uproszczone",
+  "payment": "Płatność",
+  "enterPaymentAmount": "Wprowadź kwotę płatności",
+  "groupImage": "Obraz grupy",
+  "viewGroupImage": "Zobacz obraz grupy",
+  "expensePhoto": "Zdjęcie wydatku",
+  "allSettledUp": "Wszystko wyrównane!",
+  "allSettledUpDescription": "Nikomu nic nie jesteś winien i nikt nic nie jest Ci winien.",
+  "simplificationAdded": "Dodano uproszczenie dla grup. Teraz wszystkie grupy mają zoptymalizowaną liczbę płatności między członkami."
 }

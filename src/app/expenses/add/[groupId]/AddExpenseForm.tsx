@@ -1259,6 +1259,48 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 											)
 										const isSelected = fieldIndex !== -1
 
+										// Використовуємо watch для реактивного оновлення
+										const totalAmount = parseFloat(form.watch('amount') || '0')
+										const selectedDebtorsCount = debtorFields.length
+
+										let calculatedShare = 0
+
+										// Для EXTRA режиму рахуємо завжди (навіть якщо не вибрано)
+										if (debtorMode === 'EXTRA') {
+											const allExtraDebtors = form.watch('debtors') || []
+											// 1. Сумуємо всі додаткові суми
+											const totalExtraAmounts = allExtraDebtors.reduce((sum: number, d: any) => sum + parseFloat(d.extraAmount || '0'), 0)
+											// 2. Віднімаємо від загальної суми
+											const remainingAmount = totalAmount - totalExtraAmounts
+											// 3. Ділимо залишок на ВСІХ членів групи (не тільки вибраних!)
+											const totalMembersCount = group.members.length
+											const baseShare = totalMembersCount > 0 ? remainingAmount / totalMembersCount : 0
+
+											// 4. Отримуємо додаткову суму користувача (якщо вибраний)
+											const userExtraAmount = isSelected ? parseFloat(form.watch(`debtors.${fieldIndex}.extraAmount`) || '0') : 0
+
+											// 5. Фінальна сума = базова частка + додаткова сума
+											calculatedShare = baseShare + userExtraAmount
+										} else if (isSelected) {
+											// Для інших режимів рахуємо тільки якщо вибрано
+											switch (debtorMode) {
+												case 'EQUAL':
+													calculatedShare = selectedDebtorsCount > 0 ? totalAmount / selectedDebtorsCount : 0
+													break
+												case 'PERCENTAGE':
+													const percentage = parseFloat(form.watch(`debtors.${fieldIndex}.percentage`) || '0')
+													calculatedShare = totalAmount * (percentage / 100)
+													break
+												case 'SHARES':
+													// Потрібно отримати всі частки з watch
+													const allDebtors = form.watch('debtors') || []
+													const totalShares = allDebtors.reduce((sum: number, d: any) => sum + parseFloat(d.shares || '0'), 0)
+													const userShares = parseFloat(form.watch(`debtors.${fieldIndex}.shares`) || '0')
+													calculatedShare = totalShares > 0 ? totalAmount * (userShares / totalShares) : 0
+													break
+											}
+										}
+
 										return (
 											<div
 												key={member.userId}
@@ -1293,35 +1335,58 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 													</Avatar>
 													{member.user.displayName}
 												</label>
+
+												{/* Відображення розрахованої частки для EQUAL */}
+												{isSelected && debtorMode === 'EQUAL' && (
+													<span className='text-sm font-medium text-muted-foreground w-24 text-right'>
+														{formatBalance(calculatedShare)}
+													</span>
+												)}
+
+												{/* Відображення для EXTRA режиму - показуємо ЗАВЖДИ (навіть якщо не вибрано) */}
+												{!isSelected && debtorMode === 'EXTRA' && (
+													<span className='text-sm font-medium text-muted-foreground w-24 text-right'>
+														{formatBalance(calculatedShare)}
+													</span>
+												)}
+
 												{/* Інпут з'являється тільки коли потрібно (не для EQUAL) та чекбокс обраний */}
 												{isSelected && inputConfig && (
-													<FormField
-														control={form.control}
-														disabled={
-															isLoadingAddExpense
-														}
-														name={
-															`debtors.${fieldIndex}.${inputConfig.fieldName}` as any
-														}
-														render={({
-															field: inputField
-														}) => (
-															<FormItem className='mb-0'>
-																<FormControl>
-																	<Input
-																		type='number'
-																		min={0}
-																		placeholder={
-																			inputConfig.placeholder
-																		}
-																		className='w-24'
-																		{...inputField}
-																	/>
-																</FormControl>
-																<FormMessage />
-															</FormItem>
+													<>
+														{/* Відображення розрахованої суми ПЕРЕД інпутом (не для CUSTOM) */}
+														{debtorMode !== 'CUSTOM' && (
+															<span className='text-sm font-medium text-muted-foreground w-24 text-right mr-[15px]'>
+																{formatBalance(calculatedShare)}
+															</span>
 														)}
-													/>
+														<FormField
+															control={form.control}
+															disabled={
+																isLoadingAddExpense
+															}
+															name={
+																`debtors.${fieldIndex}.${inputConfig.fieldName}` as any
+															}
+															render={({
+																field: inputField
+															}) => (
+																<FormItem className='mb-0'>
+																	<FormControl>
+																		<Input
+																			type='number'
+																			min={0}
+																			placeholder={
+																				inputConfig.placeholder
+																			}
+																			className='w-24'
+																			{...inputField}
+																		/>
+																	</FormControl>
+																	<FormMessage />
+																</FormItem>
+															)}
+														/>
+													</>
 												)}
 											</div>
 										)

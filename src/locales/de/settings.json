@@ -131,6 +131,7 @@
   "groupDeletedSuccessfully": "Gruppe erfolgreich gelöscht",
   "groupEditedSuccessfully": "Gruppe erfolgreich bearbeitet",
   "groupExpenses": "Gruppenausgaben",
+  "yourTotalExpenses": "Ihre Ausgaben",
   "groupIdInvalid": "Ungültige Gruppen-ID",
   "groupLeft": "Gruppe verlassen",
   "groupMinLength": "Gruppen-ID muss mindestens {min} Zeichen haben",
@@ -336,5 +337,19 @@
   "lockGroup": "Gruppe sperren",
   "lockGroupDescription": "In einer gesperrten Gruppe können keine neuen Mitglieder oder Ausgaben hinzugefügt werden",
   "finishGroup": "Gruppe beenden",
-  "finishGroupDescription": "Eine beendete Gruppe hat keine unausgeglichenen Salden und wird nicht in die Gesamtausgaben einbezogen"
+  "finishGroupDescription": "Eine beendete Gruppe hat keine unausgeglichenen Salden und wird nicht in die Gesamtausgaben einbezogen",
+  "simplifyDebts": "Salden vereinfachen",
+  "simplifyDebtsDescription": "Diese Funktion reduziert die Anzahl unnötiger Zahlungen zwischen Gruppenmitgliedern",
+  "simplifyDebtsExample": "Beispiel: A→B 20€, B→C 20€ = A→C 20€",
+  "simplifyDebtsWarning": "Wenn Sie vereinfachte Schulden für die Gruppe aktivieren, können Sie diese Aktion nicht rückgängig machen!",
+  "debtsSimplifiedSuccessfully": "Salden erfolgreich vereinfacht",
+  "simplifiedDebtsEnabled": "Vereinfacht",
+  "payment": "Zahlung",
+  "enterPaymentAmount": "Zahlungsbetrag eingeben",
+  "groupImage": "Gruppenbild",
+  "viewGroupImage": "Gruppenbild anzeigen",
+  "expensePhoto": "Ausgabenfoto",
+  "allSettledUp": "Alles beglichen!",
+  "allSettledUpDescription": "Sie schulden niemandem etwas und niemand schuldet Ihnen etwas.",
+  "simplificationAdded": "Vereinfachung für Gruppen hinzugefügt. Jetzt ist die Anzahl der Zahlungen zwischen Mitgliedern in allen Gruppen optimiert."
 }

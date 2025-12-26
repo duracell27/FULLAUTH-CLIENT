@@ -12,15 +12,7 @@ export function useDeletePaymentMutation(groupId: string) {
 	const { mutate: deletePayment, isPending: isLoadingDeletePayment } =
 		useMutation({
 			mutationKey: ['delete payment'],
-			mutationFn: ({
-				groupId,
-				creditorId,
-				debtorId
-			}: {
-				groupId: string
-				creditorId: string
-				debtorId: string
-			}) => paymentService.deletePayment(groupId, creditorId, debtorId),
+			mutationFn: (paymentId: string) => paymentService.deletePayment(paymentId),
 			onSuccess: () => {
 				toast.success(t('paymentDeletedSuccessfully'))
 				queryClient.invalidateQueries({

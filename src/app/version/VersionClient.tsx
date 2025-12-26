@@ -8,7 +8,6 @@ import {
 	CardHeader,
 	CardTitle
 } from '@/shared/componets/ui/Card'
-import { Badge } from '@/shared/componets/ui/Badge'
 
 export default function VersionClient() {
 	const { t } = useTranslationsHome()
@@ -26,6 +25,19 @@ export default function VersionClient() {
 						</CardDescription>
 					</CardHeader>
 					<CardContent className='space-y-4'>
+
+						<div className='space-y-2'>
+							<div className='flex items-center justify-between'>
+								<span className='font-medium'>v0.3.0</span>
+								<span className='text-sm text-muted-foreground'>
+									2025-12-26
+								</span>
+							</div>
+							<div className='text-sm text-muted-foreground pl-4'>
+								• {t('simplificationAdded')}
+							</div>
+						</div>
+
 						<div className='space-y-2'>
 							<div className='flex items-center justify-between'>
 								<span className='font-medium'>v0.2.0</span>

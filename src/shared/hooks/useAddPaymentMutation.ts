@@ -2,8 +2,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { toastMessageHandler } from '../utils'
 import { useRouter } from 'next/navigation'
-import { TypeAddExpenseForm, TypeAddExpenseFormNumber } from '../schemas'
-import { expenseService } from '../services/expense.service'
 import { TypeAddPaymentSchema } from '../schemas/createPayment.schema'
 import { paymentService } from '../services'
 import { useTranslations } from './useTranslations'
@@ -19,11 +17,12 @@ export function useAddPaymentMutation(groupId: string) {
 		onSuccess: () => {
 			toast.success(t('paymentAddedSuccessfully'))
 			queryClient.invalidateQueries({queryKey: ['group ' + groupId]})
+			queryClient.invalidateQueries({queryKey: ['groups']})
 			queryClient.invalidateQueries({queryKey: ['summary']})
 			queryClient.invalidateQueries({queryKey: ['notificationsUnread']})
 			queryClient.invalidateQueries({queryKey: ['notifications']})
 			router.push('/groups/' + groupId)
-			
+
 		},
 		onError: error => {
 			toastMessageHandler(error)

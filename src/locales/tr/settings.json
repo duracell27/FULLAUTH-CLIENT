@@ -131,6 +131,7 @@
   "groupDeletedSuccessfully": "Grup başarıyla silindi",
   "groupEditedSuccessfully": "Grup başarıyla düzenlendi",
   "groupExpenses": "Grup giderleri",
+  "yourTotalExpenses": "Harcamalarınız",
   "groupIdInvalid": "Geçersiz grup ID'si",
   "groupLeft": "Grubu terk etti",
   "groupMinLength": "Grup ID'si en az {min} karakter olmalıdır",
@@ -336,5 +337,19 @@
   "lockGroup": "Grubu kilitle",
   "lockGroupDescription": "Kilitli bir grupta yeni üye veya gider ekleyemezsiniz",
   "finishGroup": "Grubu bitir",
-  "finishGroupDescription": "Bitirilmiş bir grubun ödenmemiş bakiyesi yoktur ve genel giderlere dahil edilmez"
+  "finishGroupDescription": "Bitirilmiş bir grubun ödenmemiş bakiyesi yoktur ve genel giderlere dahil edilmez",
+  "simplifyDebts": "Bakiyeleri basitleştir",
+  "simplifyDebtsDescription": "Bu özellik, grup üyeleri arasındaki gereksiz ödeme sayısını azaltacaktır",
+  "simplifyDebtsExample": "Örnek: A→B 20₺, B→C 20₺ = A→C 20₺",
+  "simplifyDebtsWarning": "Grup için basitleştirilmiş borçları etkinleştirirseniz, bu eylemi geri alamazsınız!",
+  "debtsSimplifiedSuccessfully": "Bakiyeler başarıyla basitleştirildi",
+  "simplifiedDebtsEnabled": "Basitleştirildi",
+  "payment": "Ödeme",
+  "enterPaymentAmount": "Ödeme tutarını girin",
+  "groupImage": "Grup Resmi",
+  "viewGroupImage": "Grup resmini görüntüle",
+  "expensePhoto": "Harcama Fotoğrafı",
+  "allSettledUp": "Hepsi ödendi!",
+  "allSettledUpDescription": "Kimseye borçlu değilsiniz ve kimse size borçlu değil.",
+  "simplificationAdded": "Gruplar için basitleştirme eklendi. Artık tüm gruplarda üyeler arasındaki ödeme sayısı optimize edildi."
 }

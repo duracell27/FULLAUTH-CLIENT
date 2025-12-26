@@ -131,6 +131,7 @@
   "groupDeletedSuccessfully": "Skupina úspěšně smazána",
   "groupEditedSuccessfully": "Skupina úspěšně upravena",
   "groupExpenses": "Výdaje skupiny",
+  "yourTotalExpenses": "Vaše výdaje",
   "groupIdInvalid": "Neplatné ID skupiny",
   "groupLeft": "Opustil skupinu",
   "groupMinLength": "ID skupiny musí mít alespoň {min} znaků",
@@ -336,5 +337,19 @@
   "lockGroup": "Zamknout skupinu",
   "lockGroupDescription": "V zamčené skupině nelze přidávat nové členy nebo výdaje",
   "finishGroup": "Dokončit skupinu",
-  "finishGroupDescription": "Dokončená skupina nemá nevyrovnané zůstatky a není zahrnuta do celkových výdajů"
+  "finishGroupDescription": "Dokončená skupina nemá nevyrovnané zůstatky a není zahrnuta do celkových výdajů",
+  "simplifyDebts": "Zjednodušit zůstatky",
+  "simplifyDebtsDescription": "Tato funkce sníží počet nepotřebných plateb mezi členy skupiny",
+  "simplifyDebtsExample": "Příklad: A→B 20 Kč, B→C 20 Kč = A→C 20 Kč",
+  "simplifyDebtsWarning": "Pokud aktivujete zjednodušené dluhy pro skupinu, tuto akci již nelze vrátit zpět!",
+  "debtsSimplifiedSuccessfully": "Zůstatky úspěšně zjednodušeny",
+  "simplifiedDebtsEnabled": "Zjednodušeno",
+  "payment": "Platba",
+  "enterPaymentAmount": "Zadejte částku platby",
+  "groupImage": "Obrázek skupiny",
+  "viewGroupImage": "Zobrazit obrázek skupiny",
+  "expensePhoto": "Fotografie výdaje",
+  "allSettledUp": "Vše vyrovnáno!",
+  "allSettledUpDescription": "Nikomu nic nedlužíte a nikdo nic nedluží vám.",
+  "simplificationAdded": "Přidáno zjednodušení pro skupiny. Nyní všechny skupiny mají optimalizovaný počet plateb mezi členy."
 }

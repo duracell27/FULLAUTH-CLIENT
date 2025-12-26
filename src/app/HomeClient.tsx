@@ -61,7 +61,7 @@ export function HomeClient() {
 								'text-sm text-center'
 							)}
 						>
-							v.0.2
+							v.0.3
 						</Link>
 						<Link
 							href='/contact'
