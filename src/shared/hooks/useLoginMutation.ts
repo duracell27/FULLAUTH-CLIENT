@@ -25,6 +25,11 @@ export function useLoginMutation(setIsShowFactor: React.Dispatch<React.SetStateA
 				toastMessageHandler(data)
 				setIsShowFactor(true)
 			}else{
+				// Очищаємо прапорець logout-flag після успішного входу
+				if (typeof localStorage !== 'undefined') {
+					localStorage.removeItem('logout-flag')
+				}
+
 				toast.success(t('userLoggedInSuccessfully'))
 				router.push('/groups')
 			}

@@ -25,6 +25,31 @@ import { useDeleteAllNotificationsMutation } from '@/shared/hooks/useDeleteAllNo
 
 type Props = {}
 
+// Функція для заміни плейсхолдерів в тексті повідомлення
+const replaceMessagePlaceholders = (message: string, metadata: any): string => {
+	if (!metadata) return message
+
+	let result = message
+
+	// Замінюємо всі можливі плейсхолдери
+	const replacements: Record<string, any> = {
+		'{expenseDescription}': metadata.expenseDescription,
+		'{groupName}': metadata.groupName,
+		'{amount}': metadata.amount,
+		'{totalAmount}': metadata.totalAmount,
+		'{senderName}': metadata.senderName,
+		'{receiverName}': metadata.receiverName
+	}
+
+	Object.entries(replacements).forEach(([placeholder, value]) => {
+		if (value !== undefined && value !== null) {
+			result = result.replace(new RegExp(placeholder, 'g'), String(value))
+		}
+	})
+
+	return result
+}
+
 const NotificationsData = (props: Props) => {
 	const { notifications, isLoadingNotifications } = useNotifications()
 	const { markAllNotificationsAsRead, isLoadingMarkAllNotificationsAsRead } =
@@ -165,12 +190,10 @@ const NotificationsData = (props: Props) => {
 												'text-green-500/90'
 										)}
 									>
-										{t(notification.message)} {" "}
-										{notification.type === 'DEBT_CREATED' && (notification.metadata?.amount)}
-										{notification.type === 'DEBT_SETTLED' && (notification.metadata?.totalAmount)}
-
-										{notification.type ===  "EXPENSE_ADDED" && (notification.metadata?.groupName)}
-			
+										{replaceMessagePlaceholders(
+											t(notification.message),
+											notification.metadata
+										)}
 									</p>
 									<div className='text-xs flex items-center justify-between gap-1  '>
 										<div className=' text-muted-foreground flex items-center gap-2'>
