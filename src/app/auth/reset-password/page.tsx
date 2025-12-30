@@ -7,5 +7,9 @@ export const metadata: Metadata = {
 }
 
 export default function ResetPasswordPage() {
-	return <ResetPasswordForm />
+	return (
+		<div className='mt-18'>
+			<ResetPasswordForm />
+		</div>
+	)
 }

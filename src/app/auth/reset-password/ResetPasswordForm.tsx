@@ -53,6 +53,7 @@ const ResetPasswordForm = (props: Props) => {
 			backButtonLabel='Login'
 			backButtonHref='/auth/login'
 			
+			
 		>
 			<Form {...form}>
 				<form

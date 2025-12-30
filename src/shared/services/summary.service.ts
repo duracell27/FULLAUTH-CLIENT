@@ -1,6 +1,6 @@
 import { TypeAddExpenseFormNumber } from '../schemas'
 import { IExpense } from '../types'
-import { ISummary } from '../types/summary.types'
+import { ISummaryResponse } from '../types/summary.types'
 import { api } from '../utils/api'
 
 class SummaryService {
@@ -10,7 +10,7 @@ class SummaryService {
 	}
 
     public async getSummary() {
-        const response = await api.get<ISummary[]>(`summary`)
+        const response = await api.get<ISummaryResponse>(`summary`)
         return response
     }
 

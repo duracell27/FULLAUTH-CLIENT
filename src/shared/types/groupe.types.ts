@@ -77,6 +77,12 @@ export interface IUserGroupObject {
 	active: IUserGroup[]
 }
 
+export interface IGroupsResponse {
+	groups: IUserGroup[]
+	activeCount: number
+	finishedCount: number
+}
+
 export enum GroupRole {
 	ADMIN = 'ADMIN',
 	MEMBER = 'MEMBER'

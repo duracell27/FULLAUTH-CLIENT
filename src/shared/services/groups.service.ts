@@ -21,14 +21,14 @@ class GroupsService {
 	}
 
     public async getGroups({ type, limit = 10, offset = 0 }: { type: 'finished' | 'active', limit?: number, offset?: number }) {
-        const response = await api.get<IUserGroup[]>(`group-members`, {
+        const response = await api.get<{ groups: IUserGroup[], activeCount: number, finishedCount: number }>(`group-members`, {
             params: { type, limit, offset }
         })
         return response
     }
 
     public async getPersonalGroups({ type, limit = 10, offset = 0 }: { type: 'finished' | 'active', limit?: number, offset?: number }) {
-        const response = await api.get<IUserGroup[]>(`group-members/personal`, {
+        const response = await api.get<{ groups: IUserGroup[], activeCount: number, finishedCount: number }>(`group-members/personal`, {
             params: { type, limit, offset }
         })
         return response

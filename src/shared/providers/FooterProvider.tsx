@@ -16,8 +16,8 @@ export function FooterProvider() {
 	}
 
 	return (
-		<div className='fixed bottom-0 left-0 right-0  overflow-hidden rounded-t-md shadow-lg z-10'>
-			<Card className='w-[92%] max-w-[400px] mx-auto flex justify-between items-center mb-2 py-1 px-1 border-t border-gray-200 '>
+		<div className='fixed bottom-0 left-0 w-full flex justify-center px-2 z-10'>
+			<Card className='w-full max-w-[400px] flex justify-between items-center mb-2 py-1 px-1 border-t border-gray-200'>
 				<div className='flex gap-2 items-center w-full '>
 					<Link
 						className={

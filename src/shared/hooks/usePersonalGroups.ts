@@ -2,6 +2,12 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { groupsService } from "../services";
 import { IUserGroup } from '../types/groupe.types';
 
+interface GroupsResponse {
+    groups: IUserGroup[];
+    activeCount: number;
+    finishedCount: number;
+}
+
 export function usePersonalGroups() {
     // Active groups
     const {
@@ -10,15 +16,15 @@ export function usePersonalGroups() {
         hasNextPage: hasNextActive,
         isLoading: isLoadingActive,
         isFetchingNextPage: isFetchingNextActive,
-    } = useInfiniteQuery<IUserGroup[], Error>({
+    } = useInfiniteQuery<GroupsResponse, Error>({
         queryKey: ['groups', 'activePersonal'],
         queryFn: async ({ pageParam = 0 }) => {
             const offset = typeof pageParam === 'number' ? pageParam : Number(pageParam) || 0;
             const res = await groupsService.getPersonalGroups({ type: 'active', limit: 10, offset });
-            return res || [];
+            return res || { groups: [], activeCount: 0, finishedCount: 0 };
         },
-        getNextPageParam: (lastPage: IUserGroup[], allPages: IUserGroup[][]) =>
-            lastPage.length === 10 ? allPages.length * 10 : undefined,
+        getNextPageParam: (lastPage: GroupsResponse, allPages: GroupsResponse[]) =>
+            lastPage.groups.length === 10 ? allPages.length * 10 : undefined,
         initialPageParam: 0,
     });
 
@@ -29,25 +35,31 @@ export function usePersonalGroups() {
         hasNextPage: hasNextFinished,
         isLoading: isLoadingFinished,
         isFetchingNextPage: isFetchingNextFinished,
-    } = useInfiniteQuery<IUserGroup[], Error>({
+    } = useInfiniteQuery<GroupsResponse, Error>({
         queryKey: ['groups', 'finishedPersonal'],
         queryFn: async ({ pageParam = 0 }) => {
             const offset = typeof pageParam === 'number' ? pageParam : Number(pageParam) || 0;
             const res = await groupsService.getPersonalGroups({ type: 'finished', limit: 10, offset });
-            return res || [];
+            return res || { groups: [], activeCount: 0, finishedCount: 0 };
         },
-        getNextPageParam: (lastPage: IUserGroup[], allPages: IUserGroup[][]) =>
-            lastPage.length === 10 ? allPages.length * 10 : undefined,
+        getNextPageParam: (lastPage: GroupsResponse, allPages: GroupsResponse[]) =>
+            lastPage.groups.length === 10 ? allPages.length * 10 : undefined,
         initialPageParam: 0,
     });
 
     // Збираємо всі групи в один масив для кожного типу
-    const activeGroups = activeData?.pages ? activeData.pages.flat() : [];
-    const finishedGroups = finishedData?.pages ? finishedData.pages.flat() : [];
+    const activeGroups = activeData?.pages ? activeData.pages.flatMap(page => page.groups) : [];
+    const finishedGroups = finishedData?.pages ? finishedData.pages.flatMap(page => page.groups) : [];
+
+    // Отримуємо counts з першої сторінки (вони однакові для всіх сторінок)
+    const activeCount = activeData?.pages?.[0]?.activeCount || 0;
+    const finishedCount = finishedData?.pages?.[0]?.finishedCount || 0;
 
     return {
         activeGroups,
         finishedGroups,
+        activeCount,
+        finishedCount,
         loadMoreActive,
         loadMoreFinished,
         hasNextActive,

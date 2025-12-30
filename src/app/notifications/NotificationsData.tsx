@@ -18,10 +18,11 @@ import { useNotifications } from '@/shared/hooks/useNotifications'
 import { Language } from '@/shared/types/user.types'
 import { Loading } from '@/shared/componets/ui/Loading'
 import { cn } from '@/shared/utils'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useMarkAllNotificationsAsReadMutation } from '@/shared/hooks/useMarkAllNotificationsAsReadMutation'
 import { useDeleteNotificationMutation } from '@/shared/hooks/useDeleteNotificationMutation'
 import { useDeleteAllNotificationsMutation } from '@/shared/hooks/useDeleteAllNotificationsMutation'
+import { useMarkNotificationAsReadMutation } from '@/shared/hooks/useMarkNotificationAsReadMutation'
 
 type Props = {}
 
@@ -37,8 +38,11 @@ const replaceMessagePlaceholders = (message: string, metadata: any): string => {
 		'{groupName}': metadata.groupName,
 		'{amount}': metadata.amount,
 		'{totalAmount}': metadata.totalAmount,
+		'{count}': metadata.count,
 		'{senderName}': metadata.senderName,
-		'{receiverName}': metadata.receiverName
+		'{receiverName}': metadata.receiverName,
+		'{inviterName}': metadata.inviterName,
+		'{removerName}': metadata.removerName
 	}
 
 	Object.entries(replacements).forEach(([placeholder, value]) => {
@@ -51,9 +55,13 @@ const replaceMessagePlaceholders = (message: string, metadata: any): string => {
 }
 
 const NotificationsData = (props: Props) => {
+	const router = useRouter()
 	const { notifications, isLoadingNotifications } = useNotifications()
 	const { markAllNotificationsAsRead, isLoadingMarkAllNotificationsAsRead } =
 		useMarkAllNotificationsAsReadMutation()
+
+	const { markNotificationAsRead, isLoadingMarkNotificationAsRead } =
+		useMarkNotificationAsReadMutation()
 
 	const { deleteNotification, isLoadingDeleteNotification } =
 		useDeleteNotificationMutation()
@@ -67,6 +75,11 @@ const NotificationsData = (props: Props) => {
 	const isNotificationsUnread = notifications?.some(
 		notification => !notification.isRead
 	)
+
+	const handleNotificationClick = (notificationId: string, redirectUrl: string) => {
+		markNotificationAsRead(notificationId)
+		router.push(redirectUrl)
+	}
 
 	if (isLoadingNotifications) {
 		return (
@@ -202,7 +215,7 @@ const NotificationsData = (props: Props) => {
 												{formatDate(notification.createdAt, 'dd.MM.yyyy', user?.language || Language.EN)}
 											</div>
 											<div
-												className='flex items-center  gap-1 bg-bad-red px-1 py-1 rounded-full text-background'
+												className='flex items-center  gap-1 bg-bad-red px-1 py-1 rounded-full text-background cursor-pointer'
 												onClick={() =>
 													deleteNotification(
 														notification.id
@@ -215,53 +228,53 @@ const NotificationsData = (props: Props) => {
 										<div className=''>
 											{notification.type ===
 												'EXPENSE_ADDED' && (
-												<Link
-													href={`/expenses/${notification.relatedExpenseId}`}
-													className='flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full text-primary '
+												<button
+													onClick={() => handleNotificationClick(notification.id, `/expenses/${notification.relatedExpenseId}`)}
+													className='flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full text-primary cursor-pointer'
 												>
 													{t('show')}{' '}
 													<Link2 className='size-4 text-primary' />
-												</Link>
+												</button>
 											)}
 											{notification.type ===
 												'DEBT_CREATED' && (
-												<Link
-													href={`/expenses/${notification.relatedExpenseId}`}
-													className='flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full text-primary '
+												<button
+													onClick={() => handleNotificationClick(notification.id, `/expenses/${notification.relatedExpenseId}`)}
+													className='flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full text-primary cursor-pointer'
 												>
 													{t('show')}{' '}
 													<Link2 className='size-4 text-primary' />
-												</Link>
+												</button>
 											)}
 											{notification.type ===
 												'GROUP_INVITATION' && (
-												<Link
-													href={`/groups/${notification.relatedGroupId}`}
-													className='flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full text-primary '
+												<button
+													onClick={() => handleNotificationClick(notification.id, `/groups/${notification.relatedGroupId}`)}
+													className='flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full text-primary cursor-pointer'
 												>
 													{t('show')}{' '}
 													<Link2 className='size-4 text-primary' />
-												</Link>
+												</button>
 											)}
 											{notification.type ===
 												'DEBT_SETTLED' && (
-												<Link
-													href={`/groups/${notification.relatedGroupId}`}
-													className='flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full text-primary '
+												<button
+													onClick={() => handleNotificationClick(notification.id, `/groups/${notification.relatedGroupId}`)}
+													className='flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full text-primary cursor-pointer'
 												>
 													{t('show')}{' '}
 													<Link2 className='size-4 text-primary' />
-												</Link>
+												</button>
 											)}
 											{notification.type ===
 												'FRIEND_REQUEST' && (
-												<Link
-													href={`/dashboard/settings/friends`}
-													className='flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full text-primary '
+												<button
+													onClick={() => handleNotificationClick(notification.id, `/dashboard/settings/friends`)}
+													className='flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full text-primary cursor-pointer'
 												>
 													{t('show')}{' '}
 													<Link2 className='size-4 text-primary' />
-												</Link>
+												</button>
 											)}
 										</div>
 									</div>

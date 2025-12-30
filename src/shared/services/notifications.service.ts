@@ -17,6 +17,11 @@ class NotificationsService {
 		return response
 	}
 
+	public async markNotificationAsRead(notificationId: string) {
+		const response = await api.patch(`notifications/${notificationId}/read`)
+		return response
+	}
+
 	public async deleteNotification(notificationId: string) {
 		const response = await api.delete(`notifications/${notificationId}`)
 		return response

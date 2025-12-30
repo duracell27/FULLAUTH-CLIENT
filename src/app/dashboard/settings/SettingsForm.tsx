@@ -93,7 +93,7 @@ const SettingsForm = () => {
 										name='email'
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel>{t('email')}</FormLabel>
+												<FormLabel>{t('emailLabel')}</FormLabel>
 												<FormControl>
 													<Input
 														placeholder={t('enterYourEmail')}

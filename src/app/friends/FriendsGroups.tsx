@@ -4,7 +4,6 @@ import {
 	AvatarFallback,
 	AvatarImage,
 	Button,
-	buttonVariants,
 	Card,
 	CardContent,
 	CardHeader,
@@ -17,7 +16,8 @@ import { usePersonalGroups } from '@/shared/hooks/usePersonalGroups'
 import { IUserGroup, IUserSafe } from '@/shared/types'
 import { Language } from '@/shared/types/user.types'
 import colorBalance from '@/shared/utils/colorBalance'
-import { formatDate } from '@/shared/utils'
+import { formatDate, cn } from '@/shared/utils'
+import { Users } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
@@ -33,6 +33,8 @@ export const FriendsGroups = (props: Props) => {
 	const {
 		activeGroups,
 		finishedGroups,
+		activeCount,
+		finishedCount,
 		loadMoreActive,
 		loadMoreFinished,
 		hasNextActive,
@@ -54,19 +56,34 @@ export const FriendsGroups = (props: Props) => {
 			<Card className='w-full max-w-[400px] mb-18'>
 				<CardHeader>
 					<CardTitle className='flex justify-between items-center'>
-						<span>{t('personalGroups')}</span>
+						<span>{t('personalGroups')} <span className='text-sm text-muted-foreground'>({activeCount})</span></span>
 						{/* <Link href='/groups/add' className={buttonVariants()}>
 							Add
 						</Link> */}
 					</CardTitle>
 				</CardHeader>
 				<CardContent>
-					{activeGroups && activeGroups.length === 0 && <div>{t('youHaveNoGroups')}</div>}
-					<ul>
+					{activeGroups && activeGroups.length === 0 ? (
+						<div className='text-center text-muted-foreground py-8'>
+							<Users className='mx-auto h-12 w-12 text-muted-foreground mb-4' />
+							<p className='font-medium'>{t('youHaveNoGroups')}</p>
+							<p className='text-sm mt-2'>
+								{t('createYourFirstGroupToStart')}
+							</p>
+						</div>
+					) : (
+						<ul>
 						{activeGroups.map((group: IUserGroup) => (
 							<li className='' key={group.id}>
 								<Link
-									className='border px-1 border-ring/20 py-2 bg-primary/10 my-1 hover:bg-accent flex justify-between rounded-xl items-center gap-2'
+									className={cn(
+										'border-2 px-1 py-2 bg-primary/10 my-1 hover:bg-accent flex justify-between rounded-xl items-center gap-2',
+										Math.abs(group.userBalance) < 0.01
+											? 'border-ring/20'
+											: group.userBalance > 0
+											? 'border-good-green-light'
+											: 'border-bad-red-light'
+									)}
 									href={`/groups/${group.id}`}
 								>
 									<div className='flex gap-2 items-center'>
@@ -148,6 +165,7 @@ export const FriendsGroups = (props: Props) => {
 							</li>
 						))}
 					</ul>
+					)}
 					{hasNextActive && (
 						<Button
 							className='w-full mt-2'
@@ -165,7 +183,7 @@ export const FriendsGroups = (props: Props) => {
 				<Card className='w-full max-w-[400px] mb-18'>
 					<CardHeader>
 						<CardTitle className='flex justify-between items-center'>
-							<span>{t('finishedGroups')}</span>
+							<span>{t('finishedGroups')} <span className='text-sm text-muted-foreground'>({finishedCount})</span></span>
 						</CardTitle>
 					</CardHeader>
 					<CardContent>
@@ -173,7 +191,14 @@ export const FriendsGroups = (props: Props) => {
 							{finishedGroups.map((group: IUserGroup) => (
 								<li className='' key={group.id}>
 									<Link
-										className='border px-1 border-ring/20 py-2 bg-primary/10 my-1 hover:bg-accent flex justify-between rounded-xl items-center gap-2'
+										className={cn(
+											'border-2 px-1 py-2 bg-primary/10 my-1 hover:bg-accent flex justify-between rounded-xl items-center gap-2',
+											Math.abs(group.userBalance) < 0.01
+												? 'border-ring/20'
+												: group.userBalance > 0
+												? 'border-good-green-light'
+												: 'border-bad-red-light'
+										)}
 										href={`/groups/${group.id}`}
 									>
 										<div className='flex gap-2 items-center'>

@@ -4,10 +4,14 @@ import { expenseService } from '../services/expense.service'
 import { summaryService } from '../services/summary.service'
 
 export function useSummary() {
-	const { data: summary, isLoading: isLoadingSummary } = useQuery({
+	const { data: summaryResponse, isLoading: isLoadingSummary } = useQuery({
 		queryKey: ['summary'],
 		queryFn: () => summaryService.getSummary()
 	})
 
-	return { summary, isLoadingSummary }
+	return {
+		summary: summaryResponse?.userBalances,
+		totalBalance: summaryResponse?.totalBalance,
+		isLoadingSummary
+	}
 }

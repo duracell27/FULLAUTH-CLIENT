@@ -9,3 +9,8 @@ export interface ISummary {
         balance: number
     }[]
 }
+
+export interface ISummaryResponse {
+    userBalances: ISummary[]
+    totalBalance: number
+}

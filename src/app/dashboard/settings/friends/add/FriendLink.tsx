@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { Button, Card, CardContent, CardHeader, CardTitle } from '@/shared/componets/ui'
+import { Button } from '@/shared/componets/ui'
 import { useProfile, useTranslations } from '@/shared/hooks'
 import Link from 'next/link'
 import { toast } from 'sonner'
@@ -19,16 +19,10 @@ export const FriendLink = (props: Props) => {
         toast.success(t('linkCopiedToClipboard'))
     }
 	return (
-		<div className='flex flex-col justify-center items-center w-full'>
-			<Card className='w-full max-w-[400px]'>
-				<CardHeader>
-					<CardTitle>{t('yourUserLink')}</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<Link href={qrCodeValue} className='text-base block break-all break-words'>{qrCodeValue}</Link>
-                    <Button className='my-2' onClick={handleCopyLink}>{t('copyLink')}</Button>
-				</CardContent>
-			</Card>
+		<div className='flex flex-col w-full'>
+			<h3 className='font-semibold mb-2'>{t('yourUserLink')}</h3>
+			<Link href={qrCodeValue} className='text-base block break-all break-words mb-2'>{qrCodeValue}</Link>
+			<Button className='w-full' onClick={handleCopyLink}>{t('copyLink')}</Button>
 		</div>
 	)
 }
