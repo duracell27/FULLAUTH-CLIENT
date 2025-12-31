@@ -3,11 +3,13 @@
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/componets/ui'
 import Link from 'next/link'
-import { useTranslations } from '@/shared/hooks'
+import { useTranslations, useProfile } from '@/shared/hooks'
+import { UserRole } from '@/shared/types'
 
 export function SettingsMenu() {
 	const { t } = useTranslations()
-	
+	const { user } = useProfile()
+
 	return (
 		<Card className='w-full max-w-[400px]'>
 			<CardHeader>
@@ -40,6 +42,17 @@ export function SettingsMenu() {
 							{t('language')}
 						</Link>
 					</li>
+
+					{user?.role === UserRole.Admin && (
+						<li className=''>
+							<Link
+								className=' border-b border-ring/20 py-2 hover:bg-accent block'
+								href='/dashboard/admin'
+							>
+								Адмін панель
+							</Link>
+						</li>
+					)}
 				</ul>
 			</CardContent>
 		</Card>
