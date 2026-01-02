@@ -1,9 +1,21 @@
 import React from 'react'
 import { LoginForm } from './LoginForm'
 import { Metadata } from 'next'
+import { headers } from 'next/headers'
+import { cookieUtils } from '@/shared/utils/cookie'
+import { siteMetadata } from '@/shared/constants/metadata'
+import { Language } from '@/shared/types'
 
-export const metadata: Metadata = {
-	title: 'Login'
+export async function generateMetadata(): Promise<Metadata> {
+	const headersList = await headers()
+	const cookieHeader = headersList.get('cookie')
+	const language = cookieUtils.getLanguageFromCookie(cookieHeader || undefined)
+
+	const metadata = siteMetadata[language] || siteMetadata[Language.EN]
+
+	return {
+		title: metadata.loginTitle
+	}
 }
 
 type Props = {}

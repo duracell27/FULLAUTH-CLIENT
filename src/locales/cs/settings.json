@@ -353,5 +353,17 @@
   "expensePhoto": "Fotografie výdaje",
   "allSettledUp": "Vše vyrovnáno!",
   "allSettledUpDescription": "Nikomu nic nedlužíte a nikdo nic nedluží vám.",
-  "simplificationAdded": "Přidáno zjednodušení pro skupiny. Nyní všechny skupiny mají optimalizovaný počet plateb mezi členy."
+  "simplificationAdded": "Přidáno zjednodušení pro skupiny. Nyní všechny skupiny mají optimalizovaný počet plateb mezi členy.",
+  "splitTypeInfoTitle": "Typy rozdělení výdajů",
+  "splitTypeInfoDescription": "Vyberte, jak chcete rozdělit výdaj mezi účastníky",
+  "splitTypeEqualTitle": "Rovnoměrně",
+  "splitTypeEqualDescription": "Výdaj je rozdělen rovnoměrně mezi všechny vybrané účastníky. Každý platí stejnou částku.",
+  "splitTypeCustomTitle": "Vlastní rozdělení",
+  "splitTypeCustomDescription": "Ručně určíte přesnou částku pro každého účastníka. Součet všech podílů se musí rovnat celkové částce výdaje.",
+  "splitTypePercentageTitle": "Podle procent",
+  "splitTypePercentageDescription": "Výdaj je rozdělen podle procent, která určíte pro každého účastníka. Součet všech procent se musí rovnat 100%.",
+  "splitTypeSharesTitle": "Podle podílů",
+  "splitTypeSharesDescription": "Výdaj je rozdělen úměrně počtu podílů každého účastníka. Například pokud má jeden účastník 2 podíly a druhý 1, první zaplatí dvakrát tolik.",
+  "splitTypeExtraTitle": "Extra",
+  "splitTypeExtraDescription": "Nejprve je výdaj rozdělen rovnoměrně mezi všechny. Poté můžete přidat další částky pro jednotlivé účastníky. Zbývající účastníci automaticky platí méně, aby celková částka zůstala stejná. Příklad: výdaj 600 pro 2 osoby, jedna přidá 50 - platí 350, druhá 250."
 }

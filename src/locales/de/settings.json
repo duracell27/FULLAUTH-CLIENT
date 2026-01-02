@@ -353,5 +353,17 @@
   "expensePhoto": "Ausgabenfoto",
   "allSettledUp": "Alles beglichen!",
   "allSettledUpDescription": "Sie schulden niemandem etwas und niemand schuldet Ihnen etwas.",
-  "simplificationAdded": "Vereinfachung für Gruppen hinzugefügt. Jetzt ist die Anzahl der Zahlungen zwischen Mitgliedern in allen Gruppen optimiert."
+  "simplificationAdded": "Vereinfachung für Gruppen hinzugefügt. Jetzt ist die Anzahl der Zahlungen zwischen Mitgliedern in allen Gruppen optimiert.",
+  "splitTypeInfoTitle": "Ausgabenaufteilungsarten",
+  "splitTypeInfoDescription": "Wählen Sie, wie Sie die Ausgabe unter den Teilnehmern aufteilen möchten",
+  "splitTypeEqualTitle": "Gleichmäßig",
+  "splitTypeEqualDescription": "Die Ausgabe wird gleichmäßig auf alle ausgewählten Teilnehmer aufgeteilt. Jeder zahlt den gleichen Betrag.",
+  "splitTypeCustomTitle": "Benutzerdefinierte Aufteilung",
+  "splitTypeCustomDescription": "Sie geben manuell den genauen Betrag für jeden Teilnehmer an. Die Summe aller Anteile muss dem Gesamtausgabenbetrag entsprechen.",
+  "splitTypePercentageTitle": "Nach Prozentsatz",
+  "splitTypePercentageDescription": "Die Ausgabe wird nach Prozentsätzen aufgeteilt, die Sie für jeden Teilnehmer angeben. Die Summe aller Prozentsätze muss 100% betragen.",
+  "splitTypeSharesTitle": "Nach Anteilen",
+  "splitTypeSharesDescription": "Die Ausgabe wird proportional zur Anzahl der Anteile jedes Teilnehmers aufgeteilt. Wenn beispielsweise ein Teilnehmer 2 Anteile und ein anderer 1 hat, zahlt der erste doppelt so viel.",
+  "splitTypeExtraTitle": "Extra",
+  "splitTypeExtraDescription": "Zuerst wird die Ausgabe gleichmäßig auf alle aufgeteilt. Dann können Sie zusätzliche Beträge für einzelne Teilnehmer hinzufügen. Die übrigen Teilnehmer zahlen automatisch weniger, damit der Gesamtbetrag gleich bleibt. Beispiel: Ausgabe 600 für 2 Personen, eine fügt 50 hinzu - sie zahlt 350, die andere 250."
 }

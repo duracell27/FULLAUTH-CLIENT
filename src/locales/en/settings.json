@@ -353,5 +353,17 @@
   "expensePhoto": "Expense Photo",
   "allSettledUp": "All settled up!",
   "allSettledUpDescription": "You don't owe anyone and no one owes you.",
-  "simplificationAdded": "Added simplification for groups. Now all groups have optimized number of payments between members."
+  "simplificationAdded": "Added simplification for groups. Now all groups have optimized number of payments between members.",
+  "splitTypeInfoTitle": "Expense Split Types",
+  "splitTypeInfoDescription": "Choose how you want to split the expense among participants",
+  "splitTypeEqualTitle": "Equally",
+  "splitTypeEqualDescription": "The expense is divided equally among all selected participants. Everyone pays the same amount.",
+  "splitTypeCustomTitle": "Custom Split",
+  "splitTypeCustomDescription": "You manually specify the exact amount for each participant. The sum of all shares must equal the total expense amount.",
+  "splitTypePercentageTitle": "By Percentage",
+  "splitTypePercentageDescription": "The expense is split by percentages you specify for each participant. The sum of all percentages must equal 100%.",
+  "splitTypeSharesTitle": "By Shares",
+  "splitTypeSharesDescription": "The expense is split proportionally to the number of shares each participant has. For example, if one participant has 2 shares and another has 1, the first will pay twice as much.",
+  "splitTypeExtraTitle": "Extra",
+  "splitTypeExtraDescription": "First, the expense is divided equally among everyone. Then you can add extra amounts for individual participants. The remaining participants automatically pay less so the total amount stays the same. Example: expense 600 for 2 people, one adds 50 - they pay 350, the other 250."
 }

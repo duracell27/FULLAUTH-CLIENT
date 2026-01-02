@@ -2,15 +2,40 @@ import type { Metadata } from 'next'
 import { MainProvider } from '@/shared/providers'
 import { Outfit } from 'next/font/google'
 import { GoogleAnalytics } from '@next/third-parties/google'
+import { headers } from 'next/headers'
+import { cookieUtils } from '@/shared/utils/cookie'
+import { siteMetadata } from '@/shared/constants/metadata'
+import { Language } from '@/shared/types'
 import '@/shared/styles/globals.css'
 
-export const metadata: Metadata = {
-	title: {
-		absolute: 'Lendower',
-		template: '%s | Lendower'
-	},
-	description:
-		'Lendower — a handy app for calculating debts from shared trips, cafe visits, or group expenses. Easily track who owes whom!'
+export async function generateMetadata(): Promise<Metadata> {
+	const headersList = await headers()
+	const cookieHeader = headersList.get('cookie')
+	const language = cookieUtils.getLanguageFromCookie(cookieHeader || undefined)
+
+	const metadata = siteMetadata[language] || siteMetadata[Language.EN]
+
+	return {
+		title: {
+			absolute: metadata.title,
+			template: `%s | ${metadata.title}`
+		},
+		description: metadata.description,
+		alternates: {
+			languages: {
+				'en': 'https://lendower.com',
+				'uk': 'https://lendower.com',
+				'de': 'https://lendower.com',
+				'es': 'https://lendower.com',
+				'fr': 'https://lendower.com',
+				'cs': 'https://lendower.com',
+				'pl': 'https://lendower.com',
+				'tr': 'https://lendower.com',
+				'hi': 'https://lendower.com',
+				'zh': 'https://lendower.com'
+			}
+		}
+	}
 }
 
 const outfit = Outfit({

@@ -353,5 +353,17 @@
   "expensePhoto": "Photo de la dépense",
   "allSettledUp": "Tout est réglé!",
   "allSettledUpDescription": "Vous ne devez rien à personne et personne ne vous doit rien.",
-  "simplificationAdded": "Simplification ajoutée pour les groupes. Maintenant, tous les groupes ont un nombre optimisé de paiements entre membres."
+  "simplificationAdded": "Simplification ajoutée pour les groupes. Maintenant, tous les groupes ont un nombre optimisé de paiements entre membres.",
+  "splitTypeInfoTitle": "Types de répartition des dépenses",
+  "splitTypeInfoDescription": "Choisissez comment vous souhaitez répartir la dépense entre les participants",
+  "splitTypeEqualTitle": "Également",
+  "splitTypeEqualDescription": "La dépense est divisée également entre tous les participants sélectionnés. Tout le monde paie le même montant.",
+  "splitTypeCustomTitle": "Répartition personnalisée",
+  "splitTypeCustomDescription": "Vous spécifiez manuellement le montant exact pour chaque participant. La somme de toutes les parts doit être égale au montant total de la dépense.",
+  "splitTypePercentageTitle": "Par pourcentage",
+  "splitTypePercentageDescription": "La dépense est répartie par pourcentages que vous spécifiez pour chaque participant. La somme de tous les pourcentages doit être égale à 100%.",
+  "splitTypeSharesTitle": "Par parts",
+  "splitTypeSharesDescription": "La dépense est répartie proportionnellement au nombre de parts de chaque participant. Par exemple, si un participant a 2 parts et un autre en a 1, le premier paiera deux fois plus.",
+  "splitTypeExtraTitle": "Extra",
+  "splitTypeExtraDescription": "D'abord, la dépense est divisée également entre tous. Ensuite, vous pouvez ajouter des montants supplémentaires pour des participants individuels. Les participants restants paient automatiquement moins pour que le montant total reste le même. Exemple: dépense de 600 pour 2 personnes, l'une ajoute 50 - elle paie 350, l'autre 250."
 }

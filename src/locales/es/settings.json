@@ -353,5 +353,17 @@
   "expensePhoto": "Foto del gasto",
   "allSettledUp": "¡Todo saldado!",
   "allSettledUpDescription": "No le debes a nadie y nadie te debe a ti.",
-  "simplificationAdded": "Se agregó simplificación para grupos. Ahora todos los grupos tienen un número optimizado de pagos entre miembros."
+  "simplificationAdded": "Se agregó simplificación para grupos. Ahora todos los grupos tienen un número optimizado de pagos entre miembros.",
+  "splitTypeInfoTitle": "Tipos de división de gastos",
+  "splitTypeInfoDescription": "Elija cómo desea dividir el gasto entre los participantes",
+  "splitTypeEqualTitle": "Igualmente",
+  "splitTypeEqualDescription": "El gasto se divide equitativamente entre todos los participantes seleccionados. Todos pagan la misma cantidad.",
+  "splitTypeCustomTitle": "División personalizada",
+  "splitTypeCustomDescription": "Usted especifica manualmente la cantidad exacta para cada participante. La suma de todas las partes debe ser igual al monto total del gasto.",
+  "splitTypePercentageTitle": "Por porcentaje",
+  "splitTypePercentageDescription": "El gasto se divide por porcentajes que usted especifica para cada participante. La suma de todos los porcentajes debe ser igual al 100%.",
+  "splitTypeSharesTitle": "Por partes",
+  "splitTypeSharesDescription": "El gasto se divide proporcionalmente al número de partes que tiene cada participante. Por ejemplo, si un participante tiene 2 partes y otro tiene 1, el primero pagará el doble.",
+  "splitTypeExtraTitle": "Extra",
+  "splitTypeExtraDescription": "Primero, el gasto se divide equitativamente entre todos. Luego puede agregar cantidades adicionales para participantes individuales. Los participantes restantes pagan automáticamente menos para que el monto total permanezca igual. Ejemplo: gasto de 600 para 2 personas, una agrega 50 - paga 350, la otra 250."
 }

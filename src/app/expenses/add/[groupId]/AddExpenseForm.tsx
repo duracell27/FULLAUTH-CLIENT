@@ -963,70 +963,51 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 											<DialogContent className='max-w-[500px]'>
 												<DialogHeader>
 													<DialogTitle>
-														Типи розподілу витрат
+														{t('splitTypeInfoTitle')}
 													</DialogTitle>
 													<DialogDescription>
-														Оберіть спосіб, як ви хочете розподілити
-														витрату між учасниками
+														{t('splitTypeInfoDescription')}
 													</DialogDescription>
 												</DialogHeader>
 												<div className='space-y-4 mt-4'>
 													<div>
 														<h4 className='font-semibold text-sm mb-1'>
-															Рівномірно
+															{t('splitTypeEqualTitle')}
 														</h4>
 														<p className='text-sm text-muted-foreground'>
-															Витрата розподіляється порівну між
-															всіма обраними учасниками. Кожен
-															платить однакову суму.
+															{t('splitTypeEqualDescription')}
 														</p>
 													</div>
 													<div>
 														<h4 className='font-semibold text-sm mb-1'>
-															Власний розподіл
+															{t('splitTypeCustomTitle')}
 														</h4>
 														<p className='text-sm text-muted-foreground'>
-															Ви вручну вказуєте точну суму для
-															кожного учасника. Сума всіх часток
-															повинна дорівнювати загальній сумі
-															витрати.
+															{t('splitTypeCustomDescription')}
 														</p>
 													</div>
 													<div>
 														<h4 className='font-semibold text-sm mb-1'>
-															За відсотками
+															{t('splitTypePercentageTitle')}
 														</h4>
 														<p className='text-sm text-muted-foreground'>
-															Витрата розподіляється за відсотками,
-															які ви вказуєте для кожного учасника.
-															Сума всіх відсотків має дорівнювати
-															100%.
+															{t('splitTypePercentageDescription')}
 														</p>
 													</div>
 													<div>
 														<h4 className='font-semibold text-sm mb-1'>
-															За частками
+															{t('splitTypeSharesTitle')}
 														</h4>
 														<p className='text-sm text-muted-foreground'>
-															Витрата розподіляється пропорційно до
-															кількості часток кожного учасника.
-															Наприклад, якщо один учасник має 2
-															частки, а інший 1, перший заплатить
-															вдвічі більше.
+															{t('splitTypeSharesDescription')}
 														</p>
 													</div>
 													<div>
 														<h4 className='font-semibold text-sm mb-1'>
-															Додатково
+															{t('splitTypeExtraTitle')}
 														</h4>
 														<p className='text-sm text-muted-foreground'>
-															Спочатку витрата ділиться рівномірно між
-															усіма. Потім для окремих учасників можна
-															додати додаткові суми. Решта учасників
-															автоматично платять менше, щоб загальна
-															сума залишалась незмінною. Приклад: витрата
-															600 на 2 людей, одна додає 50 - вона платить
-															350, інша 250.
+															{t('splitTypeExtraDescription')}
 														</p>
 													</div>
 												</div>

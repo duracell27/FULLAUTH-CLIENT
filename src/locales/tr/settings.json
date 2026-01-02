@@ -353,5 +353,17 @@
   "expensePhoto": "Harcama Fotoğrafı",
   "allSettledUp": "Hepsi ödendi!",
   "allSettledUpDescription": "Kimseye borçlu değilsiniz ve kimse size borçlu değil.",
-  "simplificationAdded": "Gruplar için basitleştirme eklendi. Artık tüm gruplarda üyeler arasındaki ödeme sayısı optimize edildi."
+  "simplificationAdded": "Gruplar için basitleştirme eklendi. Artık tüm gruplarda üyeler arasındaki ödeme sayısı optimize edildi.",
+  "splitTypeInfoTitle": "Bölme Türleri",
+  "splitTypeInfoDescription": "Her gider bölme türünün nasıl çalıştığını anlayın",
+  "splitTypeEqualTitle": "Eşit",
+  "splitTypeEqualDescription": "Gider tüm katılımcılar arasında eşit olarak bölünür. Örneğin: 3 kişi için 600₺ = her biri 200₺",
+  "splitTypeCustomTitle": "Özel",
+  "splitTypeCustomDescription": "Her katılımcı için belirli tutarları manuel olarak belirleyin. Özel tutarların toplamı toplam tutara eşit olmalıdır.",
+  "splitTypePercentageTitle": "Yüzde",
+  "splitTypePercentageDescription": "Her katılımcıya giderin yüzdesini tahsis edin. Yüzdelerin toplamı tam olarak %100 olmalıdır.",
+  "splitTypeSharesTitle": "Paylar",
+  "splitTypeSharesDescription": "Her katılımcı için payları belirleyin. Toplam tutar toplam pay sayısına göre bölünür. Örneğin: 600₺, paylar 1,1,2 = 150₺, 150₺, 300₺",
+  "splitTypeExtraTitle": "Ekstra",
+  "splitTypeExtraDescription": "Bazı katılımcılar için ekstra bir tutar ekleyin. Örneğin: 2 kişi için 600₺, birine +50₺ ekstra = 350₺ (300₺+50₺) ve 250₺"
 }

@@ -353,5 +353,17 @@
   "expensePhoto": "费用照片",
   "allSettledUp": "全部结清！",
   "allSettledUpDescription": "您不欠任何人，也没有人欠您。",
-  "simplificationAdded": "为群组添加了简化功能。现在所有群组的成员之间的支付数量都已优化。"
+  "simplificationAdded": "为群组添加了简化功能。现在所有群组的成员之间的支付数量都已优化。",
+  "splitTypeInfoTitle": "分割类型",
+  "splitTypeInfoDescription": "了解每种费用分割类型如何工作",
+  "splitTypeEqualTitle": "平均",
+  "splitTypeEqualDescription": "费用在所有参与者之间平均分配。例如：3人分¥600 = 每人¥200",
+  "splitTypeCustomTitle": "自定义",
+  "splitTypeCustomDescription": "为每个参与者手动指定具体金额。自定义金额的总和必须等于总金额。",
+  "splitTypePercentageTitle": "百分比",
+  "splitTypePercentageDescription": "为每个参与者分配费用的百分比。百分比的总和必须恰好为100%。",
+  "splitTypeSharesTitle": "份额",
+  "splitTypeSharesDescription": "为每个参与者指定份额。总金额除以总份额数。例如：¥600，份额1,1,2 = ¥150, ¥150, ¥300",
+  "splitTypeExtraTitle": "额外",
+  "splitTypeExtraDescription": "为某些参与者添加额外金额。例如：2人分¥600，一人+¥50额外 = ¥350（¥300+¥50）和¥250"
 }

@@ -353,5 +353,17 @@
   "expensePhoto": "Zdjęcie wydatku",
   "allSettledUp": "Wszystko wyrównane!",
   "allSettledUpDescription": "Nikomu nic nie jesteś winien i nikt nic nie jest Ci winien.",
-  "simplificationAdded": "Dodano uproszczenie dla grup. Teraz wszystkie grupy mają zoptymalizowaną liczbę płatności między członkami."
+  "simplificationAdded": "Dodano uproszczenie dla grup. Teraz wszystkie grupy mają zoptymalizowaną liczbę płatności między członkami.",
+  "splitTypeInfoTitle": "Typy podziału wydatków",
+  "splitTypeInfoDescription": "Wybierz, jak chcesz podzielić wydatek między uczestników",
+  "splitTypeEqualTitle": "Równo",
+  "splitTypeEqualDescription": "Wydatek jest dzielony równo między wszystkich wybranych uczestników. Każdy płaci taką samą kwotę.",
+  "splitTypeCustomTitle": "Niestandardowy podział",
+  "splitTypeCustomDescription": "Ręcznie określasz dokładną kwotę dla każdego uczestnika. Suma wszystkich udziałów musi być równa całkowitej kwocie wydatku.",
+  "splitTypePercentageTitle": "Według procentów",
+  "splitTypePercentageDescription": "Wydatek jest dzielony według procentów, które określasz dla każdego uczestnika. Suma wszystkich procentów musi wynosić 100%.",
+  "splitTypeSharesTitle": "Według udziałów",
+  "splitTypeSharesDescription": "Wydatek jest dzielony proporcjonalnie do liczby udziałów każdego uczestnika. Na przykład, jeśli jeden uczestnik ma 2 udziały, a drugi 1, pierwszy zapłaci dwa razy więcej.",
+  "splitTypeExtraTitle": "Dodatkowe",
+  "splitTypeExtraDescription": "Najpierw wydatek jest dzielony równo między wszystkich. Następnie możesz dodać dodatkowe kwoty dla poszczególnych uczestników. Pozostali uczestnicy automatycznie płacą mniej, aby całkowita kwota pozostała taka sama. Przykład: wydatek 600 dla 2 osób, jedna dodaje 50 - płaci 350, druga 250."
 }
