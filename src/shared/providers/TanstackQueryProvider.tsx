@@ -2,12 +2,12 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { authService } from '../services'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
-
 import { usePathname } from 'next/navigation'
+import { useTranslations } from '../hooks'
 
 export function TanstackQueryProvider({
 	children
@@ -16,6 +16,7 @@ export function TanstackQueryProvider({
 }) {
 	const router = useRouter()
 	const pathname = usePathname()
+	const { t } = useTranslations()
 
 	const [client] = useState(
 		() => {
@@ -30,8 +31,13 @@ export function TanstackQueryProvider({
 			},
 		})
 
+		return queryClient
+	}
+	)
+
+	useEffect(() => {
 		// Глобальна обробка помилок
-		queryClient.getQueryCache().subscribe((event) => {
+		const unsubscribe = client.getQueryCache().subscribe((event) => {
 			if (event?.type === 'updated') {
 				const query = event.query
 				const state = query.state
@@ -43,20 +49,27 @@ export function TanstackQueryProvider({
 					if (error?.statusCode === 401 && pathname !== '/') {
 						// Перевіряємо чи користувач не знаходиться на сторінках auth
 						const isAuthPage = pathname.startsWith('/auth/')
-						
+
 						if (!isAuthPage) {
 							authService.logout()
 							router.push('/auth/login')
-							toast.error('Please login again')
+							toast.error(t('pleaseLoginAgain'), {
+							action: {
+								label: t('login'),
+								onClick: () => router.push('/auth/login')
+							}
+						})
 						}
 					}
 				}
 			}
 		})
 
-		return queryClient
-	}
-	)
+		return () => {
+			unsubscribe()
+		}
+	}, [client, pathname, router, t])
+
 	return (
 		<QueryClientProvider client={client}>
 			{children}
