@@ -26,7 +26,13 @@ import {
 	Popover,
 	PopoverTrigger,
 	PopoverContent,
-	Calendar
+	Calendar,
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogDescription,
+	DialogTrigger
 } from '@/shared/componets/ui'
 import { BackButton } from '@/shared/componets/ui/BackButton'
 import {
@@ -51,6 +57,7 @@ import { formatBalance } from '@/shared/utils/formatBalance'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { formatDate } from '@/shared/utils'
 import { CalendarIcon } from 'lucide-react'
+import { FaInfoCircle } from 'react-icons/fa'
 
 import React, { useEffect, useRef, useState } from 'react'
 import { useForm, useFieldArray } from 'react-hook-form'
@@ -533,37 +540,27 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 			return
 		}
 
-		// При extraAmount зазвичай є базова сума (рівний розподіл) + додаткові суми
-		const sumOfExtraAmounts = debtors.reduce(
-			(acc, curr) => acc + parseFloat(curr.extraAmount || '0'),
-			0
-		)
+		// Рахуємо скільки коштує кожен вибраний учасник (базова частка + додатково)
+		// Базова частка для всіх = totalAmount / загальна кількість членів групи
+		const totalMembersCount = group?.members?.length || 0
+		if (totalMembersCount === 0) return
 
-		// Базова сума розподіляється рівно між усіма
-		const baseAmountPerPerson =
-			(totalAmount - sumOfExtraAmounts) / debtors.length
+		const baseShare = totalAmount / totalMembersCount
+		let totalSelectedAmount = 0
 
-		if (debtors.length === 0) {
+		debtors.forEach(debtor => {
+			const extraAmount = parseFloat(debtor.extraAmount || '0')
+			totalSelectedAmount += baseShare + extraAmount
+		})
+
+		// Перевіряємо чи сума вибраних не перевищує загальну суму
+		if (totalSelectedAmount > totalAmount) {
 			if (!isLoadingTranslations) {
 				form.setError('debtors', {
 					type: 'manual',
-					message: t('addAtLeastOneDebtor')
-				})
-			}
-		} else if (baseAmountPerPerson < 0) {
-			if (!isLoadingTranslations) {
-				form.setError('debtors', {
-					type: 'manual',
-					message: `${t('extraAmountsExceedTotalExpense')} (${sumOfExtraAmounts.toFixed(
-						2
-					)}) exceed total expense (${totalAmount})`
-				})
-			}
-		} else if (sumOfExtraAmounts > totalAmount) {
-			if (!isLoadingTranslations) {
-				form.setError('debtors', {
-					type: 'manual',
-					message: t('sumOfExtraAmountsMustBeLessThanExpenseSum')
+					message: `${t('sumOfExtraAmountsMustBeLessThanExpenseSum')} (${formatBalance(
+						totalSelectedAmount
+					)} > ${formatBalance(totalAmount)})`
 				})
 			}
 		} else {
@@ -952,7 +949,90 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 							}
 							render={({ field }) => (
 								<FormItem className='w-full'>
-									<FormLabel>{t('splitType')}</FormLabel>
+									<div className='flex items-center gap-2'>
+										<FormLabel>{t('splitType')}</FormLabel>
+										<Dialog>
+											<DialogTrigger asChild>
+												<button
+													type='button'
+													className='text-muted-foreground hover:text-foreground transition-colors'
+												>
+													<FaInfoCircle className='h-4 w-4' />
+												</button>
+											</DialogTrigger>
+											<DialogContent className='max-w-[500px]'>
+												<DialogHeader>
+													<DialogTitle>
+														Типи розподілу витрат
+													</DialogTitle>
+													<DialogDescription>
+														Оберіть спосіб, як ви хочете розподілити
+														витрату між учасниками
+													</DialogDescription>
+												</DialogHeader>
+												<div className='space-y-4 mt-4'>
+													<div>
+														<h4 className='font-semibold text-sm mb-1'>
+															Рівномірно
+														</h4>
+														<p className='text-sm text-muted-foreground'>
+															Витрата розподіляється порівну між
+															всіма обраними учасниками. Кожен
+															платить однакову суму.
+														</p>
+													</div>
+													<div>
+														<h4 className='font-semibold text-sm mb-1'>
+															Власний розподіл
+														</h4>
+														<p className='text-sm text-muted-foreground'>
+															Ви вручну вказуєте точну суму для
+															кожного учасника. Сума всіх часток
+															повинна дорівнювати загальній сумі
+															витрати.
+														</p>
+													</div>
+													<div>
+														<h4 className='font-semibold text-sm mb-1'>
+															За відсотками
+														</h4>
+														<p className='text-sm text-muted-foreground'>
+															Витрата розподіляється за відсотками,
+															які ви вказуєте для кожного учасника.
+															Сума всіх відсотків має дорівнювати
+															100%.
+														</p>
+													</div>
+													<div>
+														<h4 className='font-semibold text-sm mb-1'>
+															За частками
+														</h4>
+														<p className='text-sm text-muted-foreground'>
+															Витрата розподіляється пропорційно до
+															кількості часток кожного учасника.
+															Наприклад, якщо один учасник має 2
+															частки, а інший 1, перший заплатить
+															вдвічі більше.
+														</p>
+													</div>
+													<div>
+														<h4 className='font-semibold text-sm mb-1'>
+															Додатково
+														</h4>
+														<p className='text-sm text-muted-foreground'>
+															Спочатку витрата ділиться рівномірно між
+															усіма. Потім для окремих учасників можна
+															додати додаткові суми. Решта учасників
+															автоматично платять менше, щоб загальна
+															сума залишалась незмінною. Приклад: витрата
+															600 на 2 людей, одна додає 50 - вона платить
+															350, інша 250.
+														</p>
+													</div>
+												</div>
+											</DialogContent>
+										</Dialog>
+									</div>
 									<FormControl className='w-full'>
 										<Select
 											onValueChange={
@@ -1267,20 +1347,33 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 
 										// Для EXTRA режиму рахуємо завжди (навіть якщо не вибрано)
 										if (debtorMode === 'EXTRA') {
-											const allExtraDebtors = form.watch('debtors') || []
-											// 1. Сумуємо всі додаткові суми
-											const totalExtraAmounts = allExtraDebtors.reduce((sum: number, d: any) => sum + parseFloat(d.extraAmount || '0'), 0)
-											// 2. Віднімаємо від загальної суми
-											const remainingAmount = totalAmount - totalExtraAmounts
-											// 3. Ділимо залишок на ВСІХ членів групи (не тільки вибраних!)
 											const totalMembersCount = group.members.length
-											const baseShare = totalMembersCount > 0 ? remainingAmount / totalMembersCount : 0
+											const baseShare = totalMembersCount > 0 ? totalAmount / totalMembersCount : 0
 
-											// 4. Отримуємо додаткову суму користувача (якщо вибраний)
-											const userExtraAmount = isSelected ? parseFloat(form.watch(`debtors.${fieldIndex}.extraAmount`) || '0') : 0
+											if (isSelected) {
+												// Для вибраних: базова частка + додаткова сума
+												const userExtraAmount = parseFloat(form.watch(`debtors.${fieldIndex}.extraAmount`) || '0')
+												calculatedShare = baseShare + userExtraAmount
+											} else {
+												// Для невибраних: (загальна сума - сума всіх вибраних) / кількість невибраних
+												const allDebtors = form.watch('debtors') || []
+												const selectedCount = allDebtors.length
+												const unselectedCount = totalMembersCount - selectedCount
 
-											// 5. Фінальна сума = базова частка + додаткова сума
-											calculatedShare = baseShare + userExtraAmount
+												if (unselectedCount > 0) {
+													// Рахуємо суму всіх вибраних
+													let totalSelectedAmount = 0
+													allDebtors.forEach((debtor: any) => {
+														const extraAmount = parseFloat(debtor.extraAmount || '0')
+														totalSelectedAmount += baseShare + extraAmount
+													})
+
+													// Ділимо залишок на невибраних
+													calculatedShare = (totalAmount - totalSelectedAmount) / unselectedCount
+												} else {
+													calculatedShare = baseShare
+												}
+											}
 										} else if (isSelected) {
 											// Для інших режимів рахуємо тільки якщо вибрано
 											switch (debtorMode) {
