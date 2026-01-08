@@ -112,6 +112,7 @@
 
 
 :root {
+  --page-background: #debbfe;
   --background: oklch(0.9730 0.0133 286.1503);
   --foreground: oklch(0.2937 0.0680 281.3759);
   --card: oklch(1.0000 0 0);
@@ -164,6 +165,7 @@
 }
 
 .dark {
+  --page-background: #9d7dd8;
   --background: oklch(0.1874 0.0343 282.5848);
   --foreground: oklch(0.9137 0.0312 285.7670);
   --card: oklch(0.2227 0.0462 281.9865);

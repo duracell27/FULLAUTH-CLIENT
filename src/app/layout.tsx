@@ -59,8 +59,7 @@ export default function RootLayout({
 				></script>
 			</head>
 			<body
-				className='bg-cover bg-fixed'
-				style={{ backgroundImage: "url('/images/bg6.png')" }}
+				style={{ backgroundColor: "var(--page-background)" }}
 			>
 				<div className='flex min-h-screen w-full justify-center'>
 					<div className='w-full mx-2 max-w-[400px] relative'>

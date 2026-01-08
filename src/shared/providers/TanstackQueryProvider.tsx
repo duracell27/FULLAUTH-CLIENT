@@ -98,13 +98,12 @@ export function TanstackQueryProvider({
 
 						if (!isAuthPage) {
 							authService.logout()
-							router.push('/auth/login')
 							toast.error(t('pleaseLoginAgain'), {
-							action: {
-								label: t('login'),
-								onClick: () => router.push('/auth/login')
-							}
-						})
+								action: {
+									label: t('login'),
+									onClick: () => router.push('/auth/login')
+								}
+							})
 						}
 					}
 				}
