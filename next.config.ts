@@ -1,17 +1,7 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-	
-	experimental: {
-		serverActions: {
-			allowedOrigins: [
-				'lendower.com',
-				'www.lendower.com',
-				'api.lendower.com',
-				'localhost:3000'
-			]
-		}
-	},
+
 	env: {
 		SERVER_URL: process.env.SERVER_URL,
 		SERVER_PATH: process.env.SERVER_PATH,

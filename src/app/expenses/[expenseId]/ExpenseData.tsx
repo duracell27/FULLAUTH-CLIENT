@@ -109,7 +109,7 @@ const ExpenseData = ({ expenseId }: Props) => {
 											<Eye />
 										</div>
 									</DialogTrigger>
-									<DialogContent className='w-[90vw] max-w-none'>
+									<DialogContent className='w-[90vw] max-w-none rounded-md'>
 										<Image
 											src={expense.photoUrl || ''}
 											alt=''
@@ -118,9 +118,9 @@ const ExpenseData = ({ expenseId }: Props) => {
 											sizes='100vw'
 											style={{
 												width: '100%',
-
 												height: 'auto',
-												borderRadius: '8px'
+												maxHeight: '75vh',
+												objectFit: 'contain'
 											}}
 										/>
 									</DialogContent>

@@ -275,7 +275,7 @@ export const GroupData = ({ groupId }: Props) => {
 											<Eye />
 										</div>
 									</DialogTrigger>
-									<DialogContent className='w-[90vw] max-w-none'>
+									<DialogContent className='w-[90vw] max-w-none rounded-md'>
 										<Image
 											src={group.avatarUrl || ''}
 											alt=''
@@ -284,9 +284,9 @@ export const GroupData = ({ groupId }: Props) => {
 											sizes='100vw'
 											style={{
 												width: '100%',
-
 												height: 'auto',
-												borderRadius: '8px'
+												maxHeight: '75vh',
+												objectFit: 'contain'
 											}}
 										/>
 									</DialogContent>
@@ -902,7 +902,7 @@ export const GroupData = ({ groupId }: Props) => {
 												</AvatarFallback>
 											</Avatar>
 										</DialogTrigger>
-										<DialogContent className='w-[90vw] max-w-none'>
+										<DialogContent className='w-[90vw] max-w-none rounded-md'>
 											{expense.photoUrl ? (
 												<Image
 													src={expense.photoUrl}
@@ -912,9 +912,9 @@ export const GroupData = ({ groupId }: Props) => {
 													sizes='100vw'
 													style={{
 														width: '100%',
-
 														height: 'auto',
-														borderRadius: '8px'
+														maxHeight: '75vh',
+														objectFit: 'contain'
 													}}
 												/>
 											) : (
