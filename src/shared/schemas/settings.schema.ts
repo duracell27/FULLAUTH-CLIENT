@@ -9,7 +9,8 @@ export const createSettingsSchema = (t: (key: string) => string) => {
 		name: z.string().min(1, {
 			message: t('nameRequired')
 		}),
-		isTwoFactorEnabled: z.boolean()
+		isTwoFactorEnabled: z.boolean(),
+		picture: z.string().optional()
 	})
 }
 
@@ -21,7 +22,8 @@ export const settingsSchema = z.object({
 	name: z.string().min(1, {
 		message: 'Name is required'
 	}),
-	isTwoFactorEnabled: z.boolean()
+	isTwoFactorEnabled: z.boolean(),
+	picture: z.string().optional()
 })
 
 export type TypeSettingsSchema = z.infer<typeof settingsSchema>
