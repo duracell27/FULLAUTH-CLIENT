@@ -23,7 +23,6 @@ export function useProfile() {
             const currentCookieLanguage = cookieUtils.getLanguage()
             // Якщо мова в профілі відрізняється від мови в cookie, оновлюємо cookie
             if (currentCookieLanguage !== user.language) {
-                console.log('[useProfile] Syncing user language to cookie:', user.language)
                 cookieUtils.setLanguage(user.language)
             }
         }

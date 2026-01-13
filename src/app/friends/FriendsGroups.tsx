@@ -309,7 +309,7 @@ export const FriendsGroups = (props: Props) => {
 				
 				// Показуємо тільки якщо персональної групи ще немає
 				return !hasPersonalGroup
-			}).length > 0 && (
+			}).length > 0 ? (
 				<Card className=''>
 					<CardHeader>
 						<CardTitle>{t('friendsToInvite')}</CardTitle>
@@ -374,6 +374,23 @@ export const FriendsGroups = (props: Props) => {
 								</li>
 							))}
 						</ul>
+					</CardContent>
+				</Card>
+			) : friendsData?.friends.length > 0 && (
+				<Card className=''>
+					<CardHeader>
+						<CardTitle>{t('friendsToInvite')}</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<div className='text-center text-muted-foreground py-4'>
+							<Users className='mx-auto h-12 w-12 text-muted-foreground mb-4' />
+							<p className='font-medium'>{t('allFriendsInvited')}</p>
+							<Link href='/dashboard/settings/friends'>
+								<Button className='mt-4'>
+									{t('addFriends')}
+								</Button>
+							</Link>
+						</div>
 					</CardContent>
 				</Card>
 			)}

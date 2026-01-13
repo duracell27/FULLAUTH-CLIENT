@@ -28,8 +28,8 @@ const languageOptions = [
 
 export function LanguageSwitcher() {
   const { user, isLoadingProfile } = useProfile()
-  const { t: tHome, changeLanguage: changeLanguageHome, currentLanguage: currentLanguageHome, isLoading: isLoadingHome } = useTranslationsHome()
-  const { t: tAuth, isLoading: isLoadingAuth } = useTranslations()
+  const { changeLanguage: changeLanguageHome, currentLanguage: currentLanguageHome, isLoading: isLoadingHome } = useTranslationsHome()
+  const { isLoading: isLoadingAuth } = useTranslations()
   const { changeLanguage: changeLanguageMutation, isLoadingChangeLanguage } = useChangeLanguageMutation()
 
   // Визначаємо, чи залогінений користувач
@@ -37,20 +37,15 @@ export function LanguageSwitcher() {
 
   // Для залогіненого користувача отримуємо поточну мову з профілю
   const currentLanguage = isLoggedIn ? (user?.language || Language.EN) : (currentLanguageHome || Language.EN)
-  const t = isLoggedIn ? tAuth : tHome
   const isLoading = isLoggedIn ? isLoadingAuth : isLoadingHome
 
   // Функція зміни мови
   const handleLanguageChange = (language: Language) => {
-    console.log('[LanguageSwitcher] handleLanguageChange called with:', language)
-    console.log('[LanguageSwitcher] isLoggedIn:', isLoggedIn)
     if (isLoggedIn) {
       // Якщо залогінений - викликаємо мутацію для зміни мови на бекенді
-      console.log('[LanguageSwitcher] Calling changeLanguageMutation')
       changeLanguageMutation({ values: { language } })
     } else {
       // Якщо не залогінений - тільки змінюємо мову в куках
-      console.log('[LanguageSwitcher] Calling changeLanguageHome')
       changeLanguageHome(language)
     }
   }

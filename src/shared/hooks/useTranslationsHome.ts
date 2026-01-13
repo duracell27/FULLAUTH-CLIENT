@@ -95,24 +95,19 @@ export function useTranslationsHome() {
         if (!hasLanguageCookie) {
           // Якщо cookie немає - визначаємо мову з браузера
           const browserLanguage = getBrowserLanguage()
-          console.log('[useTranslationsHome] No cookie found, detected browser language:', browserLanguage)
           languageToUse = browserLanguage
           // Встановлюємо cookie для наступних візитів
           cookieUtils.setLanguage(browserLanguage)
         } else {
           // Якщо cookie є - використовуємо його
           languageToUse = cookieUtils.getLanguage()
-          console.log('[useTranslationsHome] Language from cookie:', languageToUse)
         }
 
         setCurrentLanguage(languageToUse)
 
         // Потім завантажуємо переклади для правильної мови
         const locale = languageToLocale[languageToUse]
-        console.log('[useTranslationsHome] Loading locale:', locale)
         const loadedMessages = await loadMessages(locale)
-        console.log('[useTranslationsHome] Loaded messages:', Object.keys(loadedMessages).length, 'keys')
-        console.log('[useTranslationsHome] Sample translation (welcomeToLendower):', loadedMessages.welcomeToLendower)
         setMessages(loadedMessages)
       } catch (error) {
         console.error('useTranslationsHome - error loading messages:', error)
@@ -127,10 +122,8 @@ export function useTranslationsHome() {
 
   // Функція для зміни мови
   const changeLanguage = (language: Language) => {
-    console.log('[useTranslationsHome] changeLanguage called with:', language)
     setCurrentLanguage(language)
     cookieUtils.setLanguage(language)
-    console.log('[useTranslationsHome] Cookie set, reloading page...')
     // Перезавантажуємо переклади для нової мови
     setIsLoading(true)
 
