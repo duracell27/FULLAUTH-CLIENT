@@ -43,13 +43,31 @@ const outfit = Outfit({
 	variable: '--font-sans'
 })
 
-export default function RootLayout({
+const languageToISO: Record<Language, string> = {
+	[Language.EN]: 'en',
+	[Language.UK]: 'uk',
+	[Language.DE]: 'de',
+	[Language.ES]: 'es',
+	[Language.FR]: 'fr',
+	[Language.CS]: 'cs',
+	[Language.PL]: 'pl',
+	[Language.TR]: 'tr',
+	[Language.HI]: 'hi',
+	[Language.ZH]: 'zh'
+}
+
+export default async function RootLayout({
 	children
 }: Readonly<{
 	children: React.ReactNode
 }>) {
+	const headersList = await headers()
+	const cookieHeader = headersList.get('cookie')
+	const language = cookieUtils.getLanguageFromCookie(cookieHeader || undefined)
+	const langCode = languageToISO[language] || 'en'
+
 	return (
-		<html lang='en' suppressHydrationWarning className={outfit.variable}>
+		<html lang={langCode} suppressHydrationWarning className={outfit.variable}>
 			<head>
 				{/* Google Ads */}
 				<script

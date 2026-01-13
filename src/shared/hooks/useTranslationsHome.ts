@@ -21,6 +21,32 @@ const languageToLocale: Record<Language, string> = {
 // Кеш для перекладів
 const messagesCache = new Map<string, Record<string, string>>()
 
+// Функція для визначення мови браузера
+const getBrowserLanguage = (): Language => {
+  if (typeof navigator === 'undefined') {
+    return Language.EN
+  }
+
+  const browserLang = navigator.language.split('-')[0].toUpperCase()
+
+  // Мапінг ISO кодів на наш enum
+  const langMap: Record<string, Language> = {
+    'EN': Language.EN,
+    'UK': Language.UK,
+    'UA': Language.UK, // Українська може бути як UK або UA
+    'DE': Language.DE,
+    'ES': Language.ES,
+    'FR': Language.FR,
+    'CS': Language.CS,
+    'PL': Language.PL,
+    'TR': Language.TR,
+    'HI': Language.HI,
+    'ZH': Language.ZH,
+  }
+
+  return langMap[browserLang] || Language.EN
+}
+
 // Завантажуємо переклади
 const loadMessages = async (locale: string) => {
   // Перевіряємо кеш
@@ -53,22 +79,40 @@ const loadMessages = async (locale: string) => {
 export function useTranslationsHome() {
   const [messages, setMessages] = useState<Record<string, string>>({})
   const [isLoading, setIsLoading] = useState(true)
-  const [currentLanguage, setCurrentLanguage] = useState<Language>(Language.EN)
-  
-  const locale = languageToLocale[currentLanguage]
+  const [currentLanguage, setCurrentLanguage] = useState<Language | null>(null)
 
-  // Завантажуємо мову з cookie при ініціалізації
+  // Завантажуємо мову з cookie та переклади при ініціалізації
   useEffect(() => {
-    const languageFromCookie = cookieUtils.getLanguage()
-    setCurrentLanguage(languageFromCookie)
-  }, [])
-
-  // Завантажуємо переклади при зміні мови
-  useEffect(() => {
-    const loadMessagesForLanguage = async () => {
+    const loadLanguageAndMessages = async () => {
       setIsLoading(true)
       try {
+        // Перевіряємо чи є cookie з мовою
+        const cookies = typeof document !== 'undefined' ? document.cookie : ''
+        const hasLanguageCookie = cookies.includes('language=')
+
+        let languageToUse: Language
+
+        if (!hasLanguageCookie) {
+          // Якщо cookie немає - визначаємо мову з браузера
+          const browserLanguage = getBrowserLanguage()
+          console.log('[useTranslationsHome] No cookie found, detected browser language:', browserLanguage)
+          languageToUse = browserLanguage
+          // Встановлюємо cookie для наступних візитів
+          cookieUtils.setLanguage(browserLanguage)
+        } else {
+          // Якщо cookie є - використовуємо його
+          languageToUse = cookieUtils.getLanguage()
+          console.log('[useTranslationsHome] Language from cookie:', languageToUse)
+        }
+
+        setCurrentLanguage(languageToUse)
+
+        // Потім завантажуємо переклади для правильної мови
+        const locale = languageToLocale[languageToUse]
+        console.log('[useTranslationsHome] Loading locale:', locale)
         const loadedMessages = await loadMessages(locale)
+        console.log('[useTranslationsHome] Loaded messages:', Object.keys(loadedMessages).length, 'keys')
+        console.log('[useTranslationsHome] Sample translation (welcomeToLendower):', loadedMessages.welcomeToLendower)
         setMessages(loadedMessages)
       } catch (error) {
         console.error('useTranslationsHome - error loading messages:', error)
@@ -78,16 +122,18 @@ export function useTranslationsHome() {
       }
     }
 
-    loadMessagesForLanguage()
-  }, [locale])
+    loadLanguageAndMessages()
+  }, [])
 
   // Функція для зміни мови
   const changeLanguage = (language: Language) => {
+    console.log('[useTranslationsHome] changeLanguage called with:', language)
     setCurrentLanguage(language)
     cookieUtils.setLanguage(language)
+    console.log('[useTranslationsHome] Cookie set, reloading page...')
     // Перезавантажуємо переклади для нової мови
     setIsLoading(true)
-    
+
     // Плавне перезавантаження для оновлення всіх текстів
     setTimeout(() => {
       window.location.reload()
