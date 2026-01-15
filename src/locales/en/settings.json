@@ -239,6 +239,8 @@
   "groups.notifications.group_invitation.message": "{inviterName} invited you to group {groupName}",
   "groups.notifications.user_removed_from_group.title": "Removed from Group",
   "groups.notifications.user_removed_from_group.message": "{removerName} removed you from group {groupName}",
+  "group_members.notifications.invitation_accepted.title": "Invitation Accepted",
+  "group_members.notifications.invitation_accepted.message": "{userName} accepted your invitation to group {groupName}",
   "expenses.notifications.expense_added.title": "Expense Added",
   "expenses.notifications.expense_added.message": "New expense \"{expenseDescription}\" added to group {groupName}",
   "expenses.notifications.new_credit.title": "New Credit",

@@ -150,6 +150,8 @@
   "groups.notifications.group_invitation.title": "群组邀请",
   "groups.notifications.user_removed_from_group.message": "{removerName} 将您从群组 {groupName} 中移除",
   "groups.notifications.user_removed_from_group.title": "从群组中移除",
+  "group_members.notifications.invitation_accepted.title": "邀请已接受",
+  "group_members.notifications.invitation_accepted.message": "{userName} 接受了您加入群组 {groupName} 的邀请",
   "inTotal": "总共",
   "incorrectPage": "错误页面",
   "invalidEmail": "无效的电子邮件地址",

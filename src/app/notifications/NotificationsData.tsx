@@ -42,7 +42,8 @@ const replaceMessagePlaceholders = (message: string, metadata: any): string => {
 		'{senderName}': metadata.senderName,
 		'{receiverName}': metadata.receiverName,
 		'{inviterName}': metadata.inviterName,
-		'{removerName}': metadata.removerName
+		'{removerName}': metadata.removerName,
+		'{userName}': metadata.userName
 	}
 
 	Object.entries(replacements).forEach(([placeholder, value]) => {

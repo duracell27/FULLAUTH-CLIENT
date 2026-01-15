@@ -150,6 +150,8 @@
   "groups.notifications.group_invitation.title": "समूह आमंत्रण",
   "groups.notifications.user_removed_from_group.message": "{removerName} ने आपको समूह {groupName} से हटा दिया है",
   "groups.notifications.user_removed_from_group.title": "समूह से हटाया गया",
+  "group_members.notifications.invitation_accepted.title": "निमंत्रण स्वीकार किया गया",
+  "group_members.notifications.invitation_accepted.message": "{userName} ने समूह {groupName} में आपका निमंत्रण स्वीकार कर लिया है",
   "inTotal": "कुल मिलाकर",
   "incorrectPage": "गलत पेज",
   "invalidEmail": "अमान्य ईमेल पता",

@@ -150,6 +150,8 @@
   "groups.notifications.group_invitation.title": "Pozvánka do skupiny",
   "groups.notifications.user_removed_from_group.message": "{removerName} vás odebral ze skupiny {groupName}",
   "groups.notifications.user_removed_from_group.title": "Odebrán ze skupiny",
+  "group_members.notifications.invitation_accepted.title": "Pozvánka přijata",
+  "group_members.notifications.invitation_accepted.message": "{userName} přijal vaši pozvánku do skupiny {groupName}",
   "inTotal": "celkem",
   "incorrectPage": "Nesprávná stránka",
   "invalidEmail": "Neplatná e-mailová adresa",

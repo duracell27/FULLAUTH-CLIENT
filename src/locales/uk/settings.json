@@ -239,6 +239,8 @@
   "groups.notifications.group_invitation.message": "{inviterName} запросив вас до групи {groupName}",
   "groups.notifications.user_removed_from_group.title": "Видалено з групи",
   "groups.notifications.user_removed_from_group.message": "{removerName} видалив вас з групи {groupName}",
+  "group_members.notifications.invitation_accepted.title": "Запрошення прийнято",
+  "group_members.notifications.invitation_accepted.message": "{userName} прийняв ваше запрошення до групи {groupName}",
   "expenses.notifications.expense_added.title": "Додано витрату",
   "expenses.notifications.expense_added.message": "Додано нову витрату \"{expenseDescription}\" до групи {groupName}",
   "expenses.notifications.new_credit.title": "Новий кредит",

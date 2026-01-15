@@ -150,6 +150,8 @@
   "groups.notifications.group_invitation.title": "Grup Daveti",
   "groups.notifications.user_removed_from_group.message": "{removerName} sizi {groupName} grubundan çıkardı",
   "groups.notifications.user_removed_from_group.title": "Gruptan Çıkarıldı",
+  "group_members.notifications.invitation_accepted.title": "Davet Kabul Edildi",
+  "group_members.notifications.invitation_accepted.message": "{userName} {groupName} grubuna davetinizi kabul etti",
   "inTotal": "toplamda",
   "incorrectPage": "Yanlış sayfa",
   "invalidEmail": "Geçersiz e-posta adresi",

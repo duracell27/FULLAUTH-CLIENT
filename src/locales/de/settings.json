@@ -150,6 +150,8 @@
   "groups.notifications.group_invitation.title": "Gruppeneinladung",
   "groups.notifications.user_removed_from_group.message": "{removerName} hat Sie aus der Gruppe {groupName} entfernt",
   "groups.notifications.user_removed_from_group.title": "Aus Gruppe entfernt",
+  "group_members.notifications.invitation_accepted.title": "Einladung angenommen",
+  "group_members.notifications.invitation_accepted.message": "{userName} hat Ihre Einladung zur Gruppe {groupName} angenommen",
   "inTotal": "insgesamt",
   "incorrectPage": "Falsche Seite",
   "invalidEmail": "Ungültige E-Mail-Adresse",
