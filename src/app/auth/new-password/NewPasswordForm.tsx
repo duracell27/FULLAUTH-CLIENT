@@ -10,7 +10,7 @@ import {
 	FormMessage,
 	Input
 } from '@/shared/componets/ui'
-import { useNewPasswordMutation } from '@/shared/hooks'
+import { useNewPasswordMutation, useTranslations } from '@/shared/hooks'
 import { newPasswordSchema, TypeNewPasswordSchema } from '@/shared/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTheme } from 'next-themes'
@@ -23,7 +23,7 @@ type Props = {}
 
 const NewPasswordForm = (props: Props) => {
 	const { theme } = useTheme()
-	
+	const { t, locale } = useTranslations()
 	const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null)
 
 	const form = useForm<TypeNewPasswordSchema>({
@@ -39,14 +39,14 @@ const NewPasswordForm = (props: Props) => {
 		if (recaptchaValue) {
 			newPassword({ values: data, recaptcha: recaptchaValue })
 		} else {
-			toast.error('Please complete the captcha')
+			toast.error(t('pleaseCompleteTheCaptcha'))
 		}
 	}
 	return (
 		<AuthWrapper
-			heading='New password'
-			description='Please enter your new password'
-			backButtonLabel='Login'
+			heading={t('newPassword')}
+			description={t('pleaseEnterYourNewPassword')}
+			backButtonLabel={t('login')}
 			backButtonHref='/auth/login'
 		>
 			<Form {...form}>
@@ -59,10 +59,10 @@ const NewPasswordForm = (props: Props) => {
 						name='password'
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Password</FormLabel>
+								<FormLabel>{t('password')}</FormLabel>
 								<FormControl>
 									<Input
-										placeholder='Enter your new password'
+										placeholder={t('enterYourNewPassword')}
 										type='password'
 										disabled={isLoadingNewPassword}
 										{...field}
@@ -80,11 +80,12 @@ const NewPasswordForm = (props: Props) => {
 							}
 							onChange={setRecaptchaValue}
 							theme={theme === 'dark' ? 'dark' : 'light'}
+							hl={locale}
 						/>
 					</div>
 
 					<Button disabled={isLoadingNewPassword} type='submit'>
-						Continue
+						{t('continue')}
 					</Button>
 				</form>
 			</Form>

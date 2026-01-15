@@ -100,5 +100,5 @@ export function useTranslations() {
     return key
   }
 
-  return { t, isLoading, messages }
+  return { t, isLoading, messages, locale }
 }

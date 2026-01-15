@@ -1,6 +1,7 @@
 'use client'
 import { AuthWrapper } from '@/shared/componets/AuthWrapper'
 import {
+	BackButton,
 	Button,
 	Form,
 	FormControl,
@@ -26,7 +27,7 @@ export const LoginForm = (props: Props) => {
 	const { theme } = useTheme()
 	const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null)
 	const [isShowTwoFactor, setIsShowTwoFactor] = useState(false)
-	const { t } = useTranslations()
+	const { t, locale } = useTranslations()
 
 	const form = useForm<TypeLoginSchema>({
 		resolver: zodResolver(loginSchema),
@@ -46,6 +47,7 @@ export const LoginForm = (props: Props) => {
 		}
 	}
 	return (
+		<> <BackButton/> 
 		<AuthWrapper
 			heading={t('login')}
 			description={t('provideYourEmailAndPassword')}
@@ -53,6 +55,7 @@ export const LoginForm = (props: Props) => {
 			backButtonHref='/auth/register'
 			isShowSocial
 		>
+			
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}
@@ -85,7 +88,7 @@ export const LoginForm = (props: Props) => {
 								name='email'
 								render={({ field }) => (
 								<FormItem>
-									<FormLabel>{t('email')}</FormLabel>
+									<FormLabel>{t('emailLabel')}</FormLabel>
 									<FormControl>
 										<Input
 											placeholder={t('enterYourEmail')}
@@ -135,6 +138,7 @@ export const LoginForm = (props: Props) => {
 							}
 							onChange={setRecaptchaValue}
 							theme={theme === 'dark' ? 'dark' : 'light'}
+							hl={locale}
 						/>
 					</div>
 
@@ -143,6 +147,6 @@ export const LoginForm = (props: Props) => {
 					</Button>
 				</form>
 			</Form>
-		</AuthWrapper>
+		</AuthWrapper></>
 	)
 }

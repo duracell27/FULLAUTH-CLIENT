@@ -10,7 +10,7 @@ import {
 	FormMessage,
 	Input
 } from '@/shared/componets/ui'
-import { useRegisterMutation, useResetPasswordMutation } from '@/shared/hooks'
+import { useRegisterMutation, useResetPasswordMutation, useTranslations } from '@/shared/hooks'
 import {
 	registerSchema,
 	resetPasswordSchema,
@@ -29,6 +29,7 @@ type Props = {}
 const ResetPasswordForm = (props: Props) => {
 	const { theme } = useTheme()
 	const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null)
+	const { t, locale } = useTranslations()
 
 	const form = useForm<TypePasswordResetSchema>({
 		resolver: zodResolver(resetPasswordSchema),
@@ -43,17 +44,15 @@ const ResetPasswordForm = (props: Props) => {
 		if (recaptchaValue) {
 			reset({ values: data, recaptcha: recaptchaValue })
 		} else {
-			toast.error('Please complete the captcha')
+			toast.error(t('pleaseCompleteTheCaptcha'))
 		}
 	}
 	return (
 		<AuthWrapper
-			heading='Password reset'
-			description='Enter your email to reset your password'
-			backButtonLabel='Login'
+			heading={t('passwordReset')}
+			description={t('enterYourEmailToResetYourPassword')}
+			backButtonLabel={t('login')}
 			backButtonHref='/auth/login'
-			
-			
 		>
 			<Form {...form}>
 				<form
@@ -65,10 +64,10 @@ const ResetPasswordForm = (props: Props) => {
 						name='email'
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Email</FormLabel>
+								<FormLabel>{t('emailLabel')}</FormLabel>
 								<FormControl>
 									<Input
-										placeholder='Enter your email'
+										placeholder={t('enterYourEmail')}
 										type='email'
 										disabled={isLoadingReset}
 										{...field}
@@ -86,11 +85,12 @@ const ResetPasswordForm = (props: Props) => {
 							}
 							onChange={setRecaptchaValue}
 							theme={theme === 'dark' ? 'dark' : 'light'}
+							hl={locale}
 						/>
 					</div>
 
 					<Button disabled={isLoadingReset} type='submit'>
-						Reset
+						{t('passwordReset')}
 					</Button>
 				</form>
 			</Form>
