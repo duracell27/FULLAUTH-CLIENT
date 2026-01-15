@@ -41,14 +41,20 @@ const RegisterForm = (props: Props) => {
 
 	const onSubmit = (data: TypeRegisterSchema) => {
 		if (recaptchaValue) {
-			register({ values: data, recaptcha: recaptchaValue })
+			register({
+				values: data,
+				recaptcha: recaptchaValue,
+				onSuccessCallback: () => {
+					form.reset()
+					setRecaptchaValue(null)
+				}
+			})
 		} else {
 			toast.error(t('pleaseCompleteTheCaptcha'))
 		}
 	}
 	return (
 		<>
-			{' '}
 			<BackButton />
 			<AuthWrapper
 				heading={t('register')}
