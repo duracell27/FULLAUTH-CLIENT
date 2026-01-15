@@ -608,7 +608,7 @@ export const GroupData = ({ groupId }: Props) => {
 						</CollapsibleTrigger>
 						<CollapsibleContent>
 							<CardContent>
-								<Accordion type='multiple' className='w-full '>
+								<Accordion type='single' collapsible className='w-full '>
 									{group.memberBalanceDetails.map(
 										memberBalance => (
 											<AccordionItem
