@@ -43,6 +43,15 @@ export function SettingsMenu() {
 						</Link>
 					</li>
 
+					<li className=''>
+						<Link
+							className=' border-b border-ring/20 py-2 hover:bg-accent block'
+							href='/guide'
+						>
+							{t('guide')}
+						</Link>
+					</li>
+
 					{user?.role === UserRole.Admin && (
 						<li className=''>
 							<Link

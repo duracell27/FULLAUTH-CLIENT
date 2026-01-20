@@ -38,7 +38,10 @@ export function HomeClient() {
 				</CardContent>
 				<CardFooter className='flex flex-col items-center gap-4'>
 					<div className='flex justify-center gap-3'>
-						<Link href='/auth/login' className={buttonVariants()}>
+						<Link
+							href='/auth/login'
+							className={buttonVariants()}
+						>
 							{t('login')}
 						</Link>
 						<Link
@@ -50,8 +53,20 @@ export function HomeClient() {
 					</div>
 				</CardFooter>
 			</Card>
+			<Card className='w-full max-w-[400px]'>
+				<CardContent className='p-0'>
+					<Link
+						href='/guide'
+						className={cn(
+							buttonVariants({ variant: 'ghost' }),
+							'text-xs text-primary hover:opacity-100 transition-opacity w-full'
+						)}
+					>
+						{t('guide')}
+					</Link>
+				</CardContent>
+			</Card>
 			<Card className='w-full pt-3 max-w-[400px]'>
-			
 				<CardContent>
 					<div className='flex justify-center gap-3'>
 						<Link
@@ -61,7 +76,7 @@ export function HomeClient() {
 								'text-sm text-center'
 							)}
 						>
-							v.0.3
+							v.0.3.5
 						</Link>
 						<Link
 							href='/contact'
