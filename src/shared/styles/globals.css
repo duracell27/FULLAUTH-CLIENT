@@ -276,7 +276,13 @@
 	* {
 		@apply border-border outline-ring/50;
 	}
+	html {
+		overscroll-behavior: none;
+		overflow-x: hidden;
+	}
 	body {
 		@apply bg-background text-foreground p-0 m-0;
+		overscroll-behavior: none;
+		overflow-x: hidden;
 	}
 }
