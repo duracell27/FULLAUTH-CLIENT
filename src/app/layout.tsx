@@ -79,8 +79,8 @@ export default async function RootLayout({
 			<body
 				style={{ backgroundColor: "var(--page-background)" }}
 			>
-				<div className='flex min-h-screen w-full justify-center'>
-					<div className='w-full mx-2 max-w-[400px] relative'>
+				<div className='flex h-full w-full justify-center overflow-y-auto'>
+					<div className='w-full mx-2 max-w-[400px] relative min-h-full'>
 						<MainProvider>{children}</MainProvider>
 					</div>
 				</div>

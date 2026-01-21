@@ -27,7 +27,7 @@ export function HeaderProvider() {
 	const notificationCount = notificationsUnread?.length || 0
 
 	return (
-		<div className='fixed top-0 left-0 w-full flex justify-center px-2 z-10'>
+		<div className='fixed top-0 left-0 w-full flex justify-center px-2 z-10' style={{ transform: 'translateZ(0)' }}>
 			<Card className='w-full max-w-[400px] flex justify-between items-center my-2 py-1 px-2'>
 				<h1 className='font-bold'>
 					<Link href={process.env.NEXT_PUBLIC_FRONTEND_URL as string}>
