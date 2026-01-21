@@ -11,7 +11,7 @@ export function SettingsMenu() {
 	const { user } = useProfile()
 
 	return (
-		<Card className='w-full max-w-[400px]'>
+		<Card className='w-full max-w-[400px] mb-18'>
 			<CardHeader>
 				<CardTitle>{t('moreSettings')}</CardTitle>
 			</CardHeader>
