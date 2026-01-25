@@ -810,7 +810,7 @@ const AddExpenseForm = ({ groupId, expenseId = '', edit }: Props) => {
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(onSubmit)}
-				className='grid gap-4 w-full max-w-[400px] mt-24 mb-18'
+				className='grid gap-4 w-full max-w-[400px] mt-20 pb-18'
 			>
 				<BackButton url={`/groups/${groupId}`} />
 				<Card className=''>
