@@ -9,7 +9,7 @@ export default function ContactClient() {
   const { t } = useTranslationsHome()
 
   return (
-    <div className="w-full mx-auto pt-18 mb-18 max-w-[400px]">
+    <div className="w-full mx-auto pt-18 pb-18 max-w-[400px]">
       <div className="space-y-6">
         {/* Header */}
         <Card>

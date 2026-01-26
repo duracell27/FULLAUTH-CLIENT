@@ -150,7 +150,7 @@ export const EditGroupForm = ({ groupId }: Props) => {
 		return <Loading />
 	}
 	return (
-		<div className='flex flex-col gap-3 justify-start items-center mb-18  pt-18'>
+		<div className='flex flex-col gap-3 justify-start items-center py-18'>
 			<Card className='w-full max-w-[400px]'>
 				<CardHeader>
 					<CardTitle>{t('editGroup')}</CardTitle>

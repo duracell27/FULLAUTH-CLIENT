@@ -5,7 +5,7 @@ type Props = {}
 
 const FriendsGroupPage = (props: Props) => {
 	return (
-		<div className='flex flex-col gap-3 justify-center items-center w-full max-w-[400px] pt-18 mb-18'>
+		<div className='flex flex-col gap-3 justify-center items-center w-full max-w-[400px] py-18'>
 			<FriendsGroups />
 		</div>
 	)

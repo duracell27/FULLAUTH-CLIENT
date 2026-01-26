@@ -62,8 +62,8 @@ export const AdminDashboard = () => {
 	}
 
 	return (
-		<div className='flex flex-col gap-6 justify-center items-center mb-18 pt-18 w-full max-w-[800px] px-2'>
-			<h1 className='text-2xl font-bold w-full text-center mb-4'>
+		<div className='flex flex-col gap-6 justify-center items-center pb-18 pt-18 w-full max-w-[400px] px-2'>
+			<h1 className='text-2xl font-bold w-full text-center'>
 				Адмін панель
 			</h1>
 

@@ -310,7 +310,7 @@ export const FriendsGroups = (props: Props) => {
 				// Показуємо тільки якщо персональної групи ще немає
 				return !hasPersonalGroup
 			}).length > 0 ? (
-				<Card className='w-full max-w-[400px] mb-18'>
+				<Card className='w-full max-w-[400px]'>
 					<CardHeader>
 						<CardTitle>{t('friendsToInvite')}</CardTitle>
 					</CardHeader>
@@ -377,7 +377,7 @@ export const FriendsGroups = (props: Props) => {
 					</CardContent>
 				</Card>
 			) : friendsData?.friends.length > 0 && (
-				<Card className='w-full max-w-[400px] mb-18'>
+				<Card className='w-full max-w-[400px]'>
 					<CardHeader>
 						<CardTitle>{t('friendsToInvite')}</CardTitle>
 					</CardHeader>

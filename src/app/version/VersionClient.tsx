@@ -13,7 +13,7 @@ export default function VersionClient() {
 	const { t } = useTranslationsHome()
 
 	return (
-		<div className='w-full pt-18 mb-18 max-w-[400px]'>
+		<div className='w-full py-18 max-w-[400px]'>
 			<div className='space-y-6'>
 
 				{/* Changelog */}

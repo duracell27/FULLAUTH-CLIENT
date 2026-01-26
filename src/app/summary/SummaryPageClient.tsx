@@ -13,7 +13,7 @@ export const SummaryPageClient = (props: Props) => {
 	const { totalBalance } = useSummary()
 
 	return (
-		<div className='flex flex-col gap-3 justify-center items-center mb-18 pt-18 w-full max-w-[400px]'>
+		<div className='flex flex-col gap-3 justify-center items-center py-18 w-full max-w-[400px]'>
 			<div className='flex justify-between items-center w-full'>
 				<Card className='w-full'>
 					<CardHeader>

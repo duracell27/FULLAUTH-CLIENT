@@ -16,7 +16,7 @@ export function HomeClient() {
 	const { t } = useTranslationsHome()
 
 	return (
-		<div className='flex flex-col items-center justify-center h-full mb-18 pt-18 space-y-3'>
+		<div className='flex flex-col items-center justify-start pb-18 pt-18 space-y-3'>
 			<Card className='w-full max-w-[400px]'>
 				<CardHeader>
 					<h1 className='text-2xl font-bold text-center'>

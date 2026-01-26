@@ -87,7 +87,7 @@ export default function GuideClient() {
   }
 
   return (
-    <div className="flex flex-col gap-3 justify-start items-center pt-18 mb-18">
+    <div className="flex flex-col gap-3 justify-start items-center py-18">
       <div className="space-y-6">
         {/* Header */}
         <Card>

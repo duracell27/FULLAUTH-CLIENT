@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 const SettingsPage = () => {
 	return (
-		<div className='flex flex-col gap-3 justify-start items-center mb-18 pt-18'>
+		<div className='flex flex-col gap-3 justify-start items-center pb-18 pt-18'>
 			<SettingsForm />
 			<SettingsMenu />
 		</div>
