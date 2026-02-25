@@ -54,6 +54,18 @@ export interface ExpenseTypeStatisticsResponse {
 }
 
 /**
+ * Один із нещодавно зареєстрованих користувачів
+ */
+export interface RecentUser {
+	id: string
+	displayName: string
+	email: string
+	picture: string | null
+	method: 'CREDENTIALS' | 'GOOGLE'
+	createdAt: string
+}
+
+/**
  * GET /admin/dashboard
  * Повна статистика для дашборду
  */
@@ -72,6 +84,7 @@ export interface AdminDashboardResponse {
 		active: number
 	}
 	expenseTypeStatistics: ExpenseTypeStatistic[]
+	recentUsers: RecentUser[]
 }
 
 class AdminService {

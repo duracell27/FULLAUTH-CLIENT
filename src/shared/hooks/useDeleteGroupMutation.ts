@@ -19,11 +19,7 @@ export function useDeleteGroupMutation() {
 					toastMessageHandler(data)
 				} else {
 					toast.success(t('groupDeletedSuccessfully'))
-					queryClient.invalidateQueries({
-						queryKey: ['groups']
-					})
-					queryClient.invalidateQueries({ queryKey: ['summary'] })
-					router.push('/groups')
+						router.push('/groups')
 				}
 			},
 			onError: error => {

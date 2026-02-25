@@ -6,3 +6,4 @@ export * from "./fetch/fetchTypes";
 
 export * from "./toastMessageHandler";
 export * from "./dateFormat";
+export * from "./avatarUrl";

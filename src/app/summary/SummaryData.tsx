@@ -13,19 +13,24 @@ import { useSettleUpMutation } from '@/shared/hooks/useSettleUpMutation'
 import { useSummary } from '@/shared/hooks/useSummary'
 import { useTranslations } from '@/shared/hooks'
 import colorBalance from '@/shared/utils/colorBalance'
+import { getAvatarUrl } from '@/shared/utils'
 import { Users, Link as LinkIcon, HandCoins, Coins } from 'lucide-react'
 import Link from 'next/link'
 
-import React from 'react'
-
+import React, { useMemo } from 'react'
 
 type Props = {}
 
 export const SummaryData = (props: Props) => {
 	const { summary, isLoadingSummary } = useSummary()
-	
+
 	const { settleUp, isLoadingSettleUp } = useSettleUpMutation()
 	const { t } = useTranslations()
+
+	const filteredSummary = useMemo(
+		() => summary?.filter(s => Math.abs(s.totalBalance) > 0.01) ?? [],
+		[summary]
+	)
 
 	if (isLoadingSummary) {
 		return <div>{t('loadingSummary')}</div>
@@ -34,8 +39,6 @@ export const SummaryData = (props: Props) => {
 	if (!summary?.length) {
 		return <div>{t('noSummaryFound')}</div>
 	}
-
-	const filteredSummary = summary.filter(summary => Math.abs(summary.totalBalance) > 0.01)
 
 	if (filteredSummary.length === 0) {
 		return (
@@ -61,14 +64,7 @@ export const SummaryData = (props: Props) => {
 									<div className='flex items-center gap-2 '>
 										<Avatar className=''>
 											<AvatarImage
-												src={
-													summary.user.picture
-														? summary.user.picture.replace(
-																'/upload/',
-																'/upload/w_100,h_100,c_fill,f_webp,q_80/'
-														  )
-														: ''
-												}
+												src={getAvatarUrl(summary.user.picture)}
 											/>
 											<AvatarFallback className=''>
 												{summary.user.displayName
@@ -108,16 +104,7 @@ export const SummaryData = (props: Props) => {
 														</div>
 														<Avatar className='w-7 h-7 mt-1'>
 															<AvatarImage
-																src={
-																	group
-																		.groupInfo
-																		.avatarUrl
-																		? group.groupInfo.avatarUrl.replace(
-																				'/upload/',
-																				'/upload/w_100,h_100,c_fill,f_webp,q_80/'
-																		  )
-																		: ''
-																}
+																src={getAvatarUrl(group.groupInfo.avatarUrl)}
 															/>
 															<AvatarFallback className='text-sm'>
 																{group.groupInfo.name

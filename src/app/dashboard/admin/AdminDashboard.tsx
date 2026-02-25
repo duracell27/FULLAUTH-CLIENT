@@ -3,7 +3,8 @@ import React from 'react'
 import { useAdminDashboard } from '@/shared/hooks/useAdminDashboard'
 import { useProfile } from '@/shared/hooks'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/componets/ui'
-import { FaUsers, FaMoneyBillWave, FaLayerGroup } from 'react-icons/fa'
+import { FaUsers, FaMoneyBillWave, FaLayerGroup, FaGoogle, FaEnvelope } from 'react-icons/fa'
+import { Avatar, AvatarImage, AvatarFallback } from '@/shared/componets/ui'
 import { UserRole } from '@/shared/types'
 import { useRouter } from 'next/navigation'
 
@@ -158,7 +159,66 @@ export const AdminDashboard = () => {
 				</CardContent>
 			</Card>
 
-			{/* Додаткова інформація */}
+			{/* Нові користувачі */}
+		{dashboard.recentUsers && dashboard.recentUsers.length > 0 && (
+			<Card className='w-full'>
+				<CardHeader>
+					<CardTitle>Нові користувачі</CardTitle>
+				</CardHeader>
+				<CardContent className='space-y-3'>
+					{dashboard.recentUsers.map(user => (
+						<div
+							key={user.id}
+							className='flex items-center gap-3'
+						>
+							<Avatar className='h-9 w-9 shrink-0'>
+								{user.picture ? (
+									<AvatarImage
+										src={user.picture}
+										alt={user.displayName}
+									/>
+								) : null}
+								<AvatarFallback>
+									{user.displayName.charAt(0).toUpperCase()}
+								</AvatarFallback>
+							</Avatar>
+
+							<div className='flex-1 min-w-0'>
+								<p className='text-sm font-medium truncate'>
+									{user.displayName}
+								</p>
+								<p className='text-xs text-muted-foreground truncate'>
+									{user.email}
+								</p>
+							</div>
+
+							<div className='flex flex-col items-end gap-1 shrink-0'>
+								{user.method === 'GOOGLE' ? (
+									<FaGoogle
+										className='h-3.5 w-3.5 text-muted-foreground'
+										title='Google'
+									/>
+								) : (
+									<FaEnvelope
+										className='h-3.5 w-3.5 text-muted-foreground'
+										title='Email'
+									/>
+								)}
+								<span className='text-xs text-muted-foreground'>
+									{new Date(user.createdAt).toLocaleDateString('uk-UA', {
+										day: '2-digit',
+										month: '2-digit',
+										year: 'numeric'
+									})}
+								</span>
+							</div>
+						</div>
+					))}
+				</CardContent>
+			</Card>
+		)}
+
+		{/* Додаткова інформація */}
 			<Card className='w-full'>
 				<CardHeader>
 					<CardTitle>Середні показники</CardTitle>

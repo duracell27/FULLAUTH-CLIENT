@@ -26,6 +26,7 @@ export function useGroups() {
         getNextPageParam: (lastPage: GroupsResponse, allPages: GroupsResponse[]) =>
             lastPage.groups.length === 10 ? allPages.length * 10 : undefined,
         initialPageParam: 0,
+        staleTime: 0,
     });
 
     // Finished groups
@@ -45,6 +46,7 @@ export function useGroups() {
         getNextPageParam: (lastPage: GroupsResponse, allPages: GroupsResponse[]) =>
             lastPage.groups.length === 10 ? allPages.length * 10 : undefined,
         initialPageParam: 0,
+        staleTime: 0,
     });
 
     // Збираємо всі групи в один масив для кожного типу

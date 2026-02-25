@@ -17,8 +17,6 @@ export function useAddPaymentMutation(groupId: string) {
 		onSuccess: () => {
 			toast.success(t('paymentAddedSuccessfully'))
 			queryClient.invalidateQueries({queryKey: ['group ' + groupId]})
-			queryClient.invalidateQueries({queryKey: ['groups']})
-			queryClient.invalidateQueries({queryKey: ['summary']})
 			queryClient.invalidateQueries({queryKey: ['notificationsUnread']})
 			queryClient.invalidateQueries({queryKey: ['notifications']})
 			router.push('/groups/' + groupId)

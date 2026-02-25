@@ -77,7 +77,12 @@ export default async function RootLayout({
 				></script>
 			</head>
 			<body
-				style={{ backgroundColor: "var(--page-background)" }}
+				style={{
+					backgroundImage: "url('/images/mainBgPatternViolet.png')",
+					backgroundSize: 'cover',
+					backgroundPosition: 'center',
+					backgroundRepeat: 'no-repeat',
+				}}
 			>
 				<div className='flex h-full w-full justify-center overflow-y-auto'>
 					<div className='w-full mx-2 max-w-[400px] relative min-h-full'>

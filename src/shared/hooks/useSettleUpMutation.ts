@@ -16,7 +16,6 @@ export function useSettleUpMutation() {
         onSuccess: () => {
             toast.success(t('youHaveBeenSettledUpSuccessfully'))
             queryClient.invalidateQueries({queryKey: ['summary']})
-            queryClient.invalidateQueries({queryKey: ['groups']})
         },
         onError: (error) => {
             toastMessageHandler(error)

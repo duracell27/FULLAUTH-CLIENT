@@ -5,6 +5,7 @@ export function useGroupsRequests() {
     const {data:userGroupsRequests, isLoading: isLoadingUserGroupsRequests} = useQuery({
         queryKey: ['groups requests'],
         queryFn: () => memberService.getGroupsRequests(),
+        staleTime: 0,
     })
 
     return {userGroupsRequests, isLoadingUserGroupsRequests}

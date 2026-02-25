@@ -4,7 +4,8 @@ import { expenseService } from '../services/expense.service'
 export function useExpense(expenseId: string) {
 	const { data: expense, isLoading: isLoadingExpense } = useQuery({
 		queryKey: ['expense ' + expenseId],
-		queryFn: () => expenseService.getExpense(expenseId)
+		queryFn: () => expenseService.getExpense(expenseId),
+		staleTime: 0,
 	})
 
 	return { expense, isLoadingExpense }

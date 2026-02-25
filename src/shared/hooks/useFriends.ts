@@ -5,6 +5,7 @@ export function useFriends() {
     const {data:friendsData, isLoading: isLoadingFriend} = useQuery({
         queryKey: ['friends'],
         queryFn: () => friendsService.getFriends(),
+        staleTime: 0,
     })
 
     return {friendsData, isLoadingFriend}

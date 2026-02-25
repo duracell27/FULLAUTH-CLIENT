@@ -5,7 +5,8 @@ export function useNotifications() {
 	const { data: notifications, isLoading: isLoadingNotifications } = useQuery(
 		{
 			queryKey: ['notifications'],
-			queryFn: () => notificationsService.getNotifications()
+			queryFn: () => notificationsService.getNotifications(),
+			staleTime: 0,
 		}
 	)
 

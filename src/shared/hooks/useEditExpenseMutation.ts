@@ -22,7 +22,6 @@ export function useEditExpenseMutation(groupId: string, expenseId: string) {
 					queryKey: ['group ' + groupId]
 				})
 				queryClient.invalidateQueries({ queryKey: ['expense ' + expenseId] })
-				queryClient.invalidateQueries({ queryKey: ['summary'] })
 				queryClient.invalidateQueries({queryKey: ['notificationsUnread']})
 				queryClient.invalidateQueries({queryKey: ['notifications']})
 				router.push('/groups/' + groupId)

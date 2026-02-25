@@ -6,7 +6,8 @@ import { summaryService } from '../services/summary.service'
 export function useSummary() {
 	const { data: summaryResponse, isLoading: isLoadingSummary } = useQuery({
 		queryKey: ['summary'],
-		queryFn: () => summaryService.getSummary()
+		queryFn: () => summaryService.getSummary(),
+		staleTime: 0,
 	})
 
 	return {
