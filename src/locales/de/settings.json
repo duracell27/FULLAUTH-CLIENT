@@ -400,4 +400,10 @@
   "addedGuidePageLendower": "Anleitung 'Wie verwende ich Lendower' hinzugefügt",
   "fixedTranslationBugs": "Übersetzungsfehler behoben",
   "improvedRegistrationProcess": "Registrierungsprozess verbessert"
+,
+  "serverError": "Serverfehler aufgetreten",
+  "networkError": "Netzwerkfehler. Verbindung prüfen",
+  "errorLoadingGroup": "Gruppe konnte nicht geladen werden",
+  "errorLoadingSummary": "Zusammenfassung konnte nicht geladen werden",
+  "tryAgain": "Erneut versuchen"
 }

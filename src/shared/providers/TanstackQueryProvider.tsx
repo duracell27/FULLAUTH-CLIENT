@@ -105,6 +105,10 @@ export function TanstackQueryProvider({
 								}
 							})
 						}
+					} else if (error?.statusCode >= 500) {
+						toast.error(t('serverError'))
+					} else if (error?.statusCode === undefined && error?.message) {
+						toast.error(t('networkError'))
 					}
 				}
 			}

@@ -22,7 +22,7 @@ import React, { useMemo } from 'react'
 type Props = {}
 
 export const SummaryData = (props: Props) => {
-	const { summary, isLoadingSummary } = useSummary()
+	const { summary, isLoadingSummary, isErrorSummary, refetchSummary } = useSummary()
 
 	const { settleUp, isLoadingSettleUp } = useSettleUpMutation()
 	const { t } = useTranslations()
@@ -34,6 +34,15 @@ export const SummaryData = (props: Props) => {
 
 	if (isLoadingSummary) {
 		return <div>{t('loadingSummary')}</div>
+	}
+
+	if (isErrorSummary) {
+		return (
+			<div className='flex flex-col items-center justify-center py-10 gap-3'>
+				<p className='text-muted-foreground'>{t('errorLoadingSummary')}</p>
+				<Button onClick={() => refetchSummary()}>{t('tryAgain')}</Button>
+			</div>
+		)
 	}
 
 	if (!summary?.length) {

@@ -400,4 +400,10 @@
   "addedGuidePageLendower": "添加了如何使用Lendower页面",
   "fixedTranslationBugs": "修复了翻译错误",
   "improvedRegistrationProcess": "改进了注册流程"
+,
+  "serverError": "服务器错误",
+  "networkError": "网络错误，请检查连接",
+  "errorLoadingGroup": "无法加载群组",
+  "errorLoadingSummary": "无法加载摘要",
+  "tryAgain": "重试"
 }

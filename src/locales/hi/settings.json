@@ -400,4 +400,10 @@
   "addedGuidePageLendower": "Lendower का उपयोग कैसे करें पृष्ठ जोड़ा गया",
   "fixedTranslationBugs": "अनुवाद की त्रुटियां ठीक की गईं",
   "improvedRegistrationProcess": "पंजीकरण प्रक्रिया में सुधार किया गया"
+,
+  "serverError": "सर्वर में त्रुटि हुई",
+  "networkError": "नेटवर्क त्रुटि। कनेक्शन जाँचें",
+  "errorLoadingGroup": "समूह लोड नहीं हो सका",
+  "errorLoadingSummary": "सारांश लोड नहीं हो सका",
+  "tryAgain": "फिर कोशिश करें"
 }

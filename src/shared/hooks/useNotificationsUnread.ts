@@ -7,6 +7,7 @@ export function useNotificationsUnread() {
 			queryKey: ['notificationsUnread'],
 			queryFn: () => notificationsService.getNotificationsUnread(),
 			refetchInterval: 60000,
+			refetchOnWindowFocus: true,
 			staleTime: 0,
 		}
 	)

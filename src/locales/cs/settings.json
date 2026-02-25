@@ -400,4 +400,10 @@
   "addedGuidePageLendower": "Přidána stránka Jak používat Lendower",
   "fixedTranslationBugs": "Opraveny chyby překladů",
   "improvedRegistrationProcess": "Vylepšen registrační proces"
+,
+  "serverError": "Chyba serveru",
+  "networkError": "Chyba sítě. Zkontrolujte připojení",
+  "errorLoadingGroup": "Skupinu se nepodařilo načíst",
+  "errorLoadingSummary": "Přehled se nepodařilo načíst",
+  "tryAgain": "Zkusit znovu"
 }

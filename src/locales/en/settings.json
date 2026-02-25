@@ -400,4 +400,10 @@
   "addedGuidePageLendower": "Added How to Use Lendower page",
   "fixedTranslationBugs": "Fixed translation bugs",
   "improvedRegistrationProcess": "Improved registration process"
+,
+  "serverError": "Something went wrong on the server",
+  "networkError": "Network error. Please check your connection",
+  "errorLoadingGroup": "Failed to load group",
+  "errorLoadingSummary": "Failed to load summary",
+  "tryAgain": "Try again"
 }

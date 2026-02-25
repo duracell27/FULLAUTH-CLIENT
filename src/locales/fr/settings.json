@@ -400,4 +400,10 @@
   "addedGuidePageLendower": "Page Comment utiliser Lendower ajoutée",
   "fixedTranslationBugs": "Erreurs de traduction corrigées",
   "improvedRegistrationProcess": "Processus d'inscription amélioré"
+,
+  "serverError": "Erreur serveur",
+  "networkError": "Erreur réseau. Vérifiez votre connexion",
+  "errorLoadingGroup": "Impossible de charger le groupe",
+  "errorLoadingSummary": "Impossible de charger le résumé",
+  "tryAgain": "Réessayer"
 }

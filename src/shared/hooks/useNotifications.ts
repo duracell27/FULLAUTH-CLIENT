@@ -6,6 +6,8 @@ export function useNotifications() {
 		{
 			queryKey: ['notifications'],
 			queryFn: () => notificationsService.getNotifications(),
+			refetchInterval: 60000,
+			refetchOnWindowFocus: true,
 			staleTime: 0,
 		}
 	)

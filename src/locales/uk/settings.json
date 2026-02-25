@@ -400,4 +400,10 @@
   "addedGuidePageLendower": "Додано сторінку Як користуватись Lendower",
   "fixedTranslationBugs": "Виправлено баги перекладу",
   "improvedRegistrationProcess": "Покращено процес реєстрації"
+,
+  "serverError": "Щось пішло не так на сервері",
+  "networkError": "Помилка мережі. Перевірте підключення",
+  "errorLoadingGroup": "Не вдалося завантажити групу",
+  "errorLoadingSummary": "Не вдалося завантажити підсумок",
+  "tryAgain": "Спробувати знову"
 }

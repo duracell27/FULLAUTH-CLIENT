@@ -400,4 +400,10 @@
   "addedGuidePageLendower": "Lendower Nasıl Kullanılır sayfası eklendi",
   "fixedTranslationBugs": "Çeviri hataları düzeltildi",
   "improvedRegistrationProcess": "Kayıt süreci iyileştirildi"
+,
+  "serverError": "Sunucu hatası",
+  "networkError": "Ağ hatası. Bağlantınızı kontrol edin",
+  "errorLoadingGroup": "Grup yüklenemedi",
+  "errorLoadingSummary": "Özet yüklenemedi",
+  "tryAgain": "Tekrar dene"
 }
