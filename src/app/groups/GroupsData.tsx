@@ -28,7 +28,7 @@ import { IUserGroup } from '@/shared/types/groupe.types'
 import { IUserSafe } from '@/shared/types/user.types'
 
 type GroupRequestItemProps = {
-	requestItem: { id: string; name: string; avatarUrl: string; eventDate: string }
+	requestItem: { id: string; name: string; avatarUrl: string; eventDate: Date | string }
 	language: Language
 	onAccept: (id: string) => void
 	onReject: (id: string) => void
