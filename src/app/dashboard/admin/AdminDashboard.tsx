@@ -7,6 +7,7 @@ import { FaUsers, FaMoneyBillWave, FaLayerGroup, FaGoogle, FaEnvelope } from 're
 import { Avatar, AvatarImage, AvatarFallback } from '@/shared/componets/ui'
 import { UserRole } from '@/shared/types'
 import { useRouter } from 'next/navigation'
+import { DeleteUserDialog } from './DeleteUserDialog'
 
 export const AdminDashboard = () => {
 	const { dashboard, isLoading, error } = useAdminDashboard()
@@ -187,30 +188,36 @@ export const AdminDashboard = () => {
 								<p className='text-sm font-medium truncate'>
 									{user.displayName}
 								</p>
-								<p className='text-xs text-muted-foreground truncate'>
+								<p className='text-xs text-muted-foreground break-all'>
 									{user.email}
 								</p>
 							</div>
 
-							<div className='flex flex-col items-end gap-1 shrink-0'>
-								{user.method === 'GOOGLE' ? (
-									<FaGoogle
-										className='h-3.5 w-3.5 text-muted-foreground'
-										title='Google'
-									/>
-								) : (
-									<FaEnvelope
-										className='h-3.5 w-3.5 text-muted-foreground'
-										title='Email'
-									/>
-								)}
-								<span className='text-xs text-muted-foreground'>
-									{new Date(user.createdAt).toLocaleDateString('uk-UA', {
-										day: '2-digit',
-										month: '2-digit',
-										year: 'numeric'
-									})}
-								</span>
+							<div className='flex items-center gap-2 shrink-0'>
+								<div className='flex flex-col items-end gap-1'>
+									{user.method === 'GOOGLE' ? (
+										<FaGoogle
+											className='h-3.5 w-3.5 text-muted-foreground'
+											title='Google'
+										/>
+									) : (
+										<FaEnvelope
+											className='h-3.5 w-3.5 text-muted-foreground'
+											title='Email'
+										/>
+									)}
+									<span className='text-xs text-muted-foreground'>
+										{new Date(user.createdAt).toLocaleString('uk-UA', {
+											day: '2-digit',
+											month: '2-digit',
+											year: 'numeric',
+											hour: '2-digit',
+											minute: '2-digit',
+											second: '2-digit'
+										})}
+									</span>
+								</div>
+								<DeleteUserDialog user={user} />
 							</div>
 						</div>
 					))}

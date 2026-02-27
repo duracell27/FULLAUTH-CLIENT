@@ -87,6 +87,14 @@ export interface AdminDashboardResponse {
 	recentUsers: RecentUser[]
 }
 
+export interface UserDeleteDetails {
+	groupsCount: number
+	expensesCreatedCount: number
+	expensesAsPayerCount: number
+	debtsCount: number
+	paymentsCount: number
+}
+
 class AdminService {
 	public async getUsersCount() {
 		const response = await api.get<UsersCountResponse>('admin/users/count')
@@ -114,6 +122,16 @@ class AdminService {
 
 	public async getDashboard() {
 		const response = await api.get<AdminDashboardResponse>('admin/dashboard')
+		return response
+	}
+
+	public async getUserDeleteDetails(userId: string) {
+		const response = await api.get<UserDeleteDetails>(`admin/users/${userId}/stats`)
+		return response
+	}
+
+	public async deleteUser(userId: string) {
+		const response = await api.delete(`admin/users/${userId}`)
 		return response
 	}
 }

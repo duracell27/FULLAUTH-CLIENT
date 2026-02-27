@@ -84,7 +84,7 @@ export default async function RootLayout({
 					backgroundRepeat: 'no-repeat',
 				}}
 			>
-				<div className='flex h-full w-full justify-center overflow-y-auto'>
+				<div className='flex h-full w-full justify-center overflow-y-auto' style={{ scrollbarGutter: 'stable both-edges' }}>
 					<div className='w-full mx-2 max-w-[400px] relative min-h-full'>
 						<MainProvider>{children}</MainProvider>
 					</div>
