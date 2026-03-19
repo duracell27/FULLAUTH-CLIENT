@@ -26,29 +26,18 @@ import { useMarkNotificationAsReadMutation } from '@/shared/hooks/useMarkNotific
 
 type Props = {}
 
-// Функція для заміни плейсхолдерів в тексті повідомлення
+// Підставляє будь-які metadata поля у вигляді {key} або {{key}} в тексті
 const replaceMessagePlaceholders = (message: string, metadata: any): string => {
 	if (!metadata) return message
 
 	let result = message
 
-	// Замінюємо всі можливі плейсхолдери
-	const replacements: Record<string, any> = {
-		'{expenseDescription}': metadata.expenseDescription,
-		'{groupName}': metadata.groupName,
-		'{amount}': metadata.amount,
-		'{totalAmount}': metadata.totalAmount,
-		'{count}': metadata.count,
-		'{senderName}': metadata.senderName,
-		'{receiverName}': metadata.receiverName,
-		'{inviterName}': metadata.inviterName,
-		'{removerName}': metadata.removerName,
-		'{userName}': metadata.userName
-	}
-
-	Object.entries(replacements).forEach(([placeholder, value]) => {
+	Object.entries(metadata).forEach(([key, value]) => {
 		if (value !== undefined && value !== null) {
-			result = result.replace(new RegExp(placeholder, 'g'), String(value))
+			// підтримка і {key} і {{key}} форматів
+			result = result
+				.replace(new RegExp(`\\{\\{${key}\\}\\}`, 'g'), String(value))
+				.replace(new RegExp(`\\{${key}\\}`, 'g'), String(value))
 		}
 	})
 
@@ -162,7 +151,7 @@ const NotificationsData = (props: Props) => {
 								<div className='flex-1 space-y-1'>
 									<div className=' flex flex-1 items-center justify-between gap-2 '>
 										<h3 className='text-base'>
-											{t(notification.title)}
+											{t(notification.title) || notification.title}
 										</h3>
 										<p className='text-xs bg-primary px-2 py-0.5 rounded-full text-primary-foreground'>
 											{notification.type ===
@@ -183,6 +172,10 @@ const NotificationsData = (props: Props) => {
 												: notification.type ===
 												  'USER_REMOVED_FROM_GROUP'
 												? t('groupLeft')
+												: notification.type === 'CARD_REQUEST' ||
+												  notification.type === 'CARD_REQUEST_APPROVED' ||
+												  notification.type === 'CARD_REQUEST_DENIED'
+												? t('cardRequestLabel')
 												: ''}
 										</p>
 									</div>
@@ -205,7 +198,7 @@ const NotificationsData = (props: Props) => {
 										)}
 									>
 										{replaceMessagePlaceholders(
-											t(notification.message),
+											t(notification.message) || notification.message,
 											notification.metadata
 										)}
 									</p>
@@ -271,6 +264,17 @@ const NotificationsData = (props: Props) => {
 												'FRIEND_REQUEST' && (
 												<button
 													onClick={() => handleNotificationClick(notification.id, `/dashboard/settings/friends`)}
+													className='flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full text-primary cursor-pointer'
+												>
+													{t('show')}{' '}
+													<Link2 className='size-4 text-primary' />
+												</button>
+											)}
+											{(notification.type === 'CARD_REQUEST' ||
+												notification.type === 'CARD_REQUEST_APPROVED' ||
+												notification.type === 'CARD_REQUEST_DENIED') && (
+												<button
+													onClick={() => handleNotificationClick(notification.id, `/dashboard/card-requests`)}
 													className='flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full text-primary cursor-pointer'
 												>
 													{t('show')}{' '}

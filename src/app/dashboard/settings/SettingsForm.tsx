@@ -37,7 +37,9 @@ const SettingsForm = () => {
 			email: user?.email || '',
 			name: user?.displayName || '',
 			isTwoFactorEnabled: user?.isTwoFactorEnabled || false,
-			picture: user?.picture || ''
+			picture: user?.picture || '',
+			cardNumber: user?.cardNumber ?? null,
+			cardVisibility: user?.cardVisibility || 'EVERYONE'
 		}
 	})
 

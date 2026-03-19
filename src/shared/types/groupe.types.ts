@@ -1,5 +1,5 @@
 import { IExpense } from './expense.types'
-import { IUser, IUserSafe } from './user.types'
+import { CardVisibility, IUser, IUserSafe } from './user.types'
 
 export interface IGroup {
 	id: string
@@ -27,6 +27,8 @@ export interface IGroup {
 				id: string
 				displayName: string
 				picture: string | null
+				cardNumber: string | null
+				cardVisibility: CardVisibility
 			}
 			amount: number
 			type: 'owes_to_member' | 'member_owes_to'

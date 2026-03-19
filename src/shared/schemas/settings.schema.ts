@@ -23,7 +23,9 @@ export const settingsSchema = z.object({
 		message: 'Name is required'
 	}),
 	isTwoFactorEnabled: z.boolean(),
-	picture: z.string().optional()
+	picture: z.string().optional(),
+	cardNumber: z.string().nullable().optional(),
+	cardVisibility: z.enum(['EVERYONE', 'FRIENDS_ONLY', 'ON_REQUEST']).optional()
 })
 
 export type TypeSettingsSchema = z.infer<typeof settingsSchema>

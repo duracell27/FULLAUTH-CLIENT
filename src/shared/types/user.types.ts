@@ -16,6 +16,12 @@ export enum FriendStatus {
 	Rejected = 'REJECTED'
 }
 
+export enum CardVisibility {
+	EVERYONE = 'EVERYONE',
+	FRIENDS_ONLY = 'FRIENDS_ONLY',
+	ON_REQUEST = 'ON_REQUEST'
+}
+
 export enum Language {
 	EN = 'EN',
 	UK = 'UK',
@@ -56,6 +62,8 @@ export interface IUser {
 	method: AuthMethod
 	accounts: IAccount[]
 	groupMemberships: IGroupMember[]
+	cardNumber: string | null
+	cardVisibility: CardVisibility
 }
 
 export interface IUserSafe {
