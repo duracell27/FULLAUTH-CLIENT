@@ -6,6 +6,9 @@ export type NotificationType =
 	| 'EXPENSE_ADDED'
 	| 'DEBT_CREATED'
 	| 'USER_REMOVED_FROM_GROUP'
+	| 'CARD_REQUEST'
+	| 'CARD_REQUEST_APPROVED'
+	| 'CARD_REQUEST_DENIED'
 
 // Основна DTO для нотифікації
 export interface NotificationResponse {
