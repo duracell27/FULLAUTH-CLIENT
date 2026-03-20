@@ -26,10 +26,12 @@ import {
 } from '@/shared/hooks'
 import { useDeleteMemberFromGroupMutation } from '@/shared/hooks/useDeleteMemberFromGroupMutation'
 import { useAddFriendMutation } from '@/shared/hooks/useAddFriendMutation'
+import { useAcceptJoinRequestMutation } from '@/shared/hooks/useAcceptJoinRequestMutation'
+import { useRejectJoinRequestMutation } from '@/shared/hooks/useRejectJoinRequestMutation'
 import { GroupMemberStatus, GroupRole } from '@/shared/types'
 import { FriendStatus, IUser } from '@/shared/types/user.types'
 import { IGroup } from '@/shared/types/groupe.types'
-import { Lock, UserPlus, X } from 'lucide-react'
+import { Check, Lock, UserPlus, X } from 'lucide-react'
 import Link from 'next/link'
 
 type Props = {
@@ -41,6 +43,8 @@ export const MembersCard = ({ group, user }: Props) => {
 	const { t } = useTranslations()
 	const { deleteMember } = useDeleteMemberFromGroupMutation(group.id)
 	const { addFriend, isLoadingAddFriend } = useAddFriendMutation()
+	const { acceptJoinRequest, isAcceptingJoinRequest } = useAcceptJoinRequestMutation(group.id)
+	const { rejectJoinRequest, isRejectingJoinRequest } = useRejectJoinRequestMutation(group.id)
 	const { friendsData } = useFriends()
 
 	const isCurrentUserAdmin =
@@ -128,7 +132,7 @@ export const MembersCard = ({ group, user }: Props) => {
 												{member.user.displayName}
 											</span>
 											<Badge className='text-xs bg-muted-foreground'>
-												{t('invited')}
+												{member.initiator === 'USER' ? t('groupWantsToJoin') : t('groupInvitationSent')}
 											</Badge>
 										</>
 									) : (
@@ -144,6 +148,32 @@ export const MembersCard = ({ group, user }: Props) => {
 
 								<div className='flex gap-2'>
 									{/* Add Friend Button */}
+									{/* Accept/Reject join request for admin */}
+									{isCurrentUserAdmin && member.status === GroupMemberStatus.PENDING && member.initiator === 'USER' && (
+										<>
+											<Button
+												type='button'
+												size='xs'
+												disabled={isAcceptingJoinRequest}
+												onClick={() => acceptJoinRequest(member.userId)}
+												title={t('cardRequestApprove')}
+											>
+												<Check className='size-4' />
+											</Button>
+											<Button
+												type='button'
+												size='xs'
+												variant='outline'
+												className='text-bad-red border-bad-red hover:bg-bad-red/10 hover:text-bad-red'
+												disabled={isRejectingJoinRequest}
+												onClick={() => rejectJoinRequest(member.userId)}
+												title={t('cardRequestDeny')}
+											>
+												<X className='size-4' />
+											</Button>
+										</>
+									)}
+
 									{member.userId !== user.id &&
 										member.status !== GroupMemberStatus.PENDING &&
 										!isUserInFriends(member.userId) && (
@@ -182,7 +212,7 @@ export const MembersCard = ({ group, user }: Props) => {
 										)}
 
 									{/* Remove Member Button */}
-									{isCurrentUserAdmin && member.userId !== user.id && (
+									{isCurrentUserAdmin && member.userId !== user.id && member.status !== GroupMemberStatus.PENDING && (
 										<AlertDialog>
 											<AlertDialogTrigger asChild>
 												<Button

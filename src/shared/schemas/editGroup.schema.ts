@@ -25,7 +25,10 @@ export const editGroupSchema = z.object({
 	avatarUrl: z.optional(z.string()),
 	eventDate: z.optional(z.date()),
 	isLocked: z.boolean(),
-	isFinished: z.boolean()
+	isFinished: z.boolean(),
+	isPublic: z.boolean().default(false),
+	showMembers: z.boolean().default(true),
+	maxMembers: z.number().min(2).nullable().optional()
 })
 
 export type TypeEditGroupSchema = z.infer<typeof editGroupSchema>

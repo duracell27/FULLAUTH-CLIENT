@@ -111,6 +111,51 @@
 } */
 
 
+/* Safari fallback — oklch not supported before Safari 15.4 */
+@supports not (color: oklch(0 0 0)) {
+  :root {
+    --background: #f5f2fe;
+    --foreground: #2d2860;
+    --card: #ffffff;
+    --card-foreground: #2d2860;
+    --popover: #ffffff;
+    --popover-foreground: #2d2860;
+    --primary: #6040c0;
+    --primary-foreground: #ffffff;
+    --secondary: #ede8fb;
+    --secondary-foreground: #3a2e8a;
+    --muted: #f0ecfc;
+    --muted-foreground: #6b5ea8;
+    --accent: #e8e4f8;
+    --accent-foreground: #2d2860;
+    --destructive: #d94f3a;
+    --destructive-foreground: #ffffff;
+    --border: #ddd8f5;
+    --input: #ddd8f5;
+    --ring: #6040c0;
+  }
+
+  .dark {
+    --background: #1a1628;
+    --foreground: #e8e4f8;
+    --card: #221e35;
+    --card-foreground: #e8e4f8;
+    --popover: #221e35;
+    --popover-foreground: #e8e4f8;
+    --primary: #9d80e0;
+    --primary-foreground: #1a1628;
+    --secondary: #2e2850;
+    --secondary-foreground: #c8bcf0;
+    --muted: #261f40;
+    --muted-foreground: #9d90cc;
+    --accent: #302860;
+    --accent-foreground: #e8e4f8;
+    --border: #332c55;
+    --input: #332c55;
+    --ring: #9d80e0;
+  }
+}
+
 :root {
   --page-background: #debbfe;
   --background: oklch(0.9730 0.0133 286.1503);

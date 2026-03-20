@@ -2,6 +2,8 @@
 import { useGroup, useProfile, useTranslations } from '@/shared/hooks'
 import { Loading } from '@/shared/componets/ui/Loading'
 import { Avatar, AvatarFallback, AvatarImage, Button, Card, CardContent, CardHeader, CardTitle } from '@/shared/componets/ui'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 import { GroupInfoCard } from './GroupInfoCard'
 import { PaymentsCard } from './PaymentsCard'
 import { BalancesCard } from './BalancesCard'
@@ -27,6 +29,13 @@ export const GroupData = ({ groupId }: Props) => {
 	const { rejectGroupRequest } = useRejectGroupRequestMutation()
 
 	const language = user?.language || Language.EN
+	const router = useRouter()
+
+	useEffect(() => {
+		if (isErrorGroup) {
+			router.replace(`/groups/${groupId}/public`)
+		}
+	}, [isErrorGroup, groupId, router])
 
 	if (isLoadingGroup) {
 		return <Loading />

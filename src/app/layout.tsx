@@ -78,10 +78,12 @@ export default async function RootLayout({
 			</head>
 			<body
 				style={{
+					backgroundColor: '#debbfe',
 					backgroundImage: "url('/images/mainBgPatternViolet.png')",
 					backgroundSize: 'cover',
 					backgroundPosition: 'center',
 					backgroundRepeat: 'no-repeat',
+					backgroundAttachment: 'scroll',
 				}}
 			>
 				<div className='flex h-full w-full justify-center overflow-y-auto' style={{ scrollbarGutter: 'stable both-edges' }}>

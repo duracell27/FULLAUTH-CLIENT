@@ -1,6 +1,19 @@
 import { IExpense } from './expense.types'
 import { CardVisibility, IUser, IUserSafe } from './user.types'
 
+export interface IPublicGroup {
+	id: string
+	name: string
+	avatarUrl: string | null
+	createdAt: string
+	isPublic: boolean
+	showMembers: boolean
+	maxMembers: number | null
+	membersCount: number
+	members?: { userId: string; user: { id: string; displayName: string; picture: string | null } }[]
+	currentUserStatus: 'PENDING' | 'ACCEPTED' | 'REJECTED' | null
+}
+
 export interface IGroup {
 	id: string
 	name: string
@@ -8,6 +21,9 @@ export interface IGroup {
 	isLocked: boolean
 	isFinished: boolean
 	isPersonal: boolean
+	isPublic: boolean
+	showMembers: boolean
+	maxMembers: number | null
 	eventDate: Date
 	createdAt: Date
 	updatedAt: Date
@@ -59,6 +75,7 @@ export interface IGroupMember {
 	groupId: string
 	role: GroupRole
 	status: GroupMemberStatus
+	initiator: 'USER' | 'ADMIN'
 	joinedAt: Date
 	user: IUserSafe
 	group: IGroup

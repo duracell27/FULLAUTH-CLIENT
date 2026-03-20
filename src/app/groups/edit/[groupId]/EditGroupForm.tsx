@@ -37,6 +37,7 @@ import { Loading } from '@/shared/componets/ui/Loading'
 import { editGroupSchema, TypeEditGroupSchema } from '@/shared/schemas'
 import { useEditGroupMutation } from '@/shared/hooks/useEditGroupMutation'
 import { Switch } from '@/shared/componets/ui/Switch'
+import { FormDescription } from '@/shared/componets/ui'
 
 type Props = {
 	groupId: string
@@ -60,11 +61,16 @@ export const EditGroupForm = ({ groupId }: Props) => {
 			avatarUrl: (group?.avatarUrl as string) || '',
 			eventDate: new Date(group?.eventDate!) || new Date(),
 			isLocked: group?.isLocked ?? false,
-			isFinished: group?.isFinished ?? false
+			isFinished: group?.isFinished ?? false,
+			isPublic: group?.isPublic ?? false,
+			showMembers: group?.showMembers ?? true,
+			maxMembers: group?.maxMembers ?? null
 		}
 	})
 
 	const { editGroup, isLoadingEditGroup } = useEditGroupMutation(groupId)
+
+	const watchedIsPublic = form.watch('isPublic')
 
 	const handleFileChange = async (
 		event: React.ChangeEvent<HTMLInputElement>
@@ -352,7 +358,66 @@ export const EditGroupForm = ({ groupId }: Props) => {
 								)}
 							/>
 
-							<Button type='submit'>{t('updateGroup')}</Button>
+							<FormField
+							control={form.control}
+							name='isPublic'
+							render={({ field }) => (
+								<FormItem className='flex flex-col gap-1'>
+									<div className='flex items-center gap-3'>
+										<FormLabel>{t('groupPublic')}</FormLabel>
+										<Switch
+											checked={field.value}
+											onCheckedChange={field.onChange}
+											disabled={isLoadingEditGroup}
+										/>
+									</div>
+									<FormDescription className='text-xs'>{t('groupPublicDescription')}</FormDescription>
+								</FormItem>
+							)}
+						/>
+
+						{watchedIsPublic && (
+							<>
+								<FormField
+									control={form.control}
+									name='showMembers'
+									render={({ field }) => (
+										<FormItem className='flex flex-col gap-1'>
+											<div className='flex items-center gap-3'>
+												<FormLabel>{t('groupShowMembers')}</FormLabel>
+												<Switch
+													checked={field.value}
+													onCheckedChange={field.onChange}
+													disabled={isLoadingEditGroup}
+												/>
+											</div>
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name='maxMembers'
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{t('groupMaxMembers')}</FormLabel>
+											<FormControl>
+												<Input
+													type='number'
+													min={2}
+													placeholder={t('groupMaxMembersPlaceholder')}
+													disabled={isLoadingEditGroup}
+													value={field.value ?? ''}
+													onChange={e => field.onChange(e.target.value ? Number(e.target.value) : null)}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</>
+						)}
+
+						<Button type='submit'>{t('updateGroup')}</Button>
 						</form>
 					</Form>
 				</CardContent>

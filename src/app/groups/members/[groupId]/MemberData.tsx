@@ -99,6 +99,7 @@ export const MemberData = (props: Props) => {
 				</CardContent>
 			</Card>
 
+			{searchName && (
 			<Card className='w-full max-w-[400px]'>
 				<CardHeader>
 					<CardTitle>{t('results')}</CardTitle>
@@ -140,6 +141,7 @@ export const MemberData = (props: Props) => {
 					</ul>
 				</CardContent>
 			</Card>
+			)}
 
 			{friendsData && friendsData?.friends.length > 0 && (
 				<Card className='w-full max-w-[400px] mb-18'>

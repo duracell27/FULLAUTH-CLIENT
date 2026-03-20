@@ -9,6 +9,9 @@ export type NotificationType =
 	| 'CARD_REQUEST'
 	| 'CARD_REQUEST_APPROVED'
 	| 'CARD_REQUEST_DENIED'
+	| 'GROUP_JOIN_REQUEST'
+	| 'GROUP_JOIN_REQUEST_ACCEPTED'
+	| 'GROUP_JOIN_REQUEST_REJECTED'
 
 // Основна DTO для нотифікації
 export interface NotificationResponse {

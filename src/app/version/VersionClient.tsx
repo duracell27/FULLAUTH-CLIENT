@@ -28,6 +28,19 @@ export default function VersionClient() {
 
 						<div className='space-y-2'>
 							<div className='flex items-center justify-between'>
+								<span className='font-medium'>v0.4</span>
+								<span className='text-sm text-muted-foreground'>
+									2026-03-20
+								</span>
+							</div>
+							<div className='text-sm text-muted-foreground pl-4'>
+								• {t('v04CardManagement')}
+								<br />• {t('v04CardInPayment')}
+							</div>
+						</div>
+
+						<div className='space-y-2'>
+							<div className='flex items-center justify-between'>
 								<span className='font-medium'>v0.3.5</span>
 								<span className='text-sm text-muted-foreground'>
 									2026-01-20

@@ -35,6 +35,8 @@ import { useAddGroupMutation, useTranslations } from '@/shared/hooks'
 import { useProfile } from '@/shared/hooks/useProfile'
 import { Language } from '@/shared/types/user.types'
 import { BackButton } from '@/shared/componets/ui/BackButton'
+import { Switch } from '@/shared/componets/ui/Switch'
+import { FormDescription } from '@/shared/componets/ui'
 
 type Props = {}
 
@@ -55,9 +57,14 @@ export const AddGroupForm = (props: Props) => {
 			avatarUrl: '',
 			eventDate: new Date(),
 			isLocked: false,
-			isFinished: false
+			isFinished: false,
+			isPublic: false,
+			showMembers: true,
+			maxMembers: null
 		}
 	})
+
+	const watchedIsPublic = form.watch('isPublic')
 
 	const handleFileChange = async (
 		event: React.ChangeEvent<HTMLInputElement>
@@ -304,6 +311,66 @@ export const AddGroupForm = (props: Props) => {
 									</FormItem>
 								)}
 							/>
+
+
+							<FormField
+								control={form.control}
+								name='isPublic'
+								render={({ field }) => (
+									<FormItem className='flex flex-col gap-1'>
+										<div className='flex items-center gap-3'>
+											<FormLabel>{t('groupPublic')}</FormLabel>
+											<Switch
+												checked={field.value}
+												onCheckedChange={field.onChange}
+												disabled={isLoadingAddGroup}
+											/>
+										</div>
+										<FormDescription className='text-xs'>{t('groupPublicDescription')}</FormDescription>
+									</FormItem>
+								)}
+							/>
+
+							{watchedIsPublic && (
+								<>
+									<FormField
+										control={form.control}
+										name='showMembers'
+										render={({ field }) => (
+											<FormItem className='flex flex-col gap-1'>
+												<div className='flex items-center gap-3'>
+													<FormLabel>{t('groupShowMembers')}</FormLabel>
+													<Switch
+														checked={field.value}
+														onCheckedChange={field.onChange}
+														disabled={isLoadingAddGroup}
+													/>
+												</div>
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name='maxMembers'
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>{t('groupMaxMembers')}</FormLabel>
+												<FormControl>
+													<Input
+														type='number'
+														min={2}
+														placeholder={t('groupMaxMembersPlaceholder')}
+														disabled={isLoadingAddGroup}
+														value={field.value ?? ''}
+														onChange={e => field.onChange(e.target.value ? Number(e.target.value) : null)}
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								</>
+							)}
 
 							<Button disabled={isLoadingAddGroup} type='submit'>
 								{t('createGroup')}

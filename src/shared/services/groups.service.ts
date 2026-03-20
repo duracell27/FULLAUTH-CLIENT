@@ -1,7 +1,7 @@
 import { TypeEditGroupSchema } from '../schemas'
 import { TypeAddGroupSchema } from '../schemas/createGroup.schema'
 import { IGroup } from '../types'
-import { IUserGroup } from '../types/groupe.types'
+import { IPublicGroup, IUserGroup } from '../types/groupe.types'
 import { api } from '../utils/api'
 
 class GroupsService {
@@ -41,6 +41,26 @@ class GroupsService {
 
      public async getGroup(groupId: string) {
         const response = await api.get<IGroup>(`groups/${groupId}`)
+        return response
+    }
+
+    public async getPublicGroup(groupId: string) {
+        const response = await api.get<IPublicGroup>(`groups/${groupId}/public`)
+        return response
+    }
+
+    public async sendJoinRequest(groupId: string) {
+        const response = await api.post(`groups/${groupId}/join-request`, {})
+        return response
+    }
+
+    public async acceptJoinRequest(groupId: string, requesterId: string) {
+        const response = await api.patch(`groups/${groupId}/join-request/${requesterId}/accept`, {})
+        return response
+    }
+
+    public async rejectJoinRequest(groupId: string, requesterId: string) {
+        const response = await api.patch(`groups/${groupId}/join-request/${requesterId}/reject`, {})
         return response
     }
 }

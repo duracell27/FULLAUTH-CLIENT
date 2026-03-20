@@ -176,6 +176,10 @@ const NotificationsData = (props: Props) => {
 												  notification.type === 'CARD_REQUEST_APPROVED' ||
 												  notification.type === 'CARD_REQUEST_DENIED'
 												? t('cardRequestLabel')
+												: notification.type === 'GROUP_JOIN_REQUEST' ||
+												  notification.type === 'GROUP_JOIN_REQUEST_ACCEPTED' ||
+												  notification.type === 'GROUP_JOIN_REQUEST_REJECTED'
+												? t('group')
 												: ''}
 										</p>
 									</div>
@@ -275,6 +279,25 @@ const NotificationsData = (props: Props) => {
 												notification.type === 'CARD_REQUEST_DENIED') && (
 												<button
 													onClick={() => handleNotificationClick(notification.id, `/dashboard/card-requests`)}
+													className='flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full text-primary cursor-pointer'
+												>
+													{t('show')}{' '}
+													<Link2 className='size-4 text-primary' />
+												</button>
+											)}
+											{(notification.type === 'GROUP_JOIN_REQUEST' ||
+												notification.type === 'GROUP_JOIN_REQUEST_ACCEPTED') && (
+												<button
+													onClick={() => handleNotificationClick(notification.id, `/groups/${notification.relatedGroupId ?? notification.metadata?.groupId}`)}
+													className='flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full text-primary cursor-pointer'
+												>
+													{t('show')}{' '}
+													<Link2 className='size-4 text-primary' />
+												</button>
+											)}
+											{notification.type === 'GROUP_JOIN_REQUEST_REJECTED' && (
+												<button
+													onClick={() => handleNotificationClick(notification.id, `/groups/${notification.relatedGroupId ?? notification.metadata?.groupId}/public`)}
 													className='flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full text-primary cursor-pointer'
 												>
 													{t('show')}{' '}

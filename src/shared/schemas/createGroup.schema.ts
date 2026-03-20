@@ -22,7 +22,10 @@ export const addGroupSchema = z.object({
 	avatarUrl: z.optional(z.string()),
 	eventDate: z.optional(z.date()),
 	isLocked: z.boolean().default(false),
-	isFinished: z.boolean().default(false)
+	isFinished: z.boolean().default(false),
+	isPublic: z.boolean().default(false),
+	showMembers: z.boolean().default(true),
+	maxMembers: z.number().min(2).nullable().optional()
 })
 
 export type TypeAddGroupSchema = z.infer<typeof addGroupSchema>
