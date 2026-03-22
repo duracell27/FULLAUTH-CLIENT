@@ -463,6 +463,17 @@
   "groups.notifications.group_join_request_rejected.title": "Demande refusée",
   "groups.notifications.group_join_request_rejected.message": "Votre demande pour rejoindre {groupName} a été refusée",
   "memberAcceptedSuccessfully": "Membre accepté avec succès",
-  "groupWantsToJoin": "Veut rejoindre",
-  "groupInvitationSent": "Invitation envoyée"
+  "groupWantsToJoin": "En attente",
+  "groupInvitationSent": "Invitation envoyée",
+  "shareGroup": "Partager le groupe",
+  "groupPersonalDescription": "Groupe personnel — uniquement pour suivre les dépenses entre deux personnes",
+  "groupPrivateDescription": "Groupe privé — seuls les membres invités peuvent rejoindre",
+  "leaveGroup": "Quitter le groupe",
+  "leaveGroupDescription": "Êtes-vous sûr de vouloir quitter ce groupe ? Vous ne pouvez partir que si vous n'avez pas de soldes non réglés.",
+  "groupLeftSuccessfully": "Vous avez quitté le groupe",
+  "common.group_members.errors.user_has_unsettled_balance": "Vous ne pouvez pas quitter le groupe tant que vous avez des soldes non réglés",
+  "group_members.errors.admin_cannot_leave": "L'administrateur du groupe ne peut pas quitter le groupe",
+  "group_members.errors.user_has_unsettled_balance": "Vous avez des dettes ou crédits non réglés dans ce groupe",
+  "v045PublicGroups": "Groupes publics ajoutés",
+  "v045QrCodeAccess": "Accès via QR code ou lien de groupe"
 }

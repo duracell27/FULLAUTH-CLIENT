@@ -45,7 +45,7 @@ export function ToggleTheme() {
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
-			<p className='inline text-lg font-bold'>{mounted && theme}</p>
+			<p className='inline text-lg font-bold'>{mounted && theme && t(theme)}</p>
 		</div>
 	)
 }

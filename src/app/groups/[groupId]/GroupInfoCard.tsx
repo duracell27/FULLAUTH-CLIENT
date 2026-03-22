@@ -33,7 +33,7 @@ import { IGroup } from '@/shared/types/groupe.types'
 import colorBalance from '@/shared/utils/colorBalance'
 import { formatNumberWithSpaces } from '@/shared/utils/formatBalance'
 import { formatDate } from '@/shared/utils'
-import { BookmarkCheck, Edit2, Eye, Lock, Trash } from 'lucide-react'
+import { BookmarkCheck, Edit2, Eye, Globe, Lock, Trash, User } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -200,20 +200,59 @@ export const GroupInfoCard = ({ group, user }: Props) => {
 						{colorBalance({ balance: group.userTotalBalance })}
 					</span>
 				</div>
-				<Popover>
-					<PopoverTrigger asChild>
-						<p className='text-xs mt-1 cursor-pointer w-fit'>
-							{formatDate(
-								group.eventDate,
-								'PP',
-								user?.language || Language.EN
-							)}
-						</p>
-					</PopoverTrigger>
-					<PopoverContent className='w-auto'>
-						<p className='text-sm'>{formatDate(group.eventDate, 'PPpp', user?.language || Language.EN)}</p>
-					</PopoverContent>
-				</Popover>
+				<div className='flex items-center justify-between mt-1'>
+					<Popover>
+						<PopoverTrigger asChild>
+							<p className='text-xs cursor-pointer w-fit'>
+								{formatDate(
+									group.eventDate,
+									'PP',
+									user?.language || Language.EN
+								)}
+							</p>
+						</PopoverTrigger>
+						<PopoverContent className='w-auto'>
+							<p className='text-sm'>{formatDate(group.eventDate, 'PPpp', user?.language || Language.EN)}</p>
+						</PopoverContent>
+					</Popover>
+
+					<div className='flex items-center gap-1'>
+						{group.isPersonal ? (
+							<Popover>
+								<PopoverTrigger asChild>
+									<button className='text-muted-foreground hover:text-foreground transition-colors'>
+										<User className='size-4' />
+									</button>
+								</PopoverTrigger>
+								<PopoverContent className='w-auto text-sm max-w-[200px]'>
+									{t('groupPersonalDescription')}
+								</PopoverContent>
+							</Popover>
+						) : group.isPublic ? (
+							<Popover>
+								<PopoverTrigger asChild>
+									<button className='text-muted-foreground hover:text-foreground transition-colors'>
+										<Globe className='size-4' />
+									</button>
+								</PopoverTrigger>
+								<PopoverContent className='w-auto text-sm max-w-[200px]'>
+									{t('groupPublicDescription')}
+								</PopoverContent>
+							</Popover>
+						) : (
+							<Popover>
+								<PopoverTrigger asChild>
+									<button className='text-muted-foreground hover:text-foreground transition-colors'>
+										<Lock className='size-4' />
+									</button>
+								</PopoverTrigger>
+								<PopoverContent className='w-auto text-sm max-w-[200px]'>
+									{t('groupPrivateDescription')}
+								</PopoverContent>
+							</Popover>
+						)}
+					</div>
+				</div>
 
 				{group.isLocked && (
 					<div className='flex justify-center items-center gap-2 bg-bad-red px-2 rounded-full text-white mt-1'>

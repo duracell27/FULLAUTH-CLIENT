@@ -463,6 +463,17 @@
   "groups.notifications.group_join_request_rejected.title": "Beitrittsanfrage abgelehnt",
   "groups.notifications.group_join_request_rejected.message": "Deine Anfrage, {groupName} beizutreten, wurde abgelehnt",
   "memberAcceptedSuccessfully": "Mitglied erfolgreich akzeptiert",
-  "groupWantsToJoin": "Möchte beitreten",
-  "groupInvitationSent": "Einladung gesendet"
+  "groupWantsToJoin": "Ausstehend",
+  "groupInvitationSent": "Einladung gesendet",
+  "shareGroup": "Gruppe teilen",
+  "groupPersonalDescription": "Persönliche Gruppe — nur für die Kostenverfolgung zwischen zwei Personen",
+  "groupPrivateDescription": "Private Gruppe — nur eingeladene Mitglieder können beitreten",
+  "leaveGroup": "Gruppe verlassen",
+  "leaveGroupDescription": "Möchten Sie die Gruppe wirklich verlassen? Sie können nur austreten, wenn Sie keine offenen Salden haben.",
+  "groupLeftSuccessfully": "Sie haben die Gruppe verlassen",
+  "common.group_members.errors.user_has_unsettled_balance": "Sie können die Gruppe nicht verlassen, solange Sie offene Salden haben",
+  "group_members.errors.admin_cannot_leave": "Der Gruppenadmin kann die Gruppe nicht verlassen",
+  "group_members.errors.user_has_unsettled_balance": "Sie haben offene Schulden oder Guthaben in dieser Gruppe",
+  "v045PublicGroups": "Öffentliche Gruppen hinzugefügt",
+  "v045QrCodeAccess": "Zugang per QR-Code oder Gruppenlink"
 }

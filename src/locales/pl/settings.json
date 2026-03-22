@@ -463,6 +463,17 @@
   "groups.notifications.group_join_request_rejected.title": "Wniosek odrzucony",
   "groups.notifications.group_join_request_rejected.message": "Twój wniosek o dołączenie do {groupName} został odrzucony",
   "memberAcceptedSuccessfully": "Członek zaakceptowany pomyślnie",
-  "groupWantsToJoin": "Chce dołączyć",
-  "groupInvitationSent": "Zaproszenie wysłane"
+  "groupWantsToJoin": "Oczekuje",
+  "groupInvitationSent": "Zaproszenie wysłane",
+  "shareGroup": "Udostępnij grupę",
+  "groupPersonalDescription": "Grupa osobista — tylko do śledzenia wydatków między dwiema osobami",
+  "groupPrivateDescription": "Grupa prywatna — tylko zaproszeni członkowie mogą dołączyć",
+  "leaveGroup": "Opuść grupę",
+  "leaveGroupDescription": "Czy na pewno chcesz opuścić tę grupę? Możesz odejść tylko jeśli nie masz nierozliczonych sald.",
+  "groupLeftSuccessfully": "Opuściłeś grupę",
+  "common.group_members.errors.user_has_unsettled_balance": "Nie możesz opuścić grupy, dopóki masz nierozliczone salda",
+  "group_members.errors.admin_cannot_leave": "Administrator grupy nie może opuścić grupy",
+  "group_members.errors.user_has_unsettled_balance": "Masz nierozliczone długi lub kredyty w tej grupie",
+  "v045PublicGroups": "Dodano grupy publiczne",
+  "v045QrCodeAccess": "Dostęp przez kod QR lub link do grupy"
 }

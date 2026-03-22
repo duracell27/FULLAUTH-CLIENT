@@ -17,7 +17,7 @@ import {
 	Input
 } from '@/shared/componets/ui'
 import { BackButton } from '@/shared/componets/ui/BackButton'
-import { useFriends, useProfile, useTranslations } from '@/shared/hooks'
+import { useFriends, useGroup, useProfile, useTranslations } from '@/shared/hooks'
 import { useAddMemberToGroupMutation } from '@/shared/hooks/useAddMemberToGroupMutation'
 import { useProfileByNameSafe } from '@/shared/hooks/useProfileByNameSafe'
 import {
@@ -29,8 +29,8 @@ import { Language } from '@/shared/types/user.types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { set } from 'date-fns'
 import React, { useState } from 'react'
-
 import { useForm } from 'react-hook-form'
+import { GroupShareCard } from '../../GroupShareCard'
 
 type Props = {
 	groupId: string
@@ -43,6 +43,7 @@ export const MemberData = (props: Props) => {
 		props.groupId
 	)
 	const { friendsData, isLoadingFriend } = useFriends()
+	const { group } = useGroup(props.groupId)
 	const { user } = useProfile()
 	const { t } = useTranslations()
 	
@@ -66,6 +67,7 @@ export const MemberData = (props: Props) => {
 	return (
 		<>
 			<BackButton />
+			{group?.isPublic && <GroupShareCard groupId={props.groupId} />}
 			<Card className='w-full max-w-[400px]'>
 				<CardHeader>
 					<CardTitle>{t('searchUser')}</CardTitle>

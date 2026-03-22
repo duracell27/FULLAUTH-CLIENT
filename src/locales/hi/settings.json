@@ -463,6 +463,17 @@
   "groups.notifications.group_join_request_rejected.title": "अनुरोध अस्वीकृत",
   "groups.notifications.group_join_request_rejected.message": "{groupName} में शामिल होने का आपका अनुरोध अस्वीकृत हो गया",
   "memberAcceptedSuccessfully": "सदस्य सफलतापूर्वक स्वीकृत",
-  "groupWantsToJoin": "शामिल होना चाहता है",
-  "groupInvitationSent": "निमंत्रण भेजा गया"
+  "groupWantsToJoin": "लंबित",
+  "groupInvitationSent": "निमंत्रण भेजा गया",
+  "shareGroup": "समूह साझा करें",
+  "groupPersonalDescription": "व्यक्तिगत समूह — केवल दो लोगों के बीच खर्च ट्रैक करने के लिए",
+  "groupPrivateDescription": "निजी समूह — केवल आमंत्रित सदस्य जुड़ सकते हैं",
+  "leaveGroup": "समूह छोड़ें",
+  "leaveGroupDescription": "क्या आप वाकई इस समूह को छोड़ना चाहते हैं? आप केवल तभी छोड़ सकते हैं जब आपका कोई अनसेटल्ड बैलेंस न हो।",
+  "groupLeftSuccessfully": "आपने समूह छोड़ दिया",
+  "common.group_members.errors.user_has_unsettled_balance": "जब तक आपके अनसेटल्ड बैलेंस हैं, आप समूह नहीं छोड़ सकते",
+  "group_members.errors.admin_cannot_leave": "समूह व्यवस्थापक समूह नहीं छोड़ सकता",
+  "group_members.errors.user_has_unsettled_balance": "इस समूह में आपके अनसुलझे ऋण या क्रेडिट हैं",
+  "v045PublicGroups": "सार्वजनिक समूह जोड़े गए",
+  "v045QrCodeAccess": "QR कोड या समूह लिंक के माध्यम से पहुंच"
 }

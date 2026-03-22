@@ -10,6 +10,7 @@ import { BalancesCard } from './BalancesCard'
 import { ExpensesCard } from './ExpensesCard'
 import { MembersCard } from './MembersCard'
 import { useGroupsRequests } from '@/shared/hooks/useGroupsRequests'
+import { GroupShareCard } from '../GroupShareCard'
 import { useAcceptGroupRequestMutation } from '@/shared/hooks/useAcceptGroupRequestMutation'
 import { useRejectGroupRequestMutation } from '@/shared/hooks/useRejectGroupRequestMutation'
 import { getAvatarUrl, formatDate } from '@/shared/utils'
@@ -101,6 +102,7 @@ export const GroupData = ({ groupId }: Props) => {
 			<BalancesCard group={group} user={user} />
 			<ExpensesCard group={group} user={user} />
 			<MembersCard group={group} user={user} />
+			{group.isPublic && <GroupShareCard groupId={group.id} />}
 		</div>
 	)
 }

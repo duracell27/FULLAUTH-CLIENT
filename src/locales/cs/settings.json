@@ -463,6 +463,17 @@
   "groups.notifications.group_join_request_rejected.title": "Žádost zamítnuta",
   "groups.notifications.group_join_request_rejected.message": "Vaše žádost o vstup do {groupName} byla zamítnuta",
   "memberAcceptedSuccessfully": "Člen byl úspěšně přijat",
-  "groupWantsToJoin": "Chce se přidat",
-  "groupInvitationSent": "Pozvánka odeslána"
+  "groupWantsToJoin": "Čeká",
+  "groupInvitationSent": "Pozvánka odeslána",
+  "shareGroup": "Sdílet skupinu",
+  "groupPersonalDescription": "Osobní skupina — pouze pro sledování výdajů mezi dvěma lidmi",
+  "groupPrivateDescription": "Soukromá skupina — připojit se mohou pouze pozvaní členové",
+  "leaveGroup": "Opustit skupinu",
+  "leaveGroupDescription": "Opravdu chcete skupinu opustit? Odejít lze pouze tehdy, pokud nemáte žádné nevyrovnané zůstatky.",
+  "groupLeftSuccessfully": "Opustili jste skupinu",
+  "common.group_members.errors.user_has_unsettled_balance": "Nemůžete skupinu opustit, dokud máte nevyrovnané zůstatky",
+  "group_members.errors.admin_cannot_leave": "Správce skupiny nemůže skupinu opustit",
+  "group_members.errors.user_has_unsettled_balance": "Máte nevyřízené dluhy nebo kredity v této skupině",
+  "v045PublicGroups": "Přidány veřejné skupiny",
+  "v045QrCodeAccess": "Přístup přes QR kód nebo odkaz na skupinu"
 }

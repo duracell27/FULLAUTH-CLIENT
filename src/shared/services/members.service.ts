@@ -13,6 +13,11 @@ class MemberService {
 		return response
 	}
 
+	public async leaveGroup(groupId: string) {
+		const response = await api.delete<boolean>('group-members/leave', { groupId })
+		return response
+	}
+
 	public async getGroupsRequests() {
 		const response = await api.get<IUserGroup[]>('group-members/requests')
 		return response

@@ -463,6 +463,17 @@
   "groups.notifications.group_join_request_rejected.title": "Talep reddedildi",
   "groups.notifications.group_join_request_rejected.message": "{groupName} grubuna katılma talebiniz reddedildi",
   "memberAcceptedSuccessfully": "Üye başarıyla kabul edildi",
-  "groupWantsToJoin": "Katılmak istiyor",
-  "groupInvitationSent": "Davet gönderildi"
+  "groupWantsToJoin": "Bekliyor",
+  "groupInvitationSent": "Davet gönderildi",
+  "shareGroup": "Grubu paylaş",
+  "groupPersonalDescription": "Kişisel grup — yalnızca iki kişi arasındaki giderleri takip etmek için",
+  "groupPrivateDescription": "Özel grup — yalnızca davet edilen üyeler katılabilir",
+  "leaveGroup": "Gruptan ayrıl",
+  "leaveGroupDescription": "Bu gruptan ayrılmak istediğinizden emin misiniz? Yalnızca ödenmemiş bakiyeniz yoksa ayrılabilirsiniz.",
+  "groupLeftSuccessfully": "Gruptan ayrıldınız",
+  "common.group_members.errors.user_has_unsettled_balance": "Ödenmemiş bakiyeniz varken gruptan ayrılamazsınız",
+  "group_members.errors.admin_cannot_leave": "Grup yöneticisi gruptan ayrılamaz",
+  "group_members.errors.user_has_unsettled_balance": "Bu grupta kapatılmamış borçlarınız veya alacaklarınız var",
+  "v045PublicGroups": "Herkese açık gruplar eklendi",
+  "v045QrCodeAccess": "QR kodu veya grup bağlantısı ile erişim"
 }

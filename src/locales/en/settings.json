@@ -463,6 +463,17 @@
   "groups.notifications.group_join_request_rejected.title": "Join request rejected",
   "groups.notifications.group_join_request_rejected.message": "Your request to join {groupName} has been rejected",
   "memberAcceptedSuccessfully": "Member accepted successfully",
-  "groupWantsToJoin": "Wants to join",
-  "groupInvitationSent": "Invitation sent"
+  "groupWantsToJoin": "Pending",
+  "groupInvitationSent": "Invitation sent",
+  "shareGroup": "Share group",
+  "groupPersonalDescription": "Personal group — only for tracking expenses between two people",
+  "groupPrivateDescription": "Private group — only invited members can join",
+  "leaveGroup": "Leave group",
+  "leaveGroupDescription": "Are you sure you want to leave this group? You can only leave if you have no unsettled balances.",
+  "groupLeftSuccessfully": "You have left the group",
+  "common.group_members.errors.user_has_unsettled_balance": "You cannot leave the group while you have unsettled balances",
+  "group_members.errors.admin_cannot_leave": "The group admin cannot leave the group",
+  "group_members.errors.user_has_unsettled_balance": "You have unsettled debts or credits in this group",
+  "v045PublicGroups": "Added public groups",
+  "v045QrCodeAccess": "Access via QR code or group link"
 }

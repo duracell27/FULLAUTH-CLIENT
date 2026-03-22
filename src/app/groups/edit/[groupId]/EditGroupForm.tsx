@@ -196,12 +196,12 @@ export const EditGroupForm = ({ groupId }: Props) => {
 												{/* Кастомний прямокутник */}
 												<div className='flex gap-4 items-center'>
 													<div
-														className='flex items-center justify-center w-full h-12 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 hover:bg-gray-100 cursor-pointer transition-colors'
+														className='flex items-center justify-center w-full h-12 border-2 border-dashed border-border rounded-lg bg-muted hover:bg-muted/80 cursor-pointer transition-colors'
 														onClick={
 															handleButtonClick
 														}
 													>
-														<span className='text-gray-600 font-medium'>
+														<span className='text-muted-foreground font-medium'>
 															{isLoadingAvatar
 																? t('uploading')
 																: t('uploadPhoto')}

@@ -463,6 +463,17 @@
   "groups.notifications.group_join_request_rejected.title": "Заявку відхилено",
   "groups.notifications.group_join_request_rejected.message": "Вашу заявку до {groupName} відхилено",
   "memberAcceptedSuccessfully": "Учасника прийнято",
-  "groupWantsToJoin": "Хоче приєднатись",
-  "groupInvitationSent": "Запрошення надіслано"
+  "groupWantsToJoin": "Очікує",
+  "groupInvitationSent": "Запрошення надіслано",
+  "shareGroup": "Поділитись групою",
+  "groupPersonalDescription": "Персональна група — лише для відстеження витрат між двома людьми",
+  "groupPrivateDescription": "Приватна група — лише запрошені учасники можуть приєднатись",
+  "leaveGroup": "Вийти з групи",
+  "leaveGroupDescription": "Ви впевнені, що хочете вийти з групи? Вийти можна лише якщо у вас немає незакритих балансів.",
+  "groupLeftSuccessfully": "Ви вийшли з групи",
+  "common.group_members.errors.user_has_unsettled_balance": "Ви не можете вийти з групи, поки маєте незакриті баланси",
+  "group_members.errors.admin_cannot_leave": "Адміністратор групи не може покинути групу",
+  "group_members.errors.user_has_unsettled_balance": "У вас є незакриті борги або кредити в цій групі",
+  "v045PublicGroups": "Додано публічні групи",
+  "v045QrCodeAccess": "Доступ по QR-коду або через посилання на групу"
 }

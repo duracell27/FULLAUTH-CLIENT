@@ -28,10 +28,11 @@ import { useDeleteMemberFromGroupMutation } from '@/shared/hooks/useDeleteMember
 import { useAddFriendMutation } from '@/shared/hooks/useAddFriendMutation'
 import { useAcceptJoinRequestMutation } from '@/shared/hooks/useAcceptJoinRequestMutation'
 import { useRejectJoinRequestMutation } from '@/shared/hooks/useRejectJoinRequestMutation'
+import { useLeaveGroupMutation } from '@/shared/hooks/useLeaveGroupMutation'
 import { GroupMemberStatus, GroupRole } from '@/shared/types'
 import { FriendStatus, IUser } from '@/shared/types/user.types'
 import { IGroup } from '@/shared/types/groupe.types'
-import { Check, Lock, UserPlus, X } from 'lucide-react'
+import { Check, Lock, LogOut, UserPlus, X } from 'lucide-react'
 import Link from 'next/link'
 
 type Props = {
@@ -46,6 +47,7 @@ export const MembersCard = ({ group, user }: Props) => {
 	const { acceptJoinRequest, isAcceptingJoinRequest } = useAcceptJoinRequestMutation(group.id)
 	const { rejectJoinRequest, isRejectingJoinRequest } = useRejectJoinRequestMutation(group.id)
 	const { friendsData } = useFriends()
+	const { leaveGroup, isLeavingGroup } = useLeaveGroupMutation(group.id)
 
 	const isCurrentUserAdmin =
 		group.members.find(member => member.userId === user.id)?.role === GroupRole.ADMIN
@@ -241,6 +243,41 @@ export const MembersCard = ({ group, user }: Props) => {
 														className='bg-bad-red hover:bg-bad-red/80'
 													>
 														{t('continue')}
+													</AlertDialogAction>
+												</AlertDialogFooter>
+											</AlertDialogContent>
+										</AlertDialog>
+									)}
+									{/* Leave Group Button */}
+									{!isCurrentUserAdmin && member.userId === user.id && member.status === GroupMemberStatus.ACCEPTED && !group.isPersonal && (
+										<AlertDialog>
+											<AlertDialogTrigger asChild>
+												<Button
+													type='button'
+													variant='outline'
+													size='xs'
+													className='text-bad-red border-bad-red hover:bg-bad-red/10 hover:text-bad-red'
+													disabled={isLeavingGroup}
+												>
+													<LogOut className='size-4' />
+												</Button>
+											</AlertDialogTrigger>
+											<AlertDialogContent>
+												<AlertDialogHeader>
+													<AlertDialogTitle>
+														{t('areYouAbsolutelySure')}
+													</AlertDialogTitle>
+													<AlertDialogDescription>
+														{t('leaveGroupDescription')}
+													</AlertDialogDescription>
+												</AlertDialogHeader>
+												<AlertDialogFooter>
+													<AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
+													<AlertDialogAction
+														onClick={() => leaveGroup()}
+														className='bg-bad-red hover:bg-bad-red/80'
+													>
+														{t('leaveGroup')}
 													</AlertDialogAction>
 												</AlertDialogFooter>
 											</AlertDialogContent>

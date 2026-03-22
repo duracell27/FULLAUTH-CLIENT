@@ -463,6 +463,17 @@
   "groups.notifications.group_join_request_rejected.title": "Solicitud rechazada",
   "groups.notifications.group_join_request_rejected.message": "Tu solicitud para unirte a {groupName} ha sido rechazada",
   "memberAcceptedSuccessfully": "Miembro aceptado con éxito",
-  "groupWantsToJoin": "Quiere unirse",
-  "groupInvitationSent": "Invitación enviada"
+  "groupWantsToJoin": "Pendiente",
+  "groupInvitationSent": "Invitación enviada",
+  "shareGroup": "Compartir grupo",
+  "groupPersonalDescription": "Grupo personal — solo para el seguimiento de gastos entre dos personas",
+  "groupPrivateDescription": "Grupo privado — solo los miembros invitados pueden unirse",
+  "leaveGroup": "Salir del grupo",
+  "leaveGroupDescription": "¿Estás seguro de que quieres salir del grupo? Solo puedes salir si no tienes saldos pendientes.",
+  "groupLeftSuccessfully": "Has salido del grupo",
+  "common.group_members.errors.user_has_unsettled_balance": "No puedes salir del grupo mientras tengas saldos pendientes",
+  "group_members.errors.admin_cannot_leave": "El administrador del grupo no puede abandonar el grupo",
+  "group_members.errors.user_has_unsettled_balance": "Tienes deudas o créditos pendientes en este grupo",
+  "v045PublicGroups": "Grupos públicos añadidos",
+  "v045QrCodeAccess": "Acceso mediante código QR o enlace del grupo"
 }

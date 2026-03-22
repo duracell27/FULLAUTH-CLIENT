@@ -463,6 +463,17 @@
   "groups.notifications.group_join_request_rejected.title": "申请已拒绝",
   "groups.notifications.group_join_request_rejected.message": "您加入 {groupName} 的申请已被拒绝",
   "memberAcceptedSuccessfully": "成员已成功接受",
-  "groupWantsToJoin": "想要加入",
-  "groupInvitationSent": "邀请已发送"
+  "groupWantsToJoin": "待审",
+  "groupInvitationSent": "邀请已发送",
+  "shareGroup": "分享群组",
+  "groupPersonalDescription": "个人群组 — 仅用于追踪两人之间的费用",
+  "groupPrivateDescription": "私人群组 — 只有受邀成员才能加入",
+  "leaveGroup": "退出群组",
+  "leaveGroupDescription": "您确定要退出此群组吗？只有在没有未结算余额的情况下才能退出。",
+  "groupLeftSuccessfully": "您已退出群组",
+  "common.group_members.errors.user_has_unsettled_balance": "您有未结算余额，无法退出群组",
+  "group_members.errors.admin_cannot_leave": "群组管理员无法离开群组",
+  "group_members.errors.user_has_unsettled_balance": "您在此群组中有未结清的债务或信用",
+  "v045PublicGroups": "新增公开群组",
+  "v045QrCodeAccess": "通过二维码或群组链接访问"
 }

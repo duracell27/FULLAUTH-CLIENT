@@ -28,6 +28,19 @@ export default function VersionClient() {
 
 						<div className='space-y-2'>
 							<div className='flex items-center justify-between'>
+								<span className='font-medium'>v0.4.5</span>
+								<span className='text-sm text-muted-foreground'>
+									2026-03-22
+								</span>
+							</div>
+							<div className='text-sm text-muted-foreground pl-4'>
+								• {t('v045PublicGroups')}
+								<br />• {t('v045QrCodeAccess')}
+							</div>
+						</div>
+
+						<div className='space-y-2'>
+							<div className='flex items-center justify-between'>
 								<span className='font-medium'>v0.4</span>
 								<span className='text-sm text-muted-foreground'>
 									2026-03-20
