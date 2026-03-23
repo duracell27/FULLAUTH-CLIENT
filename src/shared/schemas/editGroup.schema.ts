@@ -26,8 +26,8 @@ export const editGroupSchema = z.object({
 	eventDate: z.optional(z.date()),
 	isLocked: z.boolean(),
 	isFinished: z.boolean(),
-	isPublic: z.boolean().default(false),
-	showMembers: z.boolean().default(true),
+	isPublic: z.boolean(),
+	showMembers: z.boolean(),
 	maxMembers: z.number().min(2).nullable().optional()
 })
 
